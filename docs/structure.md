@@ -22,6 +22,7 @@ lib/
 │   │   ├── domain/
 │   │   │   ├── entities/
 │   │   │   ├── useCases/
+│   │   │   ├── enums/
 │   │   │   ├── repositories/
 │   │   ├── presentation/
 │   │   │   ├── blocs/
@@ -66,6 +67,7 @@ Represents a specific feature module.
 - **`domain/`**:
   - **`entities/`**: Domain entities representing core business objects.
   - **`useCases/`**: Use cases encapsulating the application's business logic.
+  - **`enums/`**: TODO.
   - **`repositories/`**: Abstract repository interfaces defining contract for data operations.
 
 - **`presentation/`**:
