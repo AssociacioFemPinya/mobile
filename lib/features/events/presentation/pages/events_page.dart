@@ -10,6 +10,7 @@ import 'package:fempinya3_flutter_app/features/events/domain/enums/events.dart';
 
 class EventsPage extends StatelessWidget {
   final List<DateMockup> dateEvents = generateMockup();
+  final Set<String> _selectedFilters = {}; // TODO: move to block
 
   IconData getStatusIcon(EventStatusEnum status) {
     switch (status) {
@@ -52,8 +53,30 @@ class EventsPage extends StatelessWidget {
         drawer: MenuWidget(),
         body: Column(
           children: [
-            //filtersButton(context), // Filter by tags shouldn't be necessary
-            const EventsViewModeWidged(),
+            Card(
+              elevation: 4.0,
+              margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 8.0),
+                    Text(
+                      'Zan se peleara con esto.',
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                const EventsViewModeWidged(),
+                filtersButton(context), // Filter by tags shouldn't be necessary
+              ],
+            ),
+            buildInputChips(),
             statusFilters(),
             Expanded(child: eventList())
           ],
@@ -62,66 +85,114 @@ class EventsPage extends StatelessWidget {
     );
   }
 
-  // Padding filtersButton(BuildContext context) {
-  //   return Padding(
-  //           padding: const EdgeInsets.all(8.0),
-  //           child: Align(
-  //             alignment: Alignment.centerRight,
-  //             child: buildFilterButton(context),
-  //           ),
-  //         );
-  // }
+  /// Builds a row of input chips for filtering
+  Widget buildInputChips() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Wrap(
+        spacing: 8.0,
+        children: <Widget>[
+          buildInputChip('Assajos'),
+          buildInputChip('Sortides'),
+          buildInputChip('Activitats'),
+        ],
+      ),
+    );
+  }
 
-  // /// Builds a filter button with a dropdown menu
-  // Widget buildFilterButton(BuildContext context) {
-  //   return PopupMenuButton<String>(
-  //     icon: Icon(Icons.filter_list), // The filter icon
-  //     onSelected: (String result) {
-  //       // Handle the selection
-  //       switch (result) {
-  //         case 'All':
-  //           // TODO: Add your filter logic for 'All'
-  //           break;
-  //         case 'Accepted':
-  //           // TODO: Add your filter logic for 'Accepted'
-  //           break;
-  //         case 'Declined':
-  //           // TODO: Add your filter logic for 'Declined'
-  //           break;
-  //         case 'Unknown':
-  //           // TODO: Add your filter logic for 'Unknown'
-  //           break;
-  //         case 'Warning':
-  //           // TODO: Add your filter logic for 'Warning'
-  //           break;
-  //       }
-  //     },
-  //     itemBuilder: (BuildContext context) {
-  //       return [
-  //         PopupMenuItem<String>(
-  //           value: 'All',
-  //           child: Text('All'),
-  //         ),
-  //         PopupMenuItem<String>(
-  //           value: 'Accepted',
-  //           child: Text('Accepted'),
-  //         ),
-  //         PopupMenuItem<String>(
-  //           value: 'Declined',
-  //           child: Text('Declined'),
-  //         ),
-  //         PopupMenuItem<String>(
-  //           value: 'Unknown',
-  //           child: Text('Unknown'),
-  //         ),
-  //         PopupMenuItem<String>(
-  //           value: 'Warning',
-  //           child: Text('Warning'),
-  //         ),
-  //       ];
-  //     },
-  //   );
-  // }
+  /// Creates an individual input chip
+  Widget buildInputChip(String label) {
+    return InputChip(
+      label: Text(label),
+      selected: _selectedFilters.contains(label),
+      onSelected: (bool selected) {
+        if (selected) {
+          _selectedFilters.add(label);
+        } else {
+          _selectedFilters.remove(label);
+        }
+        // You might need to setState here or trigger a rebuild to update the UI
+        // setState(() {});
+      },
+      onDeleted: () {},
+      selectedColor: Colors.blue.shade100,
+      checkmarkColor: Colors.blue,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50),
+      ),
+    );
+  }
+
+  Padding filtersButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: buildFilterButton(context),
+      ),
+    );
+  }
+
+  /// Builds a filter button with a dropdown menu
+  Widget buildFilterButton(BuildContext context) {
+    return Material(
+      color: Theme.of(context).colorScheme.primary,
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: PopupMenuButton<String>(
+        color: Theme.of(context).colorScheme.surface,
+        onSelected: (String result) {
+          // Handle the selection
+          switch (result) {
+            case 'Assajos':
+              // TODO: Add your filter logic for 'Assajos'
+              break;
+            case 'Sortides':
+              // TODO: Add your filter logic for 'Sortides'
+              break;
+            case 'Activitats':
+              // TODO: Add your filter logic for 'Activitats'
+              break;
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Filter",
+                style: TextStyle(color: Colors.white),
+              ),
+              SizedBox(width: 4),
+              Icon(
+                Icons.arrow_drop_down,
+                color: Colors.white,
+              ),
+            ],
+          ),
+        ),
+        itemBuilder: (BuildContext context) {
+          return [
+            PopupMenuItem<String>(
+              value: 'Assajos',
+              child: Text('Assajos'),
+            ),
+            PopupMenuItem<String>(
+              value: 'Sortides',
+              child: Text('Sortides'),
+            ),
+            PopupMenuItem<String>(
+              value: 'Activitats',
+              child: Text('Activitats'),
+            ),
+          ];
+        },
+      ),
+    );
+  }
 
   BlocBuilder<StatusFilterBloc, StatusFilterState> statusFilters() {
     return BlocBuilder<StatusFilterBloc, StatusFilterState>(

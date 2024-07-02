@@ -24,7 +24,8 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case homeRoute:
-            return MaterialPageRoute(builder: (_) => home_routes.homeRoutes[homeRoute]!(context));
+            //return MaterialPageRoute(builder: (_) => home_routes.homeRoutes[homeRoute]!(context));
+            return MaterialPageRoute(builder: (_) => events_routes.eventsRoutes[eventsRoute]!(context));
           case eventsRoute:
             return MaterialPageRoute(builder: (_) => events_routes.eventsRoutes[eventsRoute]!(context));
           case notificationsRoute:
