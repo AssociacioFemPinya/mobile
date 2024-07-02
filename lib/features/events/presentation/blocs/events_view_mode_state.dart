@@ -13,4 +13,12 @@ class EventsViewModeState {
         eventViewMode: eventViewMode ?? this.eventViewMode,
     );
   }
+
+  bool isEventInViewModeCalendar() {
+    return eventViewMode == EventsViewModeEnum.calendar;
+  }
+
+  bool isEventInViewModeList() {
+    return eventViewMode == EventsViewModeEnum.list;
+  }
 }

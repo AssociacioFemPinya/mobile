@@ -2,10 +2,7 @@ import 'package:fempinya3_flutter_app/features/events/domain/enums/events_view_m
 
 class EventsViewModeEvent {}
 
-class EventViewModeList extends EventsViewModeEvent {
-  EventViewModeList();
-}
-
-class EventViewModeCalendar extends EventsViewModeEvent {
-  EventViewModeCalendar();
+class EventsViewModeSet extends EventsViewModeEvent {
+  final EventsViewModeEnum value;
+  EventsViewModeSet(this.value);
 }

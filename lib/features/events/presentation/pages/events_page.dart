@@ -1,8 +1,9 @@
 import 'package:fempinya3_flutter_app/features/events/domain/entities/mockup.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/blocs/events_view_mode_bloc.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/blocs/events_view_mode_state.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_calendar.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_view_mode.dart';
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:fempinya3_flutter_app/features/menu/presentation/widgets/menu_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/blocs/events_filter_bloc.dart';
@@ -46,8 +47,15 @@ class EventsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => StatusFilterBloc(dateEvents),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<StatusFilterBloc>(
+          create: (context) => StatusFilterBloc(),
+        ),
+        BlocProvider<EventsViewModeBloc>(
+          create: (context) => EventsViewModeBloc(),
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Esdeveniments'),
@@ -59,12 +67,17 @@ class EventsPage extends StatelessWidget {
             Row(
               children: [
                 const EventsViewModeWidged(),
-                filtersButton(context), // Filter by tags shouldn't be necessary
+                filtersButton(context),
               ],
             ),
             buildInputChips(),
             statusFilters(),
-            TableBasicsExample(),
+            BlocBuilder<EventsViewModeBloc, EventsViewModeState>(
+                builder: (context, state) {
+              return Visibility(
+                  visible: state.isEventInViewModeCalendar(),
+                  child: TableBasicsExample());
+            }),
             Expanded(child: eventList())
           ],
         ),
