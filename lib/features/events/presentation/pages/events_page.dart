@@ -123,7 +123,7 @@ class EventsPage extends StatelessWidget {
   BlocBuilder eventList() {
     return BlocBuilder<StatusFilterBloc, StatusFilterState>(
       builder: (context, state) {
-        final filteredEvents = state.filterEvents(state.dateEvents);
+        final filteredEvents = state.filterEvents(dateEvents);
 
         return ListView.builder(
           itemCount: filteredEvents.length,
@@ -157,7 +157,7 @@ class EventsPage extends StatelessWidget {
                     );
                   }).toList(),
                 ),
-                Divider(),
+                const Divider(),
               ],
             );
           },

@@ -5,10 +5,12 @@ import 'package:fempinya3_flutter_app/features/events/presentation/routes.dart' 
 import 'package:fempinya3_flutter_app/features/notifications/presentation/routes.dart' as notifications_routes;
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
           case notificationsRoute:
             return MaterialPageRoute(builder: (_) => notifications_routes.notificationsRoutes[notificationsRoute]!(context));
           default:
-            return MaterialPageRoute(builder: (_) => Scaffold(body: Center(child: Text('Route not found'))));
+            return MaterialPageRoute(builder: (_) => const Scaffold(body: Center(child: Text('Route not found'))));
         }
       },
     );

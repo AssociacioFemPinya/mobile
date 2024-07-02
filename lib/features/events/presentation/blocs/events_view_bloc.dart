@@ -9,7 +9,6 @@ class StatusFilterBloc extends Bloc<StatusFilterEvent, StatusFilterState> {
     showUndefined: false,
     showAnswered: false,
     showWarning: false,
-    dateEvents: dateEvents
   )) {
     on<StatusUndefined>((event, emit) {
       emit(state.copyWith(showUndefined: event.value));

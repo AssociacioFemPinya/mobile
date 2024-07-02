@@ -1,19 +1,15 @@
 import 'package:fempinya3_flutter_app/features/events/domain/entities/mockup.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/pages/events_page.dart';
-import 'package:flutter/material.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events.dart';
 
 class StatusFilterState {
   final bool showUndefined;
   final bool showAnswered;
   final bool showWarning;
-  final List<DateMockup> dateEvents;
 
   StatusFilterState(
       {required this.showUndefined,
       required this.showAnswered,
-      required this.showWarning,
-      required this.dateEvents});
+      required this.showWarning});
 
   List<DateMockup> filterEvents(List<DateMockup> dateEvents) {
     List<DateMockup> filteredDateEvents = [];
@@ -44,12 +40,10 @@ class StatusFilterState {
     bool? showUndefined,
     bool? showAnswered,
     bool? showWarning,
-    List<DateMockup>? dateEvents,
   }) {
     return StatusFilterState(
         showUndefined: showUndefined ?? this.showUndefined,
         showAnswered: showAnswered ?? this.showAnswered,
-        showWarning: showWarning ?? this.showWarning,
-        dateEvents: dateEvents ?? this.dateEvents);
+        showWarning: showWarning ?? this.showWarning);
   }
 }
