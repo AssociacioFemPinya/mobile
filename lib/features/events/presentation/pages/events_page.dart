@@ -1,6 +1,8 @@
 import 'package:fempinya3_flutter_app/features/events/domain/entities/mockup.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_calendar.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_view_mode.dart';
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'package:fempinya3_flutter_app/features/menu/presentation/widgets/menu_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/blocs/events_view_bloc.dart';
@@ -53,23 +55,7 @@ class EventsPage extends StatelessWidget {
         drawer: MenuWidget(),
         body: Column(
           children: [
-            Card(
-              elevation: 4.0,
-              margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 8.0),
-                    Text(
-                      'Zan se peleara con esto.',
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            eventsWithAlertBanner(),
             Row(
               children: [
                 const EventsViewModeWidged(),
@@ -78,7 +64,28 @@ class EventsPage extends StatelessWidget {
             ),
             buildInputChips(),
             statusFilters(),
+            TableBasicsExample(),
             Expanded(child: eventList())
+          ],
+        ),
+      ),
+    );
+  }
+
+  Card eventsWithAlertBanner() {
+    return Card(
+      elevation: 4.0,
+      margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 8.0),
+            Text(
+              'Zan se peleara con esto.',
+              style: TextStyle(fontSize: 16.0),
+            ),
           ],
         ),
       ),
