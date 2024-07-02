@@ -1,4 +1,5 @@
 import 'package:fempinya3_flutter_app/features/events/domain/entities/mockup.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_view_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:fempinya3_flutter_app/features/menu/presentation/widgets/menu_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,38 +46,15 @@ class EventsPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => StatusFilterBloc(dateEvents),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Esdeveniments')),
+        appBar: AppBar(
+          title: const Text('Esdeveniments'),
+        ),
         drawer: MenuWidget(),
         body: Column(
           children: [
-            //SegmentedButton(context),
-            BlocBuilder<StatusFilterBloc, StatusFilterState>(
-              builder: (context, state) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    buildEventStatusCheckbox(state.showUndefined, 'Pendent',
-                        (value) {
-                      context
-                          .read<StatusFilterBloc>()
-                          .add(StatusUndefined(value!));
-                    }),
-                    buildEventStatusCheckbox(state.showAnswered, 'Respost',
-                        (value) {
-                      context
-                          .read<StatusFilterBloc>()
-                          .add(StatusAnswered(value!));
-                    }),
-                    buildEventStatusCheckbox(state.showWarning, 'Amb alerta',
-                        (value) {
-                      context
-                          .read<StatusFilterBloc>()
-                          .add(StatusWarning(value!));
-                    }),
-                  ],
-                );
-              },
-            ),
+            //filtersButton(context), // Filter by tags shouldn't be necessary
+            const EventsViewModeWidged(),
+            statusFilters(),
             Expanded(child: eventList())
           ],
         ),
@@ -84,30 +62,87 @@ class EventsPage extends StatelessWidget {
     );
   }
 
-//   Widget SegmentedButton(context) {
-//     return SegmentedButton<String>(
-//       segments: const <ButtonSegment<String>>[
-//         ButtonSegment<Calendar>(
-//             value: Calendar.day,
-//             label: Text('Day'),
-//             icon: Icon(Icons.calendar_view_day)),
-//         ButtonSegment<Calendar>(
-//             value: Calendar.week,
-//             label: Text('Week'),
-//             icon: Icon(Icons.calendar_view_week)),
-//       ],
-//       selected: <Calendar>{calendarView},
-//       onSelectionChanged: (Set<Calendar> newSelection) {
-//         setState(() {
-//           // By default there is only a single segment that can be
-//           // selected at one time, so its value is always the first
-//           // item in the selected set.
-//           calendarView = newSelection.first;
-//         });
-//       },
-//     );
-//   }
-// }
+  // Padding filtersButton(BuildContext context) {
+  //   return Padding(
+  //           padding: const EdgeInsets.all(8.0),
+  //           child: Align(
+  //             alignment: Alignment.centerRight,
+  //             child: buildFilterButton(context),
+  //           ),
+  //         );
+  // }
+
+  // /// Builds a filter button with a dropdown menu
+  // Widget buildFilterButton(BuildContext context) {
+  //   return PopupMenuButton<String>(
+  //     icon: Icon(Icons.filter_list), // The filter icon
+  //     onSelected: (String result) {
+  //       // Handle the selection
+  //       switch (result) {
+  //         case 'All':
+  //           // TODO: Add your filter logic for 'All'
+  //           break;
+  //         case 'Accepted':
+  //           // TODO: Add your filter logic for 'Accepted'
+  //           break;
+  //         case 'Declined':
+  //           // TODO: Add your filter logic for 'Declined'
+  //           break;
+  //         case 'Unknown':
+  //           // TODO: Add your filter logic for 'Unknown'
+  //           break;
+  //         case 'Warning':
+  //           // TODO: Add your filter logic for 'Warning'
+  //           break;
+  //       }
+  //     },
+  //     itemBuilder: (BuildContext context) {
+  //       return [
+  //         PopupMenuItem<String>(
+  //           value: 'All',
+  //           child: Text('All'),
+  //         ),
+  //         PopupMenuItem<String>(
+  //           value: 'Accepted',
+  //           child: Text('Accepted'),
+  //         ),
+  //         PopupMenuItem<String>(
+  //           value: 'Declined',
+  //           child: Text('Declined'),
+  //         ),
+  //         PopupMenuItem<String>(
+  //           value: 'Unknown',
+  //           child: Text('Unknown'),
+  //         ),
+  //         PopupMenuItem<String>(
+  //           value: 'Warning',
+  //           child: Text('Warning'),
+  //         ),
+  //       ];
+  //     },
+  //   );
+  // }
+
+  BlocBuilder<StatusFilterBloc, StatusFilterState> statusFilters() {
+    return BlocBuilder<StatusFilterBloc, StatusFilterState>(
+      builder: (context, state) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            buildEventStatusCheckbox(state.showUndefined, 'Pendent', (value) {
+              context.read<StatusFilterBloc>().add(StatusUndefined(value!));
+            }),
+            buildEventStatusCheckbox(state.showAnswered, 'Respost', (value) {
+              context.read<StatusFilterBloc>().add(StatusAnswered(value!));
+            }),
+            buildEventStatusCheckbox(state.showWarning, 'Amb alerta', (value) {
+              context.read<StatusFilterBloc>().add(StatusWarning(value!));
+            }),
+          ],
+        );
+      },
+    );
+  }
 
   Expanded buildEventStatusCheckbox(
       bool value, String title, Function(bool?) onChanged) {
