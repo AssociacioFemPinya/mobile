@@ -1,0 +1,4 @@
+enum EventsViewModeEnum {
+  list,
+  calendar
+}

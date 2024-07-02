@@ -1,4 +1,4 @@
-import 'package:fempinya3_flutter_app/features/events/domain/enums/events.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 

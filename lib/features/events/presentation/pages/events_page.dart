@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:fempinya3_flutter_app/features/menu/presentation/widgets/menu_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/blocs/events_view_bloc.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/blocs/events_view_events.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/blocs/events_view_state.dart';
-import 'package:fempinya3_flutter_app/features/events/domain/enums/events.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/blocs/events_filter_bloc.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/blocs/events_filter_events.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/blocs/events_filter_state.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 
 class EventsPage extends StatelessWidget {
   final List<DateMockup> dateEvents = generateMockup();

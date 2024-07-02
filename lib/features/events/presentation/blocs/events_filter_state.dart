@@ -1,5 +1,5 @@
 import 'package:fempinya3_flutter_app/features/events/domain/entities/mockup.dart';
-import 'package:fempinya3_flutter_app/features/events/domain/enums/events.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 
 class StatusFilterState {
   final bool showUndefined;
