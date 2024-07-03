@@ -14,6 +14,10 @@ dependencies:
   meta: ^1.12.0
   equatable: ^2.0.0
   table_calendar: ^3.1.2
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+  provider: ^6.0.0
 
 dev_dependencies:
   flutter_test:
@@ -22,3 +26,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
+
+

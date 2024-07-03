@@ -8,9 +8,11 @@ import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_f
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filter/events_filter_events.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filter/events_filter_state.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class EventsPage extends StatelessWidget {
@@ -47,59 +49,68 @@ class EventsPage extends StatelessWidget {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<EventsFilterBloc>(
-          create: (context) => EventsFilterBloc(),
-        ),
-        BlocProvider<EventsViewModeBloc>(
-          create: (context) => EventsViewModeBloc(),
-        ),
-      ],
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Esdeveniments'),
-        ),
-        drawer: MenuWidget(),
-        body: Column(
+@override
+Widget build(BuildContext context) {
+  var translate = AppLocalizations.of(context)!;
+
+  return MultiBlocProvider(
+    providers: [
+      BlocProvider<EventsFilterBloc>(
+        create: (context) => EventsFilterBloc(),
+      ),
+      BlocProvider<EventsViewModeBloc>(
+        create: (context) => EventsViewModeBloc(),
+      ),
+    ],
+    child: Scaffold(
+      appBar: AppBar(
+        title: Text(translate.eventsPageTitle),
+      ),
+      drawer: MenuWidget(),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0), 
+        child: Column(
           children: [
-            eventsWithAlertBanner(),
+            eventsWithAlertBanner(translate),
             Row(
               children: [
-                const EventsViewModeWidged(),
+                const Expanded(child: EventsViewModeWidged()),
                 filtersButton(context),
               ],
             ),
-            buildInputChips(),
-            statusFilters(),
+            buildInputChips(context, translate),
+            const Divider(),
+            statusFilters(translate),
+            const Divider(),
             BlocBuilder<EventsViewModeBloc, EventsViewModeState>(
-                builder: (context, state) {
-              return Visibility(
+              builder: (context, state) {
+                return Visibility(
                   visible: state.isEventInViewModeCalendar(),
-                  child: EventsCalendar());
-            }),
-            Expanded(child: eventList())
+                  child: EventsCalendar(),
+                );
+              },
+            ),
+            Expanded(child: eventList()),
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
-  Card eventsWithAlertBanner() {
+  Card eventsWithAlertBanner(translate) {
     return Card(
       elevation: 4.0,
-      margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Text(
-              'Zan se peleara con esto.',
-              style: TextStyle(fontSize: 16.0),
+              translate.eventsPageEventsWithAlertBanner,
+              style: const TextStyle(fontSize: 16.0),
             ),
           ],
         ),
@@ -108,22 +119,22 @@ class EventsPage extends StatelessWidget {
   }
 
   /// Builds a row of input chips for filtering
-  Widget buildInputChips() {
+  Widget buildInputChips(context, translate) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Wrap(
         spacing: 8.0,
         children: <Widget>[
-          buildInputChip('Assajos'),
-          buildInputChip('Sortides'),
-          buildInputChip('Activitats'),
+          buildInputChip(translate.eventsPageTypeChipPractice, context),
+          buildInputChip(translate.eventsPageTypeChipOuts, context),
+          buildInputChip(translate.eventsPageTypeChipActivities, context),
         ],
       ),
     );
   }
 
   /// Creates an individual input chip
-  Widget buildInputChip(String label) {
+  Widget buildInputChip(String label, context) {
     return InputChip(
       label: Text(label),
       selected: _selectedFilters.contains(label),
@@ -137,11 +148,14 @@ class EventsPage extends StatelessWidget {
         // setState(() {});
       },
       onDeleted: () {},
-      selectedColor: Colors.blue.shade100,
-      checkmarkColor: Colors.blue,
+      selectedColor: Theme.of(context).colorScheme.primaryFixedDim,
+      checkmarkColor: Theme.of(context).colorScheme.onPrimaryFixed,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50),
+        side: const BorderSide(style: BorderStyle.none)
       ),
+      backgroundColor: Theme.of(context).colorScheme.primaryFixedDim.withOpacity(0.3), 
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, 
     );
   }
 
@@ -157,58 +171,60 @@ class EventsPage extends StatelessWidget {
 
   /// Builds a filter button with a dropdown menu
   Widget buildFilterButton(BuildContext context) {
+  var translate = AppLocalizations.of(context)!;
+
     return Material(
-      color: Theme.of(context).colorScheme.primary,
-      elevation: 2,
+      color: Theme.of(context).colorScheme.secondaryContainer,
+      elevation: 1,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(5),
       ),
-      child: PopupMenuButton<String>(
+      child: PopupMenuButton<EventTypeEnum>(
         color: Theme.of(context).colorScheme.surface,
-        onSelected: (String result) {
+        onSelected: (EventTypeEnum result) {
           // Handle the selection
           switch (result) {
-            case 'Assajos':
+            case EventTypeEnum.practice:
               // TODO: Add your filter logic for 'Assajos'
               break;
-            case 'Sortides':
+            case EventTypeEnum.outs:
               // TODO: Add your filter logic for 'Sortides'
               break;
-            case 'Activitats':
+            case EventTypeEnum.activities:
               // TODO: Add your filter logic for 'Activitats'
               break;
           }
         },
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                "Filter",
-                style: TextStyle(color: Colors.white),
+                translate.eventsPageTypeFilterTitle,
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
               ),
-              SizedBox(width: 4),
-              Icon(
+              const SizedBox(width: 3),
+               Icon(
                 Icons.arrow_drop_down,
-                color: Colors.white,
+                color:  Theme.of(context).colorScheme.primary,
               ),
             ],
           ),
         ),
         itemBuilder: (BuildContext context) {
           return [
-            PopupMenuItem<String>(
-              value: 'Assajos',
-              child: Text('Assajos'),
+             PopupMenuItem<EventTypeEnum>(
+              value: EventTypeEnum.practice,
+              child: Text(translate.eventsPageTypeChipPractice),
             ),
-            PopupMenuItem<String>(
-              value: 'Sortides',
-              child: Text('Sortides'),
+             PopupMenuItem<EventTypeEnum>(
+              value: EventTypeEnum.outs,
+              child: Text(translate.eventsPageTypeChipOuts),
             ),
-            PopupMenuItem<String>(
-              value: 'Activitats',
-              child: Text('Activitats'),
+             PopupMenuItem<EventTypeEnum>(
+              value: EventTypeEnum.activities,
+              child: Text(translate.eventsPageTypeChipActivities),
             ),
           ];
         },
@@ -216,43 +232,43 @@ class EventsPage extends StatelessWidget {
     );
   }
 
-  BlocBuilder<EventsFilterBloc, EventsFilterState> statusFilters() {
-    return BlocBuilder<EventsFilterBloc, EventsFilterState>(
-      builder: (context, state) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            buildEventStatusCheckbox(state.showUndefined, 'Pendent', (value) {
-              context
-                  .read<EventsFilterBloc>()
-                  .add(EventsStatusFilterUndefined(value!));
-            }),
-            buildEventStatusCheckbox(state.showAnswered, 'Respost', (value) {
-              context
-                  .read<EventsFilterBloc>()
-                  .add(EventsStatusFilterAnswered(value!));
-            }),
-            buildEventStatusCheckbox(state.showWarning, 'Amb alerta', (value) {
-              context
-                  .read<EventsFilterBloc>()
-                  .add(EventsStatusFilterWarning(value!));
-            }),
-          ],
-        );
-      },
-    );
-  }
+BlocBuilder<EventsFilterBloc, EventsFilterState> statusFilters(translate) {
+  return BlocBuilder<EventsFilterBloc, EventsFilterState>(
+    builder: (context, state) {
+      return Wrap(
+        spacing: 8.0,
+        children: [
+          buildEventStatusFilterChip(state.showUndefined, translate.eventPageStatusFilterPending , context, (value) {
+            context
+                .read<EventsFilterBloc>()
+                .add(EventsStatusFilterUndefined(value));
+          }),
+          buildEventStatusFilterChip(state.showAnswered, translate.eventPageStatusFilterAnswered , context, (value) {
+            context
+                .read<EventsFilterBloc>()
+                .add(EventsStatusFilterAnswered(value));
+          }),
+          buildEventStatusFilterChip(state.showWarning, translate.eventPageStatusFilterWarning, context, (value) {
+            context
+                .read<EventsFilterBloc>()
+                .add(EventsStatusFilterWarning(value));
+          }),
+        ],
+      );
+    },
+  );
+}
 
-  Expanded buildEventStatusCheckbox(
-      bool value, String title, Function(bool?) onChanged) {
-    return Expanded(
-      child: CheckboxListTile(
-          // title: Text('Pendents'),
-          title: Text(title),
-          value: value,
-          onChanged: onChanged),
-    );
-  }
+Widget buildEventStatusFilterChip(bool selected, String label, context, ValueChanged<bool> onSelected) {
+  return FilterChip(
+    label: Text(label),
+    selected: selected,
+    onSelected: onSelected,
+    selectedColor: Theme.of(context).colorScheme.primaryFixedDim,
+    checkmarkColor: Theme.of(context).colorScheme.onSecondary,
+  );
+}
+
 
   BlocBuilder eventList() {
     return BlocBuilder<EventsFilterBloc, EventsFilterState>(
@@ -300,3 +316,5 @@ class EventsPage extends StatelessWidget {
     );
   }
 }
+
+

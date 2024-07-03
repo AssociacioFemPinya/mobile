@@ -1,42 +1,84 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:fempinya3_flutter_app/core/navigation/route_names.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fempinya3_flutter_app/features/menu/domain/entities/locale.dart';
 
 class MenuWidget extends StatelessWidget {
+  const MenuWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
+    var translate = AppLocalizations.of(context)!;
+    var selectedLocale = Localizations.localeOf(context).toString();
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Theme.of(context).colorScheme.primary,
             ),
             child: Text(
-              'Menu',
+              AppLocalizations.of(context)!
+                  .menuAppName("Alansito"), //TODO Zan username
               style: TextStyle(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.onPrimary,
                 fontSize: 24,
               ),
             ),
           ),
           ListTile(
-            title: Text('Inici'),
+            title: Text(translate.menuHome),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(homeRoute);
             },
           ),
           ListTile(
-            title: Text('Events'),
+            title: Text(translate.menuEvents),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(eventsRoute);
             },
           ),
           ListTile(
-            title: Text('Notificacions'),
+            title: Text(translate.menuNotifications),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(notificationsRoute);
             },
+          ),
+          const Divider(),
+          Builder(
+            builder: (context) => Consumer<LocaleModel>(
+              builder: (context, localeModel, child) => ListTile(
+                title: DropdownButton(
+                  value: selectedLocale,
+                  items: [
+                    DropdownMenuItem(
+                      value: 'en',
+                      child: Text(translate.menuLanguageSettings("en")),
+                    ),
+                    DropdownMenuItem(
+                      value: 'es',
+                      child: Text(translate.menuLanguageSettings("es")),
+                    ),
+                    DropdownMenuItem(
+                      value: 'ca',
+                      child: Text(translate.menuLanguageSettings("ca")),
+                    ),
+                    DropdownMenuItem(
+                      value: 'fr',
+                      child: Text(translate.menuLanguageSettings("fr")),
+                    ),
+                  ],
+                  onChanged: (String? value) {
+                    if (value != null) {
+                      localeModel.set(Locale(value));
+                    }
+                  },
+                ),
+              ),
+            ),
           ),
         ],
       ),

@@ -1,0 +1,31 @@
+{
+    "@@locale": "ca",
+    "menuAppName": "FemPinya. Hola {userName}!",
+    "@menuAppName": {
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
+    "menuHome": "Inici",
+    "menuEvents": "Esdeveniments",
+    "menuNotifications": "Notificacions",
+    "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} other {-}}",
+    "@menuLanguageSettings": {
+        "placeholders": {
+            "locale": {
+                "type": "String"
+            }
+        }
+    },
+    "eventsPageTitle": "Esdeveniments",
+    "eventsPageEventsWithAlertBanner": "texto random",
+    "eventsPageTypeChipPractice": "Assajos",
+    "eventsPageTypeChipOuts": "Sortides",
+    "eventsPageTypeChipActivities": "Activitats",
+    "eventsPageTypeFilterTitle": "Tipus",
+    "eventPageStatusFilterPending": "Pendent",
+    "eventPageStatusFilterAnswered": "Respost",
+    "eventPageStatusFilterWarning": "Amb alerta"
+}

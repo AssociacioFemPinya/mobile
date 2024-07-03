@@ -1,0 +1,31 @@
+{
+  "@@locale": "es",
+  "menuAppName": "FemPinya. ¡Hola {userName}!",
+  "@menuAppName": {
+      "placeholders": {
+          "userName": {
+              "type": "String"
+          }
+      }
+  },
+  "menuHome": "Inicio",
+  "menuEvents": "Eventos",
+  "menuNotifications": "Notificaciones",
+  "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} other {-}}",
+  "@menuLanguageSettings": {
+      "placeholders": {
+          "locale": {
+              "type": "String"
+          }
+      }
+  },
+  "eventsPageTitle": "Eventos",
+  "eventsPageEventsWithAlertBanner": "texto random",
+  "eventsPageTypeChipPractice": "Ensayos",
+  "eventsPageTypeChipOuts": "Salidas",
+  "eventsPageTypeChipActivities": "Actividades",
+  "eventsPageTypeFilterTitle": "Tipo",
+  "eventPageStatusFilterPending": "Pendiente",
+  "eventPageStatusFilterAnswered": "Respondido",
+  "eventPageStatusFilterWarning": "Con alerta"
+}
