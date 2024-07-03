@@ -1,15 +1,17 @@
 import 'package:fempinya3_flutter_app/features/events/domain/entities/mockup.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/blocs/events_view_mode_bloc.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/blocs/events_view_mode_state.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view/events_view_mode_bloc.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view/events_view_mode_state.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_calendar.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_view_mode.dart';
-import 'package:flutter/material.dart';
 import 'package:fempinya3_flutter_app/features/menu/presentation/widgets/menu_widget.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/blocs/events_filter_bloc.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/blocs/events_filter_events.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/blocs/events_filter_state.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filter/events_filter_bloc.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filter/events_filter_events.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filter/events_filter_state.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 class EventsPage extends StatelessWidget {
   final List<DateMockup> dateEvents = generateMockup();
@@ -49,8 +51,8 @@ class EventsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<StatusFilterBloc>(
-          create: (context) => StatusFilterBloc(),
+        BlocProvider<EventsFilterBloc>(
+          create: (context) => EventsFilterBloc(),
         ),
         BlocProvider<EventsViewModeBloc>(
           create: (context) => EventsViewModeBloc(),
@@ -76,7 +78,7 @@ class EventsPage extends StatelessWidget {
                 builder: (context, state) {
               return Visibility(
                   visible: state.isEventInViewModeCalendar(),
-                  child: TableBasicsExample());
+                  child: EventsCalendar());
             }),
             Expanded(child: eventList())
           ],
@@ -214,20 +216,26 @@ class EventsPage extends StatelessWidget {
     );
   }
 
-  BlocBuilder<StatusFilterBloc, StatusFilterState> statusFilters() {
-    return BlocBuilder<StatusFilterBloc, StatusFilterState>(
+  BlocBuilder<EventsFilterBloc, EventsFilterState> statusFilters() {
+    return BlocBuilder<EventsFilterBloc, EventsFilterState>(
       builder: (context, state) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             buildEventStatusCheckbox(state.showUndefined, 'Pendent', (value) {
-              context.read<StatusFilterBloc>().add(StatusUndefined(value!));
+              context
+                  .read<EventsFilterBloc>()
+                  .add(EventsStatusFilterUndefined(value!));
             }),
             buildEventStatusCheckbox(state.showAnswered, 'Respost', (value) {
-              context.read<StatusFilterBloc>().add(StatusAnswered(value!));
+              context
+                  .read<EventsFilterBloc>()
+                  .add(EventsStatusFilterAnswered(value!));
             }),
             buildEventStatusCheckbox(state.showWarning, 'Amb alerta', (value) {
-              context.read<StatusFilterBloc>().add(StatusWarning(value!));
+              context
+                  .read<EventsFilterBloc>()
+                  .add(EventsStatusFilterWarning(value!));
             }),
           ],
         );
@@ -247,7 +255,7 @@ class EventsPage extends StatelessWidget {
   }
 
   BlocBuilder eventList() {
-    return BlocBuilder<StatusFilterBloc, StatusFilterState>(
+    return BlocBuilder<EventsFilterBloc, EventsFilterState>(
       builder: (context, state) {
         final filteredEvents = state.filterEvents(dateEvents);
 

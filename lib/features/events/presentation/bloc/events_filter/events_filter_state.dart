@@ -1,12 +1,12 @@
 import 'package:fempinya3_flutter_app/features/events/domain/entities/mockup.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 
-class StatusFilterState {
+class EventsFilterState {
   final bool showUndefined;
   final bool showAnswered;
   final bool showWarning;
 
-  StatusFilterState(
+  EventsFilterState(
       {required this.showUndefined,
       required this.showAnswered,
       required this.showWarning});
@@ -36,12 +36,12 @@ class StatusFilterState {
     return filteredDateEvents;
   }
 
-  StatusFilterState copyWith({
+  EventsFilterState copyWith({
     bool? showUndefined,
     bool? showAnswered,
     bool? showWarning,
   }) {
-    return StatusFilterState(
+    return EventsFilterState(
         showUndefined: showUndefined ?? this.showUndefined,
         showAnswered: showAnswered ?? this.showAnswered,
         showWarning: showWarning ?? this.showWarning);
