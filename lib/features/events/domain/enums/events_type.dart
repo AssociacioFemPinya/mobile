@@ -1,6 +1,5 @@
 enum EventTypeEnum {
-  practice,
-  outs,
-  activities,
+  training,
+  performance,
+  activity,
 }
-
