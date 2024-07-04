@@ -1,12 +1,15 @@
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_calendar/events_calendar_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_calendar/events_calendar_events.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_calendar/events_calendar_state.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view/events_view_mode_bloc.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view/events_view_mode_state.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_repository/events_repository_bloc.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view_mode/events_view_mode_bloc.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view_mode/events_view_mode_state.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+typedef EventLoader = List<String> Function(DateTime day);
 
 class EventsCalendar extends StatelessWidget {
   const EventsCalendar({super.key});
@@ -45,18 +48,69 @@ class EventsCalendar extends StatelessWidget {
         onDaySelected: (selectedDay, focusedDay) {
           if (!isSameDay(state.selectedDay, selectedDay)) {
             // Call `setState()` when updating the selected day
-            context.read<EventsCalendarBloc>().add(EventsCalendarDateSelected(selectedDay));
-            context.read<EventsCalendarBloc>().add(EventsCalendarFormatSet(CalendarFormat.week));
+            context
+                .read<EventsCalendarBloc>()
+                .add(EventsCalendarDateSelected(selectedDay));
+            context
+                .read<EventsCalendarBloc>()
+                .add(EventsCalendarDateFocused(focusedDay));
+            context
+                .read<EventsCalendarBloc>()
+                .add(EventsCalendarFormatSet(CalendarFormat.week));
           }
         },
         onHeaderTapped: (selectedDay) {
-          context.read<EventsCalendarBloc>().add(EventsCalendarFormatSet(CalendarFormat.month));
+          context
+              .read<EventsCalendarBloc>()
+              .add(EventsCalendarFormatSet(CalendarFormat.month));
         },
+
+        eventLoader: _createEventLoader(context),
+        calendarBuilders: CalendarBuilders(
+          markerBuilder: (context, date, events) {
+            if (events.isNotEmpty) {
+              return Positioned(
+                right: 1,
+                bottom: 1,
+                child: _buildEventsMarker(date, events),
+              );
+            }
+            return SizedBox();
+          },
+        ),
+
         // onPageChanged: (focusedDay) {
-        //   // No need to call `setState()` here
-        //   _focusedDay = focusedDay;
+        //   context
+        //         .read<EventsCalendarBloc>()
+        //         .add(EventsCalendarDateFocused(focusedDay));
         // },
       );
     });
+  }
+
+  EventLoader _createEventLoader(BuildContext context) {
+    return (DateTime day) {
+      return context.read<EventsRepositoryBloc>().state.getEventsNameByDate(day);
+    };
+  }
+
+  Widget _buildEventsMarker(DateTime date, List events) {
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.blue,
+      ),
+      width: 16.0,
+      height: 16.0,
+      child: Center(
+        child: Text(
+          '${events.length}',
+          style: TextStyle().copyWith(
+            color: Colors.white,
+            fontSize: 12.0,
+          ),
+        ),
+      ),
+    );
   }
 }

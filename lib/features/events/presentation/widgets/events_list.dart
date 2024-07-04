@@ -1,13 +1,11 @@
-import 'package:fempinya3_flutter_app/features/events/domain/entities/mockup.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filter/events_filter_bloc.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filter/events_filter_state.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filters/events_filters_bloc.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filters/events_filters_state.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_repository/events_repository_bloc.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
-final List<DateMockup> dateEvents = generateMockup(); // TODO: Create a block state for events list
 
 class EventsListWidged extends StatelessWidget {
   const EventsListWidged({super.key});
@@ -16,7 +14,8 @@ class EventsListWidged extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<EventsFilterBloc, EventsFilterState>(
       builder: (context, state) {
-        final filteredEvents = state.filterEvents(dateEvents);
+        // TODO: This list should be calculated in the state, not with filterEvents function being called
+        final filteredEvents = state.filterEvents(context.read<EventsRepositoryBloc>().state.events);
 
         return ListView.builder(
           itemCount: filteredEvents.length,

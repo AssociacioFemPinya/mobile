@@ -1,5 +1,5 @@
-import 'events_filter_events.dart';
-import 'events_filter_state.dart';
+import 'events_filters_events.dart';
+import 'events_filters_state.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 

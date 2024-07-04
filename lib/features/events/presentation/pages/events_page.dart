@@ -1,5 +1,6 @@
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_calendar/events_calendar_bloc.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view/events_view_mode_bloc.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_repository/events_repository_bloc.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view_mode/events_view_mode_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_calendar.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_filters_button.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_filters_input_chips.dart';
@@ -7,7 +8,7 @@ import 'package:fempinya3_flutter_app/features/events/presentation/widgets/event
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_status_filters.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_view_mode.dart';
 import 'package:fempinya3_flutter_app/features/menu/presentation/widgets/menu_widget.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filter/events_filter_bloc.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filters/events_filters_bloc.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +29,9 @@ class EventsPage extends StatelessWidget {
         ),
         BlocProvider<EventsCalendarBloc>(
           create: (context) => EventsCalendarBloc(),
+        ),
+        BlocProvider<EventsRepositoryBloc>(
+          create: (context) => EventsRepositoryBloc(),
         ),
       ],
       child: Scaffold(
@@ -56,7 +60,7 @@ class EventsPage extends StatelessWidget {
               const Divider(),
               const EventsStatusFiltersWidged(),
               const Divider(),
-              EventsCalendar(),
+              const EventsCalendar(),
               const Expanded(child: EventsListWidged()),
             ],
           ),

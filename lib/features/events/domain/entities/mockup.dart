@@ -50,8 +50,8 @@ List<DateMockup> generateMockup() {
   }
 
   return [
-    DateMockup(date: '2024-06-01', events: generateEvents()),
-    DateMockup(date: '2024-06-02', events: generateEvents()),
-    DateMockup(date: '2024-06-03', events: generateEvents()),
+    DateMockup(date: '2024-07-01', events: generateEvents()),
+    DateMockup(date: '2024-07-02', events: generateEvents()),
+    DateMockup(date: '2024-07-03', events: generateEvents()),
   ];
 }
