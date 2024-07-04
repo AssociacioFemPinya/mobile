@@ -9,6 +9,7 @@ class EventsFilterBloc extends Bloc<EventsFilterEvent, EventsFilterState> {
           showUndefined: false,
           showAnswered: false,
           showWarning: false,
+          eventTypeFilters: [],
         )) {
     on<EventsStatusFilterUndefined>((event, emit) {
       emit(state.copyWith(showUndefined: event.value));
@@ -18,6 +19,20 @@ class EventsFilterBloc extends Bloc<EventsFilterEvent, EventsFilterState> {
     });
     on<EventsStatusFilterWarning>((event, emit) {
       emit(state.copyWith(showWarning: event.value));
+    });
+    on<EventsTypeFiltersAdd>((event, emit) {
+      if (!state.eventTypeFilters.contains(event.value)) {
+        emit(state.copyWith(
+            eventTypeFilters: List.from(state.eventTypeFilters)
+              ..add(event.value)));
+      }
+    });
+    on<EventsTypeFiltersRemove>((event, emit) {
+      if (state.eventTypeFilters.contains(event.value)) {
+        emit(state.copyWith(
+            eventTypeFilters: List.from(state.eventTypeFilters)
+              ..remove(event.value)));
+      }
     });
   }
 }

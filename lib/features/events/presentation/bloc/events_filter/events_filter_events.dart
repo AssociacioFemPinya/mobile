@@ -1,3 +1,5 @@
+import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.dart';
+
 enum EventsStatusFilters {
   missingReply,
   replied,
@@ -19,4 +21,14 @@ class EventsStatusFilterAnswered extends EventsFilterEvent {
 class EventsStatusFilterWarning extends EventsFilterEvent {
   final bool value;
   EventsStatusFilterWarning(this.value);
+}
+
+class EventsTypeFiltersAdd extends EventsFilterEvent {
+  final EventTypeEnum value;
+  EventsTypeFiltersAdd(this.value);
+}
+
+class EventsTypeFiltersRemove extends EventsFilterEvent {
+  final EventTypeEnum value;
+  EventsTypeFiltersRemove(this.value);
 }

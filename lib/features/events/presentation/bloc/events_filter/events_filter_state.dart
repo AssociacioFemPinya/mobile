@@ -1,16 +1,20 @@
 import 'package:fempinya3_flutter_app/features/events/domain/entities/mockup.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.dart';
 
 class EventsFilterState {
   final bool showUndefined;
   final bool showAnswered;
   final bool showWarning;
+  final List<EventTypeEnum> eventTypeFilters;
 
   EventsFilterState(
       {required this.showUndefined,
       required this.showAnswered,
-      required this.showWarning});
+      required this.showWarning,
+      required this.eventTypeFilters});
 
+// TODO: Extend for eventTypeFilter
   List<DateMockup> filterEvents(List<DateMockup> dateEvents) {
     List<DateMockup> filteredDateEvents = [];
     for (var date in dateEvents) {
@@ -40,10 +44,12 @@ class EventsFilterState {
     bool? showUndefined,
     bool? showAnswered,
     bool? showWarning,
+    List<EventTypeEnum>? eventTypeFilters,
   }) {
     return EventsFilterState(
         showUndefined: showUndefined ?? this.showUndefined,
         showAnswered: showAnswered ?? this.showAnswered,
-        showWarning: showWarning ?? this.showWarning);
+        showWarning: showWarning ?? this.showWarning,
+        eventTypeFilters: eventTypeFilters ?? this.eventTypeFilters);
   }
 }
