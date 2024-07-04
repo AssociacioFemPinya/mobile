@@ -1,5 +1,4 @@
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view/events_view_mode_bloc.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view/events_view_mode_state.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_calendar.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_filters_button.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_filters_input_chips.dart';

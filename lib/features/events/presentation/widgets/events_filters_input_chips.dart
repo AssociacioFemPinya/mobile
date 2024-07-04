@@ -1,10 +1,10 @@
+import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filter/events_filter_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filter/events_filter_events.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filter/events_filter_state.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EventsFiltersInputChipsWidged extends StatelessWidget {
   const EventsFiltersInputChipsWidged({super.key});
@@ -20,7 +20,7 @@ class EventsFiltersInputChipsWidged extends StatelessWidget {
           children: <Widget>[
             for (var item in state.eventTypeFilters)
               InputChip(
-                label: Text(item.toString().split('.').last), // TODO: How to set proper translations to enums?
+                label: Text(item.toLocalizedString(context)),
                 onDeleted: () {
                   context
                       .read<EventsFilterBloc>()

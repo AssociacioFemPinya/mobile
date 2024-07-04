@@ -14,7 +14,6 @@ class EventsFilterState {
       required this.showWarning,
       required this.eventTypeFilters});
 
-// TODO: Extend for eventTypeFilter
   List<DateMockup> filterEvents(List<DateMockup> dateEvents) {
     List<DateMockup> filteredDateEvents = [];
     for (var date in dateEvents) {

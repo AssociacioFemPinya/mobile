@@ -2,6 +2,7 @@ import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.d
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filter/events_filter_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filter/events_filter_events.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filter/events_filter_state.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -35,12 +36,10 @@ class EventsFiltersButton extends StatelessWidget {
         child: PopupMenuButton<EventTypeEnum>(
           color: Theme.of(context).colorScheme.surface,
           onSelected: (EventTypeEnum value) {
-            context
-                  .read<EventsFilterBloc>()
-                  .add(EventsTypeFiltersAdd(value));
+            context.read<EventsFilterBloc>().add(EventsTypeFiltersAdd(value));
           },
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -59,17 +58,10 @@ class EventsFiltersButton extends StatelessWidget {
           ),
           itemBuilder: (BuildContext context) {
             return [
+              for (var item in EventTypeEnum.values)
               PopupMenuItem<EventTypeEnum>(
-                value: EventTypeEnum.training,
-                child: Text(translate.eventsPageTypeChipTraining),
-              ),
-              PopupMenuItem<EventTypeEnum>(
-                value: EventTypeEnum.performance,
-                child: Text(translate.eventsPageTypeChipPerformance),
-              ),
-              PopupMenuItem<EventTypeEnum>(
-                value: EventTypeEnum.activity,
-                child: Text(translate.eventsPageTypeChipActivity),
+                value: item,
+                child: Text(item.toLocalizedString(context)),
               ),
             ];
           },

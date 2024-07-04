@@ -1,4 +1,5 @@
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -8,13 +9,15 @@ class EventMockup {
   final String address;
   final String dateHour;
   final IconData icon;
+  final EventTypeEnum type;
 
   EventMockup(
       {required this.status,
       required this.name,
       required this.address,
       required this.dateHour,
-      required this.icon});
+      required this.icon,
+      required this.type});
 }
 
 class DateMockup {
@@ -41,6 +44,7 @@ List<DateMockup> generateMockup() {
         address: addresses[index],
         dateHour: dateHours[index],
         icon: icons[index],
+        type: EventTypeEnum.values[random.nextInt(EventTypeEnum.values.length)]
       );
     });
   }
