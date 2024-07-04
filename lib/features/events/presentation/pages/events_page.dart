@@ -1,3 +1,4 @@
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_calendar/events_calendar_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view/events_view_mode_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_calendar.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_filters_button.dart';
@@ -24,6 +25,9 @@ class EventsPage extends StatelessWidget {
         ),
         BlocProvider<EventsViewModeBloc>(
           create: (context) => EventsViewModeBloc(),
+        ),
+        BlocProvider<EventsCalendarBloc>(
+          create: (context) => EventsCalendarBloc(),
         ),
       ],
       child: Scaffold(

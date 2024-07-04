@@ -14,6 +14,19 @@ class EventsFilterState {
       required this.showWarning,
       required this.eventTypeFilters});
 
+  EventsFilterState copyWith({
+    bool? showUndefined,
+    bool? showAnswered,
+    bool? showWarning,
+    List<EventTypeEnum>? eventTypeFilters,
+  }) {
+    return EventsFilterState(
+        showUndefined: showUndefined ?? this.showUndefined,
+        showAnswered: showAnswered ?? this.showAnswered,
+        showWarning: showWarning ?? this.showWarning,
+        eventTypeFilters: eventTypeFilters ?? this.eventTypeFilters);
+  }
+
   // TODO: All this should happen at backend with query params, not filtering at app level
   List<DateMockup> filterEvents(List<DateMockup> dateEvents) {
     return filterByStatus(filterByType(dateEvents));
@@ -62,18 +75,5 @@ class EventsFilterState {
       }
     }
     return filteredDateEvents;
-  }
-
-  EventsFilterState copyWith({
-    bool? showUndefined,
-    bool? showAnswered,
-    bool? showWarning,
-    List<EventTypeEnum>? eventTypeFilters,
-  }) {
-    return EventsFilterState(
-        showUndefined: showUndefined ?? this.showUndefined,
-        showAnswered: showAnswered ?? this.showAnswered,
-        showWarning: showWarning ?? this.showWarning,
-        eventTypeFilters: eventTypeFilters ?? this.eventTypeFilters);
   }
 }
