@@ -53,14 +53,7 @@ class EventsPage extends StatelessWidget {
               const Divider(),
               const EventsStatusFiltersWidged(),
               const Divider(),
-              BlocBuilder<EventsViewModeBloc, EventsViewModeState>(
-                builder: (context, state) {
-                  return Visibility(
-                    visible: state.isEventInViewModeCalendar(),
-                    child: EventsCalendar(),
-                  );
-                },
-              ),
+              EventsCalendar(),
               const Expanded(child: EventsListWidged()),
             ],
           ),

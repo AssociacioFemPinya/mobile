@@ -1,4 +1,7 @@
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view/events_view_mode_bloc.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view/events_view_mode_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class EventsCalendar extends StatefulWidget {
@@ -13,11 +16,25 @@ class _EventsCalendarState extends State<EventsCalendar> {
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<EventsViewModeBloc, EventsViewModeState>(
+      builder: (context, state) {
+        return Visibility(
+          visible: state.isEventInViewModeCalendar(),
+          child: tableCalendar(),
+        );
+      },
+    );
+  }
+
+  TableCalendar<dynamic> tableCalendar() {
     return TableCalendar(
       firstDay: DateTime.utc(2010, 10, 16),
       lastDay: DateTime.utc(2030, 3, 14),
       focusedDay: _focusedDay,
       calendarFormat: _calendarFormat,
+      headerStyle: const HeaderStyle(
+        formatButtonVisible: false,
+      ),
       selectedDayPredicate: (day) {
         // Use `selectedDayPredicate` to determine which day is currently selected.
         // If this returns true, then `day` will be marked as selected.
@@ -32,16 +49,14 @@ class _EventsCalendarState extends State<EventsCalendar> {
           setState(() {
             _selectedDay = selectedDay;
             _focusedDay = focusedDay;
+            _calendarFormat = CalendarFormat.week;
           });
         }
       },
-      onFormatChanged: (format) {
-        if (_calendarFormat != format) {
-          // Call `setState()` when updating calendar format
-          setState(() {
-            _calendarFormat = format;
-          });
-        }
+      onHeaderTapped: (selectedDay) {
+        setState(() {
+          _calendarFormat = CalendarFormat.month;
+        });
       },
       onPageChanged: (focusedDay) {
         // No need to call `setState()` here
