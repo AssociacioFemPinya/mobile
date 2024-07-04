@@ -14,7 +14,32 @@ class EventsFilterState {
       required this.showWarning,
       required this.eventTypeFilters});
 
+  // TODO: All this should happen at backend with query params, not filtering at app level
   List<DateMockup> filterEvents(List<DateMockup> dateEvents) {
+    return filterByStatus(filterByType(dateEvents));
+  }
+
+  List<DateMockup> filterByType(List<DateMockup> dateEvents) {
+    if (eventTypeFilters.isEmpty) {
+      return dateEvents;
+    }
+    List<DateMockup> filteredDateEvents = [];
+    for (var date in dateEvents) {
+      List<EventMockup> filteredEvents = [];
+      filteredEvents.addAll(date.events.where((event) {
+        return eventTypeFilters.contains(event.type);
+      }));
+
+      if (filteredEvents.isNotEmpty) {
+        filteredDateEvents
+            .add(DateMockup(date: date.date, events: filteredEvents));
+      }
+    }
+
+    return filteredDateEvents;
+  }
+
+  List<DateMockup> filterByStatus(List<DateMockup> dateEvents) {
     List<DateMockup> filteredDateEvents = [];
     for (var date in dateEvents) {
       List<EventMockup> filteredEvents = [];
