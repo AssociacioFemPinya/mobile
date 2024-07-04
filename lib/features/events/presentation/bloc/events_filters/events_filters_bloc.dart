@@ -3,9 +3,9 @@ import 'events_filters_state.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class EventsFilterBloc extends Bloc<EventsFilterEvent, EventsFilterState> {
-  EventsFilterBloc()
-      : super(EventsFilterState(
+class EventsFiltersBloc extends Bloc<EventsFiltersEvent, EventsFiltersState> {
+  EventsFiltersBloc()
+      : super(EventsFiltersState(
           showUndefined: false,
           showAnswered: false,
           showWarning: false,

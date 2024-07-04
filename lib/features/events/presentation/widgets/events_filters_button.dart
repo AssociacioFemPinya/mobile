@@ -25,7 +25,7 @@ class EventsFiltersButton extends StatelessWidget {
   Widget buildFilterButton(BuildContext context) {
     var translate = AppLocalizations.of(context)!;
 
-    return BlocBuilder<EventsFilterBloc, EventsFilterState>(
+    return BlocBuilder<EventsFiltersBloc, EventsFiltersState>(
         builder: (context, state) {
       return Material(
         color: Theme.of(context).colorScheme.secondaryContainer,
@@ -36,7 +36,7 @@ class EventsFiltersButton extends StatelessWidget {
         child: PopupMenuButton<EventTypeEnum>(
           color: Theme.of(context).colorScheme.surface,
           onSelected: (EventTypeEnum value) {
-            context.read<EventsFilterBloc>().add(EventsTypeFiltersAdd(value));
+            context.read<EventsFiltersBloc>().add(EventsTypeFiltersAdd(value));
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),

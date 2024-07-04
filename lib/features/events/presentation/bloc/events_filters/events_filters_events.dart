@@ -6,29 +6,29 @@ enum EventsStatusFilters {
   requiresAttention,
 }
 
-class EventsFilterEvent {}
+class EventsFiltersEvent {}
 
-class EventsStatusFilterUndefined extends EventsFilterEvent {
+class EventsStatusFilterUndefined extends EventsFiltersEvent {
   final bool value;
   EventsStatusFilterUndefined(this.value);
 }
 
-class EventsStatusFilterAnswered extends EventsFilterEvent {
+class EventsStatusFilterAnswered extends EventsFiltersEvent {
   final bool value;
   EventsStatusFilterAnswered(this.value);
 }
 
-class EventsStatusFilterWarning extends EventsFilterEvent {
+class EventsStatusFilterWarning extends EventsFiltersEvent {
   final bool value;
   EventsStatusFilterWarning(this.value);
 }
 
-class EventsTypeFiltersAdd extends EventsFilterEvent {
+class EventsTypeFiltersAdd extends EventsFiltersEvent {
   final EventTypeEnum value;
   EventsTypeFiltersAdd(this.value);
 }
 
-class EventsTypeFiltersRemove extends EventsFilterEvent {
+class EventsTypeFiltersRemove extends EventsFiltersEvent {
   final EventTypeEnum value;
   EventsTypeFiltersRemove(this.value);
 }

@@ -1,24 +1,24 @@
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_view_mode.dart';
 
 class EventsViewModeState {
-  final EventsViewModeEnum eventViewMode;
+  final EventsViewModeEnum eventsViewMode;
 
   EventsViewModeState(
-      {required this.eventViewMode});
+      {required this.eventsViewMode});
 
   EventsViewModeState copyWith({
-    EventsViewModeEnum? eventViewMode,
+    EventsViewModeEnum? eventsViewMode,
   }) {
     return EventsViewModeState(
-        eventViewMode: eventViewMode ?? this.eventViewMode,
+        eventsViewMode: eventsViewMode ?? this.eventsViewMode,
     );
   }
 
   bool isEventInViewModeCalendar() {
-    return eventViewMode == EventsViewModeEnum.calendar;
+    return eventsViewMode == EventsViewModeEnum.calendar;
   }
 
   bool isEventInViewModeList() {
-    return eventViewMode == EventsViewModeEnum.list;
+    return eventsViewMode == EventsViewModeEnum.list;
   }
 }

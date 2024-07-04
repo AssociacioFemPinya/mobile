@@ -21,8 +21,8 @@ class EventsPage extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider<EventsFilterBloc>(
-          create: (context) => EventsFilterBloc(),
+        BlocProvider<EventsFiltersBloc>(
+          create: (context) => EventsFiltersBloc(),
         ),
         BlocProvider<EventsViewModeBloc>(
           create: (context) => EventsViewModeBloc(),
@@ -51,17 +51,17 @@ class EventsPage extends StatelessWidget {
                   //   //constraints: const BoxConstraints(maxWidth: 600),
                   //   child: const EventsViewModeWidged(),
                   // )),
-                  EventsViewModeWidged(),
+                  EventsViewModeWidget(),
                   Spacer(),
                   EventsFiltersButton(),
                 ],
               ),
-              const EventsFiltersInputChipsWidged(),
+              const EventsFiltersInputChipsWidget(),
               const Divider(),
-              const EventsStatusFiltersWidged(),
+              const EventsStatusFiltersWidget(),
               const Divider(),
               const EventsCalendar(),
-              const Expanded(child: EventsListWidged()),
+              const Expanded(child: EventsListWidget()),
             ],
           ),
         ),

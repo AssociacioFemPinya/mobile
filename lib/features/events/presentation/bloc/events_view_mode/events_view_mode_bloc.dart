@@ -8,10 +8,10 @@ class EventsViewModeBloc
     extends Bloc<EventsViewModeEvent, EventsViewModeState> {
   EventsViewModeBloc()
       : super(EventsViewModeState(
-          eventViewMode: EventsViewModeEnum.list,
+          eventsViewMode: EventsViewModeEnum.list,
         )) {
     on<EventsViewModeSet>((event, emit) {
-      emit(state.copyWith(eventViewMode: event.value));
+      emit(state.copyWith(eventsViewMode: event.value));
     });
   }
 }

@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class EventsStatusFiltersWidged extends StatelessWidget {
-  const EventsStatusFiltersWidged({super.key});
+class EventsStatusFiltersWidget extends StatelessWidget {
+  const EventsStatusFiltersWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     var translate = AppLocalizations.of(context)!;
 
-    return BlocBuilder<EventsFilterBloc, EventsFilterState>(
+    return BlocBuilder<EventsFiltersBloc, EventsFiltersState>(
       builder: (context, state) {
         return Wrap(
           spacing: 8.0,
@@ -21,19 +21,19 @@ class EventsStatusFiltersWidged extends StatelessWidget {
             buildEventStatusFilterChip(state.showUndefined,
                 translate.eventPageStatusFilterPending, context, (value) {
               context
-                  .read<EventsFilterBloc>()
+                  .read<EventsFiltersBloc>()
                   .add(EventsStatusFilterUndefined(value));
             }),
             buildEventStatusFilterChip(state.showAnswered,
                 translate.eventPageStatusFilterAnswered, context, (value) {
               context
-                  .read<EventsFilterBloc>()
+                  .read<EventsFiltersBloc>()
                   .add(EventsStatusFilterAnswered(value));
             }),
             buildEventStatusFilterChip(state.showWarning,
                 translate.eventPageStatusFilterWarning, context, (value) {
               context
-                  .read<EventsFilterBloc>()
+                  .read<EventsFiltersBloc>()
                   .add(EventsStatusFilterWarning(value));
             }),
           ],

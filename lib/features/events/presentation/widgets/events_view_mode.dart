@@ -6,8 +6,8 @@ import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_v
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class EventsViewModeWidged extends StatelessWidget {
-  const EventsViewModeWidged({super.key});
+class EventsViewModeWidget extends StatelessWidget {
+  const EventsViewModeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class EventsViewModeWidged extends StatelessWidget {
               icon: Icon(Icons.calendar_view_week)),
         ],
         selected: <EventsViewModeEnum>{
-          context.read<EventsViewModeBloc>().state.eventViewMode
+          context.read<EventsViewModeBloc>().state.eventsViewMode
         },
         onSelectionChanged: (Set<EventsViewModeEnum> newSelection) {
           // By default there is only a single segment that can be
