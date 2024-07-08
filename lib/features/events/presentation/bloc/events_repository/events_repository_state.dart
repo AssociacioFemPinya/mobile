@@ -1,25 +1,26 @@
 part of 'events_repository_bloc.dart';
 
 class EventsRepositoryState {
-  final List<DateMockup> events;
+  final DateEvents events;
 
   EventsRepositoryState({required this.events});
 
   EventsRepositoryState copyWith({
-    List<DateMockup>? events,
+    DateEvents? events,
   }) {
     return EventsRepositoryState(
       events: events ?? this.events,
     );
   }
 
-  // TODO: Find a better way to do this. maybe different representation of the same data? Events by date should be direct access through map
-  List<String> getEventsNameByDate(DateTime date) {
-    for (var eventsDate in events) {
-      if (DateUtils.isSameDay(DateTime.parse(eventsDate.date), date)) {
-        return [for (var event in eventsDate.events) event.name];
-      }
-    }
-    return [];
-  }
+  // // TODO: Find a better way to do this. maybe different representation of the same data? Events by date should be direct access through map
+  // List<String> getEventsNameByDate(DateTime date) {
+  //   events.forEach((date, events) {
+  // if (DateUtils.isSameDay(DateTime.parse(date), date)) {
+  //       return [for (var event in events[date]) event.name];
+  //     }
+  //   });
+    
+  //   return [];
+  // }
 }

@@ -13,51 +13,48 @@ class EventsListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EventsFiltersBloc, EventsFiltersState>(
-      builder: (context, eventsFiltersState) {
-        return BlocBuilder<EventsRepositoryBloc, EventsRepositoryState>(
-            builder: (context, eventsRepositoryState) {
-          return BlocBuilder<EventsViewModeBloc, EventsViewModeState>(
-            builder: (context, eventsViewModeState) {
-              final filteredEvents = filterEvents(
-                eventsRepositoryState.events,
-                eventsViewModeState.eventsViewMode,
-                eventsFiltersState.eventTypeFilters,
-                eventsFiltersState.dayFilter,
-                eventsFiltersState.showAnswered,
-                eventsFiltersState.showUndefined,
-                eventsFiltersState.showWarning,
-              );
+    late final eventsFiltersState = context.watch<EventsFiltersBloc>().state;
+    late final eventsRepositoryState =
+        context.watch<EventsRepositoryBloc>().state;
+    late final eventsViewModeState = context.watch<EventsViewModeBloc>().state;
 
-              return ListView.builder(
-                itemCount: filteredEvents.length,
-                itemBuilder: (context, index) {
-                  final date = filteredEvents[index];
-                  return _buildDateEventsList(date, context);
-                },
-              );
-            },
-          );
-        });
+    final filteredEvents = filterEvents(
+      eventsRepositoryState.events,
+      eventsViewModeState.eventsViewMode,
+      eventsFiltersState.eventTypeFilters,
+      eventsFiltersState.dayFilter,
+      eventsFiltersState.showAnswered,
+      eventsFiltersState.showUndefined,
+      eventsFiltersState.showWarning,
+    );
+
+    return ListView.separated(
+      itemCount: filteredEvents.length,
+      separatorBuilder: (context, index) => const Divider(),
+      itemBuilder: (context, index) {
+        final date = filteredEvents.keys.toList()[index];
+        final events = filteredEvents[date] ?? [];
+
+        return _buildDateEventsList(date, events, context);
       },
     );
   }
 
-  Widget _buildDateEventsList(DateMockup date, BuildContext context) {
+  Widget _buildDateEventsList(
+      DateTime date, List<EventMockup> events, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            date.date,
+            date.toString(),
             style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
         Column(
-          children: date.events.map((event) => _buildEventCard(event)).toList(),
+          children: events.map((event) => _buildEventCard(event)).toList(),
         ),
-        const Divider(),
       ],
     );
   }
@@ -112,8 +109,8 @@ class EventsListWidget extends StatelessWidget {
     }
   }
 
-  List<DateMockup> filterEvents(
-    List<DateMockup> dateEvents,
+  DateEvents filterEvents(
+    DateEvents dateEvents,
     EventsViewModeEnum eventsViewMode,
     List<EventTypeEnum> eventTypeFilters,
     DateTime? dayFilter,
@@ -122,13 +119,12 @@ class EventsListWidget extends StatelessWidget {
     bool showWarning,
   ) {
     if (eventsViewMode == EventsViewModeEnum.calendar && dayFilter == null) {
-      return [];
+      return {};
     }
 
-    List<DateMockup> events =
+    DateEvents events =
         dayFilter != null ? getEventsByDate(dayFilter, dateEvents) : dateEvents;
-    List<DateMockup> filteredEventsByType =
-        filterByType(events, eventTypeFilters);
+    DateEvents filteredEventsByType = filterByType(events, eventTypeFilters);
     return filterByStatus(
       filteredEventsByType,
       showAnswered,
@@ -137,40 +133,39 @@ class EventsListWidget extends StatelessWidget {
     );
   }
 
-  List<DateMockup> filterByType(
-    List<DateMockup> dateEvents,
+  DateEvents filterByType(
+    DateEvents dateEvents,
     List<EventTypeEnum> eventTypeFilters,
   ) {
     if (eventTypeFilters.isEmpty) {
       return dateEvents;
     }
 
-    List<DateMockup> filteredDateEvents = [];
+    DateEvents filteredDateEvents = {};
 
-    for (var date in dateEvents) {
-      List<EventMockup> filteredEvents = date.events.where((event) {
+    dateEvents.forEach((date, events) {
+      List<EventMockup> filteredEvents = events.where((event) {
         return eventTypeFilters.contains(event.type);
       }).toList();
 
       if (filteredEvents.isNotEmpty) {
-        filteredDateEvents
-            .add(DateMockup(date: date.date, events: filteredEvents));
+        filteredDateEvents[date] = filteredEvents;
       }
-    }
+    });
 
     return filteredDateEvents;
   }
 
-  List<DateMockup> filterByStatus(
-    List<DateMockup> dateEvents,
+  DateEvents filterByStatus(
+    DateEvents dateEvents,
     bool showAnswered,
     bool showUndefined,
     bool showWarning,
   ) {
-    List<DateMockup> filteredDateEvents = [];
+    DateEvents filteredDateEvents = {};
 
-    for (var date in dateEvents) {
-      List<EventMockup> filteredEvents = date.events.where((event) {
+    dateEvents.forEach((date, events) {
+      List<EventMockup> filteredEvents = events.where((event) {
         if (showUndefined && event.status == EventStatusEnum.undefined) {
           return true;
         }
@@ -187,20 +182,15 @@ class EventsListWidget extends StatelessWidget {
       }).toList();
 
       if (filteredEvents.isNotEmpty) {
-        filteredDateEvents
-            .add(DateMockup(date: date.date, events: filteredEvents));
+        filteredDateEvents[date] = filteredEvents;
       }
-    }
+    });
 
     return filteredDateEvents;
   }
 
-  List<DateMockup> getEventsByDate(DateTime date, List<DateMockup> dateEvents) {
-    for (var eventsDate in dateEvents) {
-      if (DateUtils.isSameDay(DateTime.parse(eventsDate.date), date)) {
-        return [eventsDate];
-      }
-    }
-    return [];
+  DateEvents getEventsByDate(DateTime date, DateEvents dateEvents) {
+    List<EventMockup>? events = dateEvents[date];
+    return {date: events ?? []};
   }
 }

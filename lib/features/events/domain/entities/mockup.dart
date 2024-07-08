@@ -3,6 +3,8 @@ import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.d
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+typedef DateEvents = Map<DateTime, List<EventMockup>>;
+
 class EventMockup {
   final EventStatusEnum status;
   final String name;
@@ -20,14 +22,7 @@ class EventMockup {
       required this.type});
 }
 
-class DateMockup {
-  final String date;
-  final List<EventMockup> events;
-
-  DateMockup({required this.date, required this.events});
-}
-
-List<DateMockup> generateMockup() {
+DateEvents generateMockup() {
   final names = ['EventMockup 1', 'EventMockup 2', 'EventMockup 3'];
   final addresses = ['Dirección 1', 'Dirección 2', 'Dirección 3'];
   final dateHours = ['10:00 AM', '12:00 PM', '02:00 PM'];
@@ -49,9 +44,9 @@ List<DateMockup> generateMockup() {
     });
   }
 
-  return [
-    DateMockup(date: '2024-07-01', events: generateEvents()),
-    DateMockup(date: '2024-07-02', events: generateEvents()),
-    DateMockup(date: '2024-07-03', events: generateEvents()),
-  ];
+  return {
+   DateTime.parse('2024-07-01 00:00:00.000Z'):  generateEvents(),
+   DateTime.parse('2024-07-02 00:00:00.000Z'):  generateEvents(),
+   DateTime.parse('2024-07-03 00:00:00.000Z'):  generateEvents(),
+  };
 }
