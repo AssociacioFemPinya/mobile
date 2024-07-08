@@ -15,11 +15,16 @@ class EventsCalendarBloc
     on<EventsCalendarDateSelected>((event, emit) {
       emit(state.copyWith(selectedDay: event.value));
     });
+    // TODO: Is it possible to handle dayFilter as non-nullable?? Having nullable values in
+    // bloc is annoying due to copyWith function
+    on<EventsCalendarDateSelectedUnset>((event, emit) {
+      emit(state.copyWith(selectedDay: null));
+    });
     on<EventsCalendarDateFocused>((event, emit) {
-      emit(state.copyWith(focusedDay: event.value));
+      emit(state.copyWith(focusedDay: event.value, selectedDay: state.selectedDay));
     });
     on<EventsCalendarFormatSet>((event, emit) {
-      emit(state.copyWith(calendarFormat: event.value));
+      emit(state.copyWith(calendarFormat: event.value, selectedDay: state.selectedDay));
     });
   }
 }

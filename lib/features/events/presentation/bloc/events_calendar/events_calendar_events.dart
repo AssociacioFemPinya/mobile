@@ -7,6 +7,10 @@ class EventsCalendarDateSelected extends EventsCalendarEvent {
   EventsCalendarDateSelected(this.value);
 }
 
+class EventsCalendarDateSelectedUnset extends EventsCalendarEvent {
+  EventsCalendarDateSelectedUnset();
+}
+
 class EventsCalendarDateFocused extends EventsCalendarEvent {
   final DateTime value;
   EventsCalendarDateFocused(this.value);

@@ -18,7 +18,7 @@ class EventsCalendarState {
     return EventsCalendarState(
       calendarFormat: calendarFormat ?? this.calendarFormat,
       focusedDay: focusedDay ?? this.focusedDay,
-      selectedDay: selectedDay ?? this.selectedDay,
+      selectedDay: selectedDay,
     );
   }
 }

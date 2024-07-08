@@ -1,5 +1,4 @@
 import 'package:fempinya3_flutter_app/features/events/domain/entities/mockup.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'events_repository_events.dart';

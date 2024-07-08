@@ -42,9 +42,12 @@ class EventsViewModeWidget extends StatelessWidget {
               context.read<EventsFiltersBloc>().add(EventsDayFilterUnset());
               context
                   .read<EventsCalendarBloc>()
+                  .add(EventsCalendarDateSelectedUnset());
+            context
+                  .read<EventsCalendarBloc>()
                   .add(EventsCalendarFormatSet(CalendarFormat.month));
               break;
-            case EventsViewModeEnum.calendar:              
+            case EventsViewModeEnum.calendar:
               break;
           }
         },
