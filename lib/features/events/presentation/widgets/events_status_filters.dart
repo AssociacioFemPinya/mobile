@@ -1,6 +1,4 @@
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filters/events_filters_bloc.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filters/events_filters_events.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filters/events_filters_state.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

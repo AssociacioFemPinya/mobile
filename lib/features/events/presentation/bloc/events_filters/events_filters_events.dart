@@ -1,4 +1,4 @@
-import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.dart';
+part of 'events_filters_bloc.dart';
 
 enum EventsStatusFilters {
   missingReply,
@@ -31,4 +31,13 @@ class EventsTypeFiltersAdd extends EventsFiltersEvent {
 class EventsTypeFiltersRemove extends EventsFiltersEvent {
   final EventTypeEnum value;
   EventsTypeFiltersRemove(this.value);
+}
+
+class EventsDayFilterSet extends EventsFiltersEvent {
+  final DateTime value;
+  EventsDayFilterSet(this.value);
+}
+
+class EventsDayFilterUnset extends EventsFiltersEvent {
+  EventsDayFilterUnset();
 }

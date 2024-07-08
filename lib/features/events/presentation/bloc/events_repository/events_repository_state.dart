@@ -1,5 +1,4 @@
-import 'package:fempinya3_flutter_app/features/events/domain/entities/mockup.dart';
-import 'package:flutter/material.dart';
+part of 'events_repository_bloc.dart';
 
 class EventsRepositoryState {
   final List<DateMockup> events;

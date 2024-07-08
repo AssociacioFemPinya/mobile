@@ -1,10 +1,12 @@
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_view_mode.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_calendar/events_calendar_bloc.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_calendar/events_calendar_events.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filters/events_filters_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view_mode/events_view_mode_bloc.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view_mode/events_view_mode_events.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view_mode/events_view_mode_state.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class EventsViewModeWidget extends StatelessWidget {
   const EventsViewModeWidget({super.key});
@@ -34,6 +36,17 @@ class EventsViewModeWidget extends StatelessWidget {
           context
               .read<EventsViewModeBloc>()
               .add(EventsViewModeSet(newSelection.first));
+
+          switch (newSelection.first) {
+            case EventsViewModeEnum.list:
+              context.read<EventsFiltersBloc>().add(EventsDayFilterUnset());
+              context
+                  .read<EventsCalendarBloc>()
+                  .add(EventsCalendarFormatSet(CalendarFormat.month));
+              break;
+            case EventsViewModeEnum.calendar:              
+              break;
+          }
         },
       );
     });

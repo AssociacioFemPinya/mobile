@@ -1,4 +1,4 @@
-import 'package:fempinya3_flutter_app/features/events/domain/enums/events_view_mode.dart';
+part of 'events_view_mode_bloc.dart';
 
 class EventsViewModeState {
   final EventsViewModeEnum eventsViewMode;

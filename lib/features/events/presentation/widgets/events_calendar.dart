@@ -1,9 +1,9 @@
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_calendar/events_calendar_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_calendar/events_calendar_events.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_calendar/events_calendar_state.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filters/events_filters_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_repository/events_repository_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view_mode/events_view_mode_bloc.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view_mode/events_view_mode_state.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,6 +57,9 @@ class EventsCalendar extends StatelessWidget {
             context
                 .read<EventsCalendarBloc>()
                 .add(EventsCalendarFormatSet(CalendarFormat.week));
+            context
+                .read<EventsFiltersBloc>()
+                .add(EventsDayFilterSet(selectedDay));
           }
         },
         onHeaderTapped: (selectedDay) {

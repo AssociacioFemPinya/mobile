@@ -27,11 +27,11 @@ class EventsPage extends StatelessWidget {
         BlocProvider<EventsViewModeBloc>(
           create: (context) => EventsViewModeBloc(),
         ),
-        BlocProvider<EventsCalendarBloc>(
-          create: (context) => EventsCalendarBloc(),
-        ),
         BlocProvider<EventsRepositoryBloc>(
           create: (context) => EventsRepositoryBloc(),
+        ),
+        BlocProvider<EventsCalendarBloc>(
+          create: (context) => EventsCalendarBloc(),
         ),
       ],
       child: Scaffold(
