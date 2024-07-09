@@ -12,43 +12,40 @@ class EventsFiltersBloc extends Bloc<EventsFiltersEvent, EventsFiltersState> {
           showAnswered: false,
           showWarning: false,
           eventTypeFilters: [],
-          // TODO: Is it possible to handle dayFilter as non-nullable?? Having nullable values in
-          // bloc is annoying due to copyWith function
           dayFilter: null,
+          dayFilterEnabled: false,
         )) {
     on<EventsStatusFilterUndefined>((event, emit) {
       emit(state.copyWith(
-          showUndefined: event.value, dayFilter: state.dayFilter));
+          showUndefined: event.value));
     });
     on<EventsStatusFilterAnswered>((event, emit) {
       emit(state.copyWith(
-          showAnswered: event.value, dayFilter: state.dayFilter));
+          showAnswered: event.value));
     });
     on<EventsStatusFilterWarning>((event, emit) {
       emit(
-          state.copyWith(showWarning: event.value, dayFilter: state.dayFilter));
+          state.copyWith(showWarning: event.value));
     });
     on<EventsTypeFiltersAdd>((event, emit) {
       if (!state.eventTypeFilters.contains(event.value)) {
         emit(state.copyWith(
             eventTypeFilters: List.from(state.eventTypeFilters)
-              ..add(event.value),
-            dayFilter: state.dayFilter));
+              ..add(event.value)));
       }
     });
     on<EventsTypeFiltersRemove>((event, emit) {
       if (state.eventTypeFilters.contains(event.value)) {
         emit(state.copyWith(
             eventTypeFilters: List.from(state.eventTypeFilters)
-              ..remove(event.value),
-            dayFilter: state.dayFilter));
+              ..remove(event.value)));
       }
     });
     on<EventsDayFilterSet>((event, emit) {
-      emit(state.copyWith(dayFilter: event.value));
+      emit(state.copyWith(dayFilter: event.value, dayFilterEnabled: true));
     });
     on<EventsDayFilterUnset>((event, emit) {
-      emit(state.copyWith(dayFilter: null));
+      emit(state.copyWith(dayFilterEnabled: false));
     });
   }
 }

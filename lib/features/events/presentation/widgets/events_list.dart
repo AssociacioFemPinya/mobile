@@ -23,6 +23,7 @@ class EventsListWidget extends StatelessWidget {
       eventsViewModeState.eventsViewMode,
       eventsFiltersState.eventTypeFilters,
       eventsFiltersState.dayFilter,
+      eventsFiltersState.dayFilterEnabled,
       eventsFiltersState.showAnswered,
       eventsFiltersState.showUndefined,
       eventsFiltersState.showWarning,
@@ -114,16 +115,17 @@ class EventsListWidget extends StatelessWidget {
     EventsViewModeEnum eventsViewMode,
     List<EventTypeEnum> eventTypeFilters,
     DateTime? dayFilter,
+    bool dayFilterEnabled,
     bool showAnswered,
     bool showUndefined,
     bool showWarning,
   ) {
-    if (eventsViewMode == EventsViewModeEnum.calendar && dayFilter == null) {
+    if (eventsViewMode == EventsViewModeEnum.calendar && !dayFilterEnabled) {
       return {};
     }
 
     DateEvents events =
-        dayFilter != null ? getEventsByDate(dayFilter, dateEvents) : dateEvents;
+        dayFilterEnabled && dayFilter != null ? getEventsByDate(dayFilter, dateEvents) : dateEvents;
     DateEvents filteredEventsByType = filterByType(events, eventTypeFilters);
     return filterByStatus(
       filteredEventsByType,

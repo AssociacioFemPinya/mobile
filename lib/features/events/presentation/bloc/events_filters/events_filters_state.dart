@@ -6,13 +6,15 @@ class EventsFiltersState extends Equatable {
   final bool showWarning;
   final List<EventTypeEnum> eventTypeFilters;
   final DateTime? dayFilter;
+  final bool dayFilterEnabled;
 
   const EventsFiltersState(
       {required this.showUndefined,
       required this.showAnswered,
       required this.showWarning,
       required this.eventTypeFilters,
-      required this.dayFilter});
+      required this.dayFilter,
+      required this.dayFilterEnabled});
 
   EventsFiltersState copyWith({
     bool? showUndefined,
@@ -27,7 +29,8 @@ class EventsFiltersState extends Equatable {
         showAnswered: showAnswered ?? this.showAnswered,
         showWarning: showWarning ?? this.showWarning,
         eventTypeFilters: eventTypeFilters ?? this.eventTypeFilters,
-        dayFilter: dayFilter);
+        dayFilter: dayFilter ?? this.dayFilter,
+        dayFilterEnabled: dayFilterEnabled ?? this.dayFilterEnabled);
   }
 
   @override
@@ -37,5 +40,6 @@ class EventsFiltersState extends Equatable {
         showWarning,
         eventTypeFilters,
         dayFilter,
+        dayFilterEnabled,
       ];
 }
