@@ -1,15 +1,26 @@
 import 'package:equatable/equatable.dart';
-
+import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.dart';
 
 class EventEntity extends Equatable {
-  final int? id;
-  final String? title;
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final String? address;
-
+  final int id;
+  final String title;
+  final DateTime startDate;
+  final DateTime endDate;
+  final String dateHour;
+  final String address;
+  final EventStatusEnum status;
+  final EventTypeEnum type;
+  
   const EventEntity(
-      {this.id, this.title, this.startDate, this.endDate, this.address});
+      {required this.id,
+      required this.title,
+      required this.startDate,
+      required this.endDate,
+      required this.dateHour,
+      required this.address,
+      required this.status,
+      required this.type});
 
   @override
   List<Object?> get props {

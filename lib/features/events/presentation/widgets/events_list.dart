@@ -1,3 +1,4 @@
+import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/mockup.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.dart';
@@ -42,7 +43,7 @@ class EventsListWidget extends StatelessWidget {
   }
 
   Widget _buildDateEventsList(
-      DateTime date, List<EventMockup> events, BuildContext context) {
+      DateTime date, List<EventEntity> events, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -60,7 +61,7 @@ class EventsListWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildEventCard(EventMockup event) {
+  Widget _buildEventCard(EventEntity event) {
     return Card(
       elevation: 0.0,
       margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
@@ -69,9 +70,10 @@ class EventsListWidget extends StatelessWidget {
           backgroundColor: _getStatusColor(event.status),
           child: Icon(_getStatusIcon(event.status), color: Colors.white),
         ),
-        title: Text(event.name),
+        title: Text(event.title),
         subtitle: Text('${event.address} - ${event.dateHour}'),
-        trailing: Icon(event.icon),
+        // TODO: Fix the icon assignment, is not the right function
+        trailing: Icon(_getStatusIcon(event.status)),
       ),
     );
   }
@@ -146,7 +148,7 @@ class EventsListWidget extends StatelessWidget {
     DateEvents filteredDateEvents = {};
 
     dateEvents.forEach((date, events) {
-      List<EventMockup> filteredEvents = events.where((event) {
+      List<EventEntity> filteredEvents = events.where((event) {
         return eventTypeFilters.contains(event.type);
       }).toList();
 
@@ -167,7 +169,7 @@ class EventsListWidget extends StatelessWidget {
     DateEvents filteredDateEvents = {};
 
     dateEvents.forEach((date, events) {
-      List<EventMockup> filteredEvents = events.where((event) {
+      List<EventEntity> filteredEvents = events.where((event) {
         if (showUndefined && event.status == EventStatusEnum.undefined) {
           return true;
         }
@@ -192,7 +194,7 @@ class EventsListWidget extends StatelessWidget {
   }
 
   DateEvents getEventsByDate(DateTime date, DateEvents dateEvents) {
-    List<EventMockup>? events = dateEvents[date];
+    List<EventEntity>? events = dateEvents[date];
     return {date: events ?? []};
   }
 }

@@ -1,6 +1,10 @@
 part of 'events_repository_bloc.dart';
 
+
+typedef DateEvents = Map<DateTime, List<EventEntity>>;
+
 class EventsRepositoryState {
+  
   final DateEvents events;
 
   EventsRepositoryState({required this.events});
@@ -24,3 +28,4 @@ class EventsRepositoryState {
   //   return [];
   // }
 }
+

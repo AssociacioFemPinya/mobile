@@ -1,3 +1,4 @@
+import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/mockup.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_calendar/events_calendar_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_calendar/events_calendar_events.dart';
@@ -94,9 +95,9 @@ class EventsCalendar extends StatelessWidget {
 
   EventLoader _createEventLoader(BuildContext context) {
     return (DateTime day) {
-      List<EventMockup>? events =
+      List<EventEntity>? events =
           context.read<EventsRepositoryBloc>().state.events[day];
-      return events != null ? [for (var event in events) event.name] : [];
+      return events != null ? [for (var event in events) event.title] : [];
     };
   }
 
