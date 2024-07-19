@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:fempinya3_flutter_app/core/global_theme.dart';
+import 'package:fempinya3_flutter_app/features/events/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:fempinya3_flutter_app/core/navigation/route_names.dart';
 import 'package:fempinya3_flutter_app/features/home/presentation/routes.dart'
@@ -14,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:fempinya3_flutter_app/features/menu/domain/entities/locale.dart';
 
 void main() {
+  setupEventsServiceLocator();
   runApp(const MyApp());
 }
 

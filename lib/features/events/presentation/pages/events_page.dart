@@ -7,6 +7,7 @@ import 'package:fempinya3_flutter_app/features/events/presentation/widgets/event
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_list.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_status_filters.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_view_mode.dart';
+import 'package:fempinya3_flutter_app/features/events/service_locator.dart';
 import 'package:fempinya3_flutter_app/features/menu/presentation/widgets/menu_widget.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filters/events_filters_bloc.dart';
 
@@ -28,7 +29,7 @@ class EventsPage extends StatelessWidget {
           create: (context) => EventsViewModeBloc(),
         ),
         BlocProvider<EventsRepositoryBloc>(
-          create: (context) => EventsRepositoryBloc(),
+          create: (context) => EventsRepositoryBloc()..add(LoadEventsList()),
         ),
         BlocProvider<EventsCalendarBloc>(
           create: (context) => EventsCalendarBloc(),

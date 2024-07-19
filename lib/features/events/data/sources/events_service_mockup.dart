@@ -11,7 +11,7 @@ class EventsServiceMockupImpl implements EventsService {
   late List<EventEntity> eventList;
 
   EventsServiceMockupImpl() {
-    final titles = ['EventMockup 1', 'EventMockup 2', 'EventMockup 3'];
+    final titles = ['EventMockup', 'EventMockup 2', 'EventMockup 3'];
     final addresses = ['Dirección 1', 'Dirección 2', 'Dirección 3'];
 
     final random = Random();
@@ -28,13 +28,13 @@ class EventsServiceMockupImpl implements EventsService {
     }
 
     List<EventEntity> generateEvents() {
-      return List<EventEntity>.generate(3, (index) {
+      return List<EventEntity>.generate(20, (index) {
         return EventEntity(
           id: index,
           status: EventStatusEnum
             .values[random.nextInt(EventStatusEnum.values.length)],
-          title: titles[index],
-          address: addresses[index],
+          title: "EventMockup $index",
+          address: "Address $index",
           type: EventTypeEnum.values[random.nextInt(EventTypeEnum.values.length)],
           startDate: getRandomDateTime(),
           endDate: DateTime.parse('2024-07-01 02:00:00.000Z'),

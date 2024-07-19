@@ -5,25 +5,35 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'events_repository_events.dart';
 part 'events_repository_state.dart';
+
 class EventsRepositoryBloc
     extends Bloc<EventsRepositoryEvent, EventsRepositoryState> {
   EventsRepositoryBloc()
       : super(EventsRepositoryState(
           events: {},
-        ));
-
-  Future<void> getEventsList() async {
-    var events = await sl<GetEventsList>().call();
-
-    events.fold(
-      (l) {
-        // TODO: handle error
-      },
-      (data) {
-        emit(
-          EventsListLoaded(listEvents: data)
-        );
+        )) {
+    on<EventsListLoaded>((events, emit) {
+      final DateEvents dateEvents = {};
+      for (var event in events.value) {
+        final eventDay = DateTime(
+            event.startDate.year, event.startDate.month, event.startDate.day);
+        if (!dateEvents.containsKey(eventDay)) {
+          dateEvents[eventDay] = [];
+        }
+        dateEvents[eventDay]!.add(event);
       }
-    );
+      emit(EventsListLoadSuccess(dateEvents));
+    });
+
+    on<LoadEventsList>((events, emit) async {
+      var result = await sl<GetEventsList>().call();
+
+      result.fold((failure) {
+        emit(EventsListLoadFailure('Failed to load events'));
+      }, (data) {
+        add(EventsListLoaded(data));
+      });
+    });
   }
 }
+
