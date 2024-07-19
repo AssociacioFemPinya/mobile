@@ -27,6 +27,9 @@ class MyApp extends StatelessWidget {
                 locale: localeModel.locale,
                 debugShowCheckedModeBanner: false,
                 themeMode: ThemeMode.system, //or ThemeMode.dark 
+                //theme: GlobalThemeData.lightThemeData,
+                //darkTheme: GlobalThemeData.darkThemeData,
+                //To-do Zan
                 theme: ThemeData(
                   colorScheme: ColorScheme.fromSeed(
                     seedColor: Colors.blue,
@@ -43,7 +46,7 @@ class MyApp extends StatelessWidget {
                   ),
                   useMaterial3: true,
                 ),
-                initialRoute: eventsRoute,
+                initialRoute: eventRoute,
               )),
     );
   }

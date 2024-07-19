@@ -20,6 +20,7 @@ dependencies:
   provider: ^6.0.0
   get_it:
   dartz:
+  flutter_svg:
   
 
 dev_dependencies:
