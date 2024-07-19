@@ -1,5 +1,5 @@
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
-import 'package:fempinya3_flutter_app/features/events/domain/entities/mockup.dart';
+import 'package:fempinya3_flutter_app/core/navigation/route_names.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_view_mode.dart';
@@ -45,24 +45,28 @@ class EventsListWidget extends StatelessWidget {
   Widget _buildDateEventsList(
       DateTime date, List<EventEntity> events, BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            date.toString(),
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-        ),
-        Column(
-          children: events.map((event) => _buildEventCard(event)).toList(),
-        ),
-      ],
-    );
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                date.toString(),
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+            Column(
+              children: events.map((event) => _buildEventCard(event, context)).toList(),
+            ),
+          ],
+        );
   }
 
-  Widget _buildEventCard(EventEntity event) {
-    return Card(
+  Widget _buildEventCard(EventEntity event, BuildContext context) {
+    return InkWell(
+        onTap: () {
+          Navigator.of(context).pushNamed(eventRoute, arguments: event);
+        },
+        child: Card(
       elevation: 0.0,
       margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: ListTile(
@@ -75,7 +79,7 @@ class EventsListWidget extends StatelessWidget {
         // TODO: Fix the icon assignment, is not the right function
         trailing: Icon(_getStatusIcon(event.status)),
       ),
-    );
+    ));
   }
 
   IconData _getStatusIcon(EventStatusEnum status) {
@@ -126,8 +130,9 @@ class EventsListWidget extends StatelessWidget {
       return {};
     }
 
-    DateEvents events =
-        dayFilterEnabled && dayFilter != null ? getEventsByDate(dayFilter, dateEvents) : dateEvents;
+    DateEvents events = dayFilterEnabled && dayFilter != null
+        ? getEventsByDate(dayFilter, dateEvents)
+        : dateEvents;
     DateEvents filteredEventsByType = filterByType(events, eventTypeFilters);
     return filterByStatus(
       filteredEventsByType,

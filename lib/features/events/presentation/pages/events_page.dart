@@ -7,7 +7,6 @@ import 'package:fempinya3_flutter_app/features/events/presentation/widgets/event
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_list.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_status_filters.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_view_mode.dart';
-import 'package:fempinya3_flutter_app/features/events/service_locator.dart';
 import 'package:fempinya3_flutter_app/features/menu/presentation/widgets/menu_widget.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filters/events_filters_bloc.dart';
 
@@ -16,6 +15,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EventsPage extends StatelessWidget {
+  const EventsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     var translate = AppLocalizations.of(context)!;
