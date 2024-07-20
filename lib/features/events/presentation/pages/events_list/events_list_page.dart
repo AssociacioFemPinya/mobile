@@ -48,6 +48,7 @@ class EventsListPage extends StatelessWidget {
             children: [
                EventsWithAlertBannerWidget(),
                EventsViewModeWidget(),
+                SizedBox(height: 5,),
                EventsStatusFiltersWidget(),
                Row(children: [
                 EventsFiltersButton(),

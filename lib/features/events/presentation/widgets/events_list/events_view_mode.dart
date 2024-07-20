@@ -87,6 +87,7 @@ class _EventsViewModeWidgetState extends State<EventsViewModeWidget>
         ),
       ),
     };
+    
     return BlocBuilder<EventsViewModeBloc, EventsViewModeState>(
       builder: (context, state) {
         return SizedBox(
@@ -96,6 +97,8 @@ class _EventsViewModeWidgetState extends State<EventsViewModeWidget>
                    borderRadius:  const BorderRadius.only(
                         topLeft: Radius.circular(8.0),
                         topRight: Radius.circular(8.0),
+                        bottomLeft: Radius.circular(8.0),
+                        bottomRight: Radius.circular(8.0)
                       ),
                   color: Theme.of(context)
                     .colorScheme
@@ -109,8 +112,10 @@ class _EventsViewModeWidgetState extends State<EventsViewModeWidget>
                     unselectedLabelColor: Colors.black,
                     indicator: const BoxDecoration(
                        borderRadius:  BorderRadius.only(
-                        topLeft: Radius.circular(8.0),
+                         topLeft: Radius.circular(8.0),
                         topRight: Radius.circular(8.0),
+                        bottomLeft: Radius.circular(8.0),
+                        bottomRight: Radius.circular(8.0)
                       ),
                       color:  Color.fromARGB(255, 45, 131, 236),
                     ),

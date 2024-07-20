@@ -26,6 +26,7 @@ class EventsStatusFiltersWidget extends StatelessWidget {
                         .read<EventsFiltersBloc>()
                         .add(EventsStatusFilterUndefined(value));
                   },
+                  isFirst: true,
                 ),
               ),
               Expanded(
@@ -50,6 +51,7 @@ class EventsStatusFiltersWidget extends StatelessWidget {
                         .read<EventsFiltersBloc>()
                         .add(EventsStatusFilterWarning(value));
                   },
+                  isLast: true,
                 ),
               ),
             ],
@@ -60,42 +62,58 @@ class EventsStatusFiltersWidget extends StatelessWidget {
   }
 
   Widget buildEventStatusFilterButton(
-      bool selected, String label, BuildContext context, ValueChanged<bool> onSelected) {
+      bool selected, String label, BuildContext context, ValueChanged<bool> onSelected,
+      {bool isFirst = false, bool isLast = false}) {
     return Container(
       margin: EdgeInsets.zero, // Elimina márgenes
-      child: TextButton(
-        style: TextButton.styleFrom(
-          backgroundColor: selected
-              ? Theme.of(context).colorScheme.primaryFixedDim
-              : Theme.of(context).colorScheme.primaryFixed,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(0),
-            side: BorderSide.none, // Elimina el borde
-          ),
-          padding: EdgeInsets.zero, // Elimina el padding interno
-          minimumSize: Size(double.infinity, 48), // Ajusta el tamaño mínimo
+      child: Material(
+        shadowColor: Colors.blue.withOpacity(0.5),
+        elevation: selected ? 1 : 0, // Aplica elevación si está seleccionado
+        borderRadius: BorderRadius.only(
+          topLeft: isFirst ? Radius.circular(5.0) : Radius.circular(0),
+          bottomLeft: isFirst ? Radius.circular(5.0) : Radius.circular(0),
+          topRight: isLast ? Radius.circular(5.0) : Radius.circular(0),
+          bottomRight: isLast ? Radius.circular(5.0) : Radius.circular(0),
         ),
-        onPressed: () => onSelected(!selected),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center, // Centra el contenido
-          children: [
-            if (selected) ...[
-              Icon(
-                Icons.check,
-                color: Theme.of(context).colorScheme.onPrimary,
-                size: 20,
+        child: TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: selected
+                ? Theme.of(context).colorScheme.primaryFixedDim
+                : Theme.of(context).colorScheme.primaryFixed,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: isFirst ? Radius.circular(5.0) : Radius.circular(0),
+                bottomLeft: isFirst ? Radius.circular(5.0) : Radius.circular(0),
+                topRight: isLast ? Radius.circular(5.0) : Radius.circular(0),
+                bottomRight: isLast ? Radius.circular(5.0) : Radius.circular(0),
               ),
-              SizedBox(width: 8), // Espacio entre el icono y el texto
-            ],
-            Text(
-              label,
-              style: TextStyle(
-                color: selected
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : Colors.black, // Texto negro cuando no está seleccionado
-              ),
+              side: BorderSide.none, // Elimina el borde
             ),
-          ],
+            padding: EdgeInsets.zero, // Elimina el padding interno
+            minimumSize: Size(double.infinity, 48), // Ajusta el tamaño mínimo
+          ),
+          onPressed: () => onSelected(!selected),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center, // Centra el contenido
+            children: [
+              if (selected) ...[
+                Icon(
+                  Icons.check,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  size: 20,
+                ),
+                SizedBox(width: 8), // Espacio entre el icono y el texto
+              ],
+              Text(
+                label,
+                style: TextStyle(
+                  color: selected
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : Colors.black, // Texto negro cuando no está seleccionado
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
