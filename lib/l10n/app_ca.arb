@@ -27,5 +27,7 @@
     "eventsPageTypeFilterTitle": "Tipus",
     "eventPageStatusFilterPending": "Pendent",
     "eventPageStatusFilterAnswered": "Respost",
-    "eventPageStatusFilterWarning": "Amb alerta"
+    "eventPageStatusFilterWarning": "Amb alerta",
+    "eventPageEventViewModeList" : "Llista",
+    "eventPageEventViewModeCalendar": "Calendari"
 }

@@ -6,6 +6,7 @@ import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_l
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_filters/events_filters_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_view_mode/events_view_mode_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EventsViewModeWidget extends StatefulWidget {
   const EventsViewModeWidget({super.key});
@@ -19,44 +20,19 @@ class _EventsViewModeWidgetState extends State<EventsViewModeWidget>
   late TabController _tabController;
   late EventsViewModeEnum _currentViewMode;
 
-  final Map<EventsViewModeEnum, Tab> _tabs = {
-    EventsViewModeEnum.list: const Tab(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.list, size: 20),
-          SizedBox(width: 8),
-          Text('Lista', style: TextStyle(fontSize: 16)),
-        ],
-      ),
-    ),
-    EventsViewModeEnum.calendar: const Tab(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.calendar_month, size: 20),
-          SizedBox(width: 8),
-          Text('Calendario', style: TextStyle(fontSize: 16)),
-        ],
-      ),
-    ),
+  late Map<EventsViewModeEnum, int> tabIndexMap = {
+    EventsViewModeEnum.list: 0,
+    EventsViewModeEnum.calendar: 1,
   };
-
-  late Map<EventsViewModeEnum, int> _tabIndexMap;
 
   @override
   void initState() {
     super.initState();
 
-    _tabIndexMap = {
-      EventsViewModeEnum.list: 0,
-      EventsViewModeEnum.calendar: 1,
-    };
-
-    _tabController = TabController(length: _tabs.length, vsync: this)
+    _tabController = TabController(length: tabIndexMap.length, vsync: this)
       ..addListener(() {
         if (_tabController.indexIsChanging) {
-          EventsViewModeEnum selectedMode = _tabIndexMap.entries
+          EventsViewModeEnum selectedMode = tabIndexMap.entries
               .firstWhere((entry) => entry.value == _tabController.index)
               .key;
           _onTabChanged(selectedMode);
@@ -66,7 +42,7 @@ class _EventsViewModeWidgetState extends State<EventsViewModeWidget>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final state = context.read<EventsViewModeBloc>().state;
       _currentViewMode = state.eventsViewMode;
-      _tabController.index = _tabIndexMap[_currentViewMode]!;
+      _tabController.index = tabIndexMap[_currentViewMode]!;
     });
   }
 
@@ -84,6 +60,33 @@ class _EventsViewModeWidgetState extends State<EventsViewModeWidget>
 
   @override
   Widget build(BuildContext context) {
+    var translate = AppLocalizations.of(context)!;
+
+    final Map<EventsViewModeEnum, Tab> tabs = {
+      EventsViewModeEnum.list: Tab(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.list, size: 20),
+            const SizedBox(width: 8),
+            Text(translate.eventPageEventViewModeList,
+                style: const TextStyle(fontSize: 16)),
+          ],
+        ),
+      ),
+      EventsViewModeEnum.calendar:  Tab(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.calendar_month, size: 20),
+            const SizedBox(width: 8),
+            Text(translate.eventPageEventViewModeCalendar,
+                style: const TextStyle(fontSize: 16)),
+          ],
+        ),
+      ),
+    };
+
     return BlocBuilder<EventsViewModeBloc, EventsViewModeState>(
       builder: (context, state) {
         return SizedBox(
@@ -96,7 +99,7 @@ class _EventsViewModeWidgetState extends State<EventsViewModeWidget>
             ),
             child: TabBar(
               controller: _tabController,
-              tabs: _tabs.values.toList(),
+              tabs: tabs.values.toList(),
               labelColor: Colors.white,
               unselectedLabelColor: Colors.black,
               indicator: BoxDecoration(

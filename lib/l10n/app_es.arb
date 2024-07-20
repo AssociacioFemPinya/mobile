@@ -11,7 +11,7 @@
   "menuHome": "Inicio",
   "menuEvents": "Eventos",
   "menuNotifications": "Notificaciones",
-  "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} other {-}}",
+    "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} other {-}}",
   "@menuLanguageSettings": {
       "placeholders": {
           "locale": {
@@ -27,5 +27,8 @@
   "eventsPageTypeFilterTitle": "Tipo",
   "eventPageStatusFilterPending": "Pendiente",
   "eventPageStatusFilterAnswered": "Respondido",
-  "eventPageStatusFilterWarning": "Con alerta"
+  "eventPageStatusFilterWarning": "Con alerta",
+
+    "eventPageEventViewModeList" : "Lista",
+    "eventPageEventViewModeCalendar": "Calendario"
 }
