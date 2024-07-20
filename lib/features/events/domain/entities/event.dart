@@ -11,6 +11,7 @@ class EventEntity extends Equatable {
   final String address;
   final EventStatusEnum status;
   final EventTypeEnum type;
+  final String description;
   
   const EventEntity(
       {required this.id,
@@ -20,7 +21,9 @@ class EventEntity extends Equatable {
       required this.dateHour,
       required this.address,
       required this.status,
-      required this.type});
+      required this.type,
+      required this.description
+      });
 
   @override
   List<Object?> get props {

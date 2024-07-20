@@ -37,6 +37,7 @@ class EventsServiceMockupImpl implements EventsService {
           startDate: getRandomDateTime(),
           endDate: DateTime.parse('2024-07-01 02:00:00.000Z'),
           dateHour: '10:00 AM',
+          description: 'Lorem ipsum dolor sit amet. Sed quisquam minus aut voluptas quibusdam in quia assumenda non consequatur voluptates in consequatur omnis. Qui praesentium officia aut neque neque qui omnis eligendi et eaque ducimus sit molestias harum. A obcaecati labore aut nobis ullam aut sint dolorem.'
         );
       });
     }

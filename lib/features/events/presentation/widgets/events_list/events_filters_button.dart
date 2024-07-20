@@ -44,7 +44,7 @@ class EventsFiltersButton extends StatelessWidget {
                 Text(
                   translate.eventsPageTypeFilterTitle,
                   style:
-                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                      TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(width: 3),
                 Icon(

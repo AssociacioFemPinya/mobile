@@ -43,20 +43,19 @@ class EventsListPage extends StatelessWidget {
         ),
         drawer: const MenuWidget(),
         body: const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
+          padding:  EdgeInsets.all(8.0),
+          child:  Column(
             children: [
-              EventsWithAlertBannerWidget(),
-              EventsViewModeWidget(),
-              Row(children: [
+               EventsWithAlertBannerWidget(),
+               EventsViewModeWidget(),
+               EventsStatusFiltersWidget(),
+               Row(children: [
                 EventsFiltersButton(),
                 EventsFiltersInputChipsWidget()
               ]),
-              Divider(),
-              EventsStatusFiltersWidget(),
-              Divider(),
-              EventsCalendar(),
-              Expanded(child: EventsListWidget()),
+               Divider(),
+               EventsCalendar(),
+               Expanded(child: EventsListWidget()),
             ],
           ),
         ),
@@ -64,3 +63,5 @@ class EventsListPage extends StatelessWidget {
     );
   }
 }
+
+

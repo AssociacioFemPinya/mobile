@@ -7,12 +7,12 @@ class EventInfoTile extends StatelessWidget {
     super.key,
     required this.svgSrc,
     required this.title,
-    this.isShowBottomBorder = false,
+    this.isShowBottomTop = true,
     required this.press,
   });
 
   final String svgSrc, title;
-  final bool isShowBottomBorder;
+  final bool isShowBottomTop;
   final VoidCallback press;
 
   @override
@@ -20,7 +20,7 @@ class EventInfoTile extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Column(
         children: [
-          const Divider(height: 1),
+          if (isShowBottomTop) const Divider(height: 1),
           ListTile(
             onTap: press,
             minLeadingWidth: 24,
@@ -29,7 +29,7 @@ class EventInfoTile extends StatelessWidget {
             title: Text(title),
             trailing: SvgPicture.asset(AppIcons.miniArrowRight),
           ),
-          if (isShowBottomBorder) const Divider(height: 1),
+          const Divider(height: 1),
         ],
       ),
     );

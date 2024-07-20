@@ -75,7 +75,7 @@ class _EventsViewModeWidgetState extends State<EventsViewModeWidget>
           ],
         ),
       ),
-      EventsViewModeEnum.calendar:  Tab(
+      EventsViewModeEnum.calendar: Tab(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -87,31 +87,44 @@ class _EventsViewModeWidgetState extends State<EventsViewModeWidget>
         ),
       ),
     };
-
     return BlocBuilder<EventsViewModeBloc, EventsViewModeState>(
       builder: (context, state) {
         return SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Container(
-            height: kToolbarHeight - 8.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              color: Colors.grey.shade200,
-            ),
-            child: TabBar(
-              controller: _tabController,
-              tabs: tabs.values.toList(),
-              labelColor: Colors.white,
-              unselectedLabelColor: Colors.black,
-              indicator: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: const Color.fromARGB(255, 45, 131, 236),
-              ),
-              indicatorPadding: EdgeInsets.zero,
-              indicatorSize: TabBarIndicatorSize.tab,
-            ),
-          ),
-        );
+            width: MediaQuery.of(context).size.width,
+            child: DecoratedBox(
+                decoration: BoxDecoration(
+                   borderRadius:  const BorderRadius.only(
+                        topLeft: Radius.circular(8.0),
+                        topRight: Radius.circular(8.0),
+                      ),
+                  color: Theme.of(context)
+                    .colorScheme
+                    .primaryFixedDim
+                    .withOpacity(0.3),
+                ),
+                child: TabBar(
+                    controller: _tabController,
+                    tabs: tabs.values.toList(),
+                    labelColor: Colors.white,
+                    unselectedLabelColor: Colors.black,
+                    indicator: const BoxDecoration(
+                       borderRadius:  BorderRadius.only(
+                        topLeft: Radius.circular(8.0),
+                        topRight: Radius.circular(8.0),
+                      ),
+                      color:  Color.fromARGB(255, 45, 131, 236),
+                    ),
+                    indicatorPadding: EdgeInsets.zero,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    padding: EdgeInsets.zero,
+                    dividerColor: Colors.transparent,
+                    overlayColor: WidgetStateProperty.resolveWith(
+                        (Set<WidgetState> states) {
+                      if (states.contains(WidgetState.hovered)) {
+                        return Colors.transparent; // Color for hover state
+                      }
+                      return Colors.transparent; // Default color
+                    }))));
       },
     );
   }

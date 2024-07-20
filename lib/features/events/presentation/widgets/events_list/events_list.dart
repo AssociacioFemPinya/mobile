@@ -1,4 +1,5 @@
 import 'package:fempinya3_flutter_app/core/configs/assets/app_icons.dart';
+import 'package:fempinya3_flutter_app/core/utils/datetime_utils.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:fempinya3_flutter_app/core/navigation/route_names.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
@@ -35,7 +36,11 @@ class EventsListWidget extends StatelessWidget {
 
     return ListView.separated(
       itemCount: filteredEvents.length,
-      separatorBuilder: (context, index) => const Divider(),
+      separatorBuilder: (context, index) => const Divider(
+        thickness: 1,
+        indent: 20,
+        endIndent: 20
+      ),
       itemBuilder: (context, index) {
         final date = filteredEvents.keys.toList()[index];
         final events = filteredEvents[date] ?? [];
@@ -56,7 +61,7 @@ class EventsListWidget extends StatelessWidget {
               children: [
                 const Icon(Icons.calendar_month),
                 Text(
-                  formatDateToHumanLanguage(
+                  DatetimeUtils.formatDateToHumanLanguage(
                       date, Localizations.localeOf(context).toString()),
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
@@ -70,31 +75,38 @@ class EventsListWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildEventCard(EventEntity event, BuildContext context) {
-    return InkWell(
-        onTap: () {
-          Navigator.of(context).pushNamed(eventRoute, arguments: event);
-        },
-        child: Card(
-          color: _getStatusBackgroundColor(event.status),
-          elevation: 0.0,
-          margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: _getStatusColor(event.status),
-              child: Icon(_getStatusIcon(event.status), color: Colors.white),
-            ),
-            title: Text(event.title),
-            subtitle: Text('${event.address} - ${event.dateHour}'),
-            // TODO: Fix the icon assignment, is not the right function
-            trailing: SvgPicture.asset(
-              _getTypeIcon(event.type),
-              width: 60,
-              height: 60,
-            ),
+Widget _buildEventCard(EventEntity event, BuildContext context) {
+  return InkWell(
+    onTap: () {
+      Navigator.of(context).pushNamed(eventRoute, arguments: event);
+    },
+    child: Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      color: _getStatusBackgroundColor(event.status),
+      elevation: 0.0,
+      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      child: Padding( 
+        padding: const EdgeInsets.all(8.0), 
+        child: ListTile(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 8.0), // Ajusta el margen interno del ListTile
+          leading: CircleAvatar(
+            backgroundColor: _getStatusColor(event.status),
+            child: Icon(_getStatusIcon(event.status), color: Colors.white),
           ),
-        ));
-  }
+          title: Text(event.title),
+          subtitle: Text('${event.address} - ${event.dateHour}'),
+          trailing: SvgPicture.asset(
+            _getTypeIcon(event.type),
+            width: 50, // Ajusta el ancho del ícono
+            height: 50, // Ajusta la altura del ícono
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
 
   IconData _getStatusIcon(EventStatusEnum status) {
     switch (status) {

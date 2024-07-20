@@ -7,7 +7,6 @@ import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_l
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 typedef EventLoader = List<String> Function(DateTime day);
 
