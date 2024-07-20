@@ -1,3 +1,4 @@
+import 'package:fempinya3_flutter_app/core/configs/assets/app_icons.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:fempinya3_flutter_app/core/navigation/route_names.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
@@ -8,6 +9,7 @@ import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_r
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view_mode/events_view_mode_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class EventsListWidget extends StatelessWidget {
   const EventsListWidget({Key? key}) : super(key: key);
@@ -67,6 +69,7 @@ class EventsListWidget extends StatelessWidget {
           Navigator.of(context).pushNamed(eventRoute, arguments: event);
         },
         child: Card(
+      color: _getStatusBackgroundColor(event.status),
       elevation: 0.0,
       margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: ListTile(
@@ -77,7 +80,7 @@ class EventsListWidget extends StatelessWidget {
         title: Text(event.title),
         subtitle: Text('${event.address} - ${event.dateHour}'),
         // TODO: Fix the icon assignment, is not the right function
-        trailing: Icon(_getStatusIcon(event.status)),
+        trailing: SvgPicture.asset(_getTypeIcon(event.type), width: 60, height: 60,),
       ),
     ));
   }
@@ -99,7 +102,37 @@ class EventsListWidget extends StatelessWidget {
     }
   }
 
-  Color _getStatusColor(EventStatusEnum status) {
+    String _getTypeIcon(EventTypeEnum type) {
+    switch (type) {
+      case EventTypeEnum.activity:
+        return AppIcons.activityIcon;
+      case EventTypeEnum.training:
+        return AppIcons.trainingIcon;
+      case EventTypeEnum.performance:
+        return AppIcons.performanceIcon;
+      default:
+        return AppIcons.miniArrowRight;
+    }
+  }
+
+  Color _getStatusBackgroundColor(EventStatusEnum status) {
+    switch (status) {
+      case EventStatusEnum.accepted:
+        return Color.fromRGBO(202, 245, 195, 100);
+      case EventStatusEnum.declined:
+        return const Color.fromRGBO(245, 127, 141, 100);
+      case EventStatusEnum.unknown:
+        return const Color.fromRGBO(249, 208, 130, 100);
+      case EventStatusEnum.undefined:
+        return const Color.fromRGBO(202, 196, 208, 100);
+      case EventStatusEnum.warning:
+        return Color.fromRGBO(202, 245, 195, 100);
+      default:
+        return const Color.fromRGBO(202, 196, 208, 100);
+    }
+  }
+
+    Color _getStatusColor(EventStatusEnum status) {
     switch (status) {
       case EventStatusEnum.accepted:
         return Colors.green;
@@ -115,6 +148,7 @@ class EventsListWidget extends StatelessWidget {
         return Colors.grey;
     }
   }
+
 
   DateEvents filterEvents(
     DateEvents dateEvents,
