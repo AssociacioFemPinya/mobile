@@ -51,6 +51,7 @@ class _EventsViewModeWidgetState extends State<EventsViewModeWidget>
     if (viewMode == EventsViewModeEnum.list) {
       context.read<EventsFiltersBloc>().add(EventsDayFilterUnset());
     } else if (viewMode == EventsViewModeEnum.calendar) {
+      context.read<EventsCalendarBloc>().add(LoadCalendarEvents());
       context.read<EventsCalendarBloc>().add(EventsCalendarDateSelectedUnset());
       context
           .read<EventsCalendarBloc>()

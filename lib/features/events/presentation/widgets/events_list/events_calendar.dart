@@ -1,14 +1,13 @@
-import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_calendar/events_calendar_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_calendar/events_calendar_events.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_calendar/events_calendar_state.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_filters/events_filters_bloc.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_list/events_list_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_view_mode/events_view_mode_bloc.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 typedef EventLoader = List<String> Function(DateTime day);
 
@@ -28,11 +27,14 @@ class EventsCalendar extends StatelessWidget {
   }
 
   BlocBuilder tableCalendar(BuildContext context) {
+    final locale = Localizations.localeOf(context).toString();
     return BlocBuilder<EventsCalendarBloc, EventsCalendarState>(
         builder: (context, state) {
       return TableCalendar(
         firstDay: DateTime.utc(2010, 10, 16),
         lastDay: DateTime.utc(2030, 3, 14),
+        startingDayOfWeek: StartingDayOfWeek.monday,
+        locale: locale,
         focusedDay: state.focusedDay,
         calendarFormat: state.calendarFormat,
         headerStyle: const HeaderStyle(
@@ -94,9 +96,7 @@ class EventsCalendar extends StatelessWidget {
 
   EventLoader _createEventLoader(BuildContext context) {
     return (DateTime day) {
-      List<EventEntity>? events =
-          context.read<EventsListBloc>().state.events[day];
-      return events != null ? [for (var event in events) event.title] : [];
+      return context.read<EventsCalendarBloc>().state.calendarEvents[day] ?? [];
     };
   }
 

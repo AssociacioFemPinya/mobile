@@ -15,7 +15,7 @@ class EventsListBloc
     on<EventsListLoaded>((events, emit) {
       final DateEvents dateEvents = {};
       for (var event in events.value) {
-        final eventDay = DateTime(
+        final eventDay = DateTime.utc(
             event.startDate.year, event.startDate.month, event.startDate.day);
         if (!dateEvents.containsKey(eventDay)) {
           dateEvents[eventDay] = [];

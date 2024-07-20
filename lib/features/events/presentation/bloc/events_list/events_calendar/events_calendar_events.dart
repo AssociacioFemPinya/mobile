@@ -1,3 +1,4 @@
+import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class EventsCalendarEvent {}
@@ -19,4 +20,16 @@ class EventsCalendarDateFocused extends EventsCalendarEvent {
 class EventsCalendarFormatSet extends EventsCalendarEvent {
   final CalendarFormat value;
   EventsCalendarFormatSet(this.value);
+}
+
+class LoadCalendarEvents extends EventsCalendarEvent {}
+
+class CalendarEventsLoaded extends EventsCalendarEvent {
+    final List<EventEntity> value;
+    CalendarEventsLoaded(this.value);
+}
+
+class CalendarEventsLoadFailure extends EventsCalendarEvent {
+    final String value;
+    CalendarEventsLoadFailure(this.value);
 }
