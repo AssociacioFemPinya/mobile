@@ -4,12 +4,13 @@ import 'package:fempinya3_flutter_app/core/navigation/route_names.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_view_mode.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_filters/events_filters_bloc.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_repository/events_repository_bloc.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_view_mode/events_view_mode_bloc.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_filters/events_filters_bloc.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_repository/events_repository_bloc.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_view_mode/events_view_mode_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 class EventsListWidget extends StatelessWidget {
   const EventsListWidget({Key? key}) : super(key: key);
@@ -47,20 +48,26 @@ class EventsListWidget extends StatelessWidget {
   Widget _buildDateEventsList(
       DateTime date, List<EventEntity> events, BuildContext context) {
     return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                date.toString(),
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ),
-            Column(
-              children: events.map((event) => _buildEventCard(event, context)).toList(),
-            ),
-          ],
-        );
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                const Icon(Icons.calendar_month),
+                Text(
+                  formatDateToHumanLanguage(
+                      date, Localizations.localeOf(context).toString()),
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ],
+            )),
+        Column(
+          children:
+              events.map((event) => _buildEventCard(event, context)).toList(),
+        ),
+      ],
+    );
   }
 
   Widget _buildEventCard(EventEntity event, BuildContext context) {
@@ -69,20 +76,24 @@ class EventsListWidget extends StatelessWidget {
           Navigator.of(context).pushNamed(eventRoute, arguments: event);
         },
         child: Card(
-      color: _getStatusBackgroundColor(event.status),
-      elevation: 0.0,
-      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: _getStatusColor(event.status),
-          child: Icon(_getStatusIcon(event.status), color: Colors.white),
-        ),
-        title: Text(event.title),
-        subtitle: Text('${event.address} - ${event.dateHour}'),
-        // TODO: Fix the icon assignment, is not the right function
-        trailing: SvgPicture.asset(_getTypeIcon(event.type), width: 60, height: 60,),
-      ),
-    ));
+          color: _getStatusBackgroundColor(event.status),
+          elevation: 0.0,
+          margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: _getStatusColor(event.status),
+              child: Icon(_getStatusIcon(event.status), color: Colors.white),
+            ),
+            title: Text(event.title),
+            subtitle: Text('${event.address} - ${event.dateHour}'),
+            // TODO: Fix the icon assignment, is not the right function
+            trailing: SvgPicture.asset(
+              _getTypeIcon(event.type),
+              width: 60,
+              height: 60,
+            ),
+          ),
+        ));
   }
 
   IconData _getStatusIcon(EventStatusEnum status) {
@@ -102,7 +113,7 @@ class EventsListWidget extends StatelessWidget {
     }
   }
 
-    String _getTypeIcon(EventTypeEnum type) {
+  String _getTypeIcon(EventTypeEnum type) {
     switch (type) {
       case EventTypeEnum.activity:
         return AppIcons.activityIcon;
@@ -132,7 +143,7 @@ class EventsListWidget extends StatelessWidget {
     }
   }
 
-    Color _getStatusColor(EventStatusEnum status) {
+  Color _getStatusColor(EventStatusEnum status) {
     switch (status) {
       case EventStatusEnum.accepted:
         return Colors.green;
@@ -148,7 +159,6 @@ class EventsListWidget extends StatelessWidget {
         return Colors.grey;
     }
   }
-
 
   DateEvents filterEvents(
     DateEvents dateEvents,
@@ -215,6 +225,7 @@ class EventsListWidget extends StatelessWidget {
         if (showAnswered &&
             (event.status == EventStatusEnum.accepted ||
                 event.status == EventStatusEnum.declined ||
+                event.status == EventStatusEnum.warning ||
                 event.status == EventStatusEnum.unknown)) {
           return true;
         }
@@ -235,5 +246,14 @@ class EventsListWidget extends StatelessWidget {
   DateEvents getEventsByDate(DateTime date, DateEvents dateEvents) {
     List<EventEntity>? events = dateEvents[date];
     return {date: events ?? []};
+  }
+
+  String formatDateToHumanLanguage(DateTime date, String locale) {
+    // TODO: this is not reloading when the user changes the language
+    // Initialize date format for the given locale
+    final DateFormat dateFormat = DateFormat.yMMMMd(locale);
+
+    // Format the date
+    return dateFormat.format(date);
   }
 }
