@@ -13,7 +13,7 @@ class EventsFiltersButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Align(
-        alignment: Alignment.centerRight,
+        //alignment: Alignment.centerRight,
         child: buildFilterButton(context),
       ),
     );

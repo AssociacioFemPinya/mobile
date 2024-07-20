@@ -19,7 +19,7 @@ class EventPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(event.title),
         ),
-        drawer: const MenuWidget(),
+        //drawer: const MenuWidget(),
         body: SafeArea(
             child: CustomScrollView(
           slivers: [
@@ -28,7 +28,7 @@ class EventPage extends StatelessWidget {
                 title: "Horaris", // todo zan traducciones
                 press: () {
                   customModalBottomSheet(context,
-                      height: MediaQuery.of(context).size.height * 92,
+                      height: MediaQuery.of(context).size.height - 100,
                       child: EventScheduleScreen(event: event));
                 })
           ],

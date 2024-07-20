@@ -16,8 +16,8 @@ Future<dynamic> customModalBottomSheet(
     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(defaultBorderRadious * 2),
-        topRight: Radius.circular(defaultBorderRadious * 2),
+        topLeft: Radius.circular(defaultBorderRadious * 1.5),
+        topRight: Radius.circular(defaultBorderRadious * 1.5),
       ),
     ),
     builder: (context) => SizedBox(
