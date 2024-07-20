@@ -3,13 +3,13 @@ import 'package:fempinya3_flutter_app/features/events/domain/useCases/get_events
 import 'package:fempinya3_flutter_app/features/events/service_locator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-part 'events_repository_events.dart';
-part 'events_repository_state.dart';
+part 'events_list_events.dart';
+part 'events_list_state.dart';
 
-class EventsRepositoryBloc
-    extends Bloc<EventsRepositoryEvent, EventsRepositoryState> {
-  EventsRepositoryBloc()
-      : super(EventsRepositoryState(
+class EventsListBloc
+    extends Bloc<EventsListEvent, EventsListState> {
+  EventsListBloc()
+      : super(EventsListState(
           events: {},
         )) {
     on<EventsListLoaded>((events, emit) {
@@ -36,4 +36,3 @@ class EventsRepositoryBloc
     });
   }
 }
-

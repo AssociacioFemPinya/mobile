@@ -1,27 +1,27 @@
-part of 'events_repository_bloc.dart';
+part of 'events_list_bloc.dart';
 
 typedef DateEvents = Map<DateTime, List<EventEntity>>;
 
-class EventsRepositoryState {
+class EventsListState {
   final DateEvents events;
 
-  EventsRepositoryState({required this.events});
+  EventsListState({required this.events});
 
-  EventsRepositoryState copyWith({
+  EventsListState copyWith({
     DateEvents? events,
   }) {
-    return EventsRepositoryState(
+    return EventsListState(
       events: events ?? this.events,
     );
   }
 }
 
-class EventsListLoadSuccess extends EventsRepositoryState {
+class EventsListLoadSuccess extends EventsListState {
   EventsListLoadSuccess(Map<DateTime, List<EventEntity>> events)
       : super(events: events);
 }
 
-class EventsListLoadFailure extends EventsRepositoryState {
+class EventsListLoadFailure extends EventsListState {
   final String error;
 
   EventsListLoadFailure(this.error) : super(events: {});

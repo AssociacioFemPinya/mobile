@@ -1,5 +1,5 @@
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_calendar/events_calendar_bloc.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_repository/events_repository_bloc.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_list/events_list_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_view_mode/events_view_mode_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_list/events_calendar.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/events_list/events_filters_button.dart';
@@ -30,8 +30,8 @@ class EventsListPage extends StatelessWidget {
         BlocProvider<EventsViewModeBloc>(
           create: (context) => EventsViewModeBloc(),
         ),
-        BlocProvider<EventsRepositoryBloc>(
-          create: (context) => EventsRepositoryBloc()..add(LoadEventsList()),
+        BlocProvider<EventsListBloc>(
+          create: (context) => EventsListBloc()..add(LoadEventsList()),
         ),
         BlocProvider<EventsCalendarBloc>(
           create: (context) => EventsCalendarBloc(),
