@@ -22,16 +22,18 @@ class EventsListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var translate = AppLocalizations.of(context)!;
 
+    EventsFiltersBloc eventsFiltersBloc = EventsFiltersBloc();
+
     return MultiBlocProvider(      
       providers: [
         BlocProvider<EventsFiltersBloc>(
-          create: (context) => EventsFiltersBloc(),
+          create: (context) => eventsFiltersBloc,
         ),
         BlocProvider<EventsViewModeBloc>(
           create: (context) => EventsViewModeBloc(),
         ),
         BlocProvider<EventsListBloc>(
-          create: (context) => EventsListBloc(EventsFiltersBloc().state)..add(LoadEventsList()),
+          create: (context) => EventsListBloc()..add(LoadEventsList(eventsFiltersBloc.state)),
         ),
         BlocProvider<EventsCalendarBloc>(
           create: (context) => EventsCalendarBloc(),
@@ -47,13 +49,7 @@ class EventsListPage extends StatelessWidget {
               BlocListener<EventsFiltersBloc, EventsFiltersState>(
                 // Whenever the filters are changed, we need to refresh the events list
                 listener: (context, state) {
-                  context.read<EventsListBloc>().add(LoadEventsList());
-                },
-              ),
-              BlocListener<EventsViewModeBloc, EventsViewModeState>(
-                // Whenever the mode view is changed, we need to refresh the events list
-                listener: (context, state) {
-                  context.read<EventsListBloc>().add(LoadEventsList());
+                  context.read<EventsListBloc>().add(LoadEventsList(state));
                 },
               ),
             ],

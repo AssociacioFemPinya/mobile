@@ -61,14 +61,10 @@ class EventsServiceMockupImpl implements EventsService {
     List<EventEntity> eventsList,
     List<EventTypeEnum> eventTypeFilters,
     DateTime? dayFilter,
-    //   bool dayFilterEnabled,
     bool showAnswered,
     bool showUndefined,
     bool showWarning,
   ) {
-    // if (eventsViewMode == EventsViewModeEnum.calendar && !dayFilterEnabled) {
-    //   return [];
-    // }
 
     List<EventEntity> events = dayFilter != null
         ? _getEventsByDate(dayFilter, eventsList)
@@ -121,6 +117,7 @@ class EventsServiceMockupImpl implements EventsService {
 
   List<EventEntity> _getEventsByDate(
       DateTime date, List<EventEntity> eventsList) {
-    return eventsList.where((event) => event.startDate == date).toList();
+    return eventsList.where((event) => date == DateTime.utc(
+            event.startDate.year, event.startDate.month, event.startDate.day)).toList();
   }
 }

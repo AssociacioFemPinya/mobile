@@ -25,6 +25,7 @@ class GetEventsList implements UseCase<Either, GetEventsListParams> {
 
   @override
   Future<Either> call({required GetEventsListParams params}) async {
+    print("getEventsList");
     return await repository.getEventsList(params);
   }
 }

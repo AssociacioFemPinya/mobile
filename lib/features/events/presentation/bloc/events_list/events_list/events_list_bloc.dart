@@ -8,9 +8,9 @@ part 'events_list_events.dart';
 part 'events_list_state.dart';
 
 class EventsListBloc extends Bloc<EventsListEvent, EventsListState> {
-  EventsListBloc(EventsFiltersState eventsFiltersState)
+  EventsListBloc()
       : super(EventsListState(
-            events: {}, eventsFiltersState: eventsFiltersState)) {
+            events: {})) {
     on<EventsListLoadSuccess>((events, emit) {
       final DateEvents dateEvents = {};
       for (var event in events.value) {
@@ -22,13 +22,16 @@ class EventsListBloc extends Bloc<EventsListEvent, EventsListState> {
         dateEvents[eventDay]!.add(event);
       }
 
-      emit(state.copyWith(
-        events: dateEvents
-      ));
+      emit(state.copyWith(events: dateEvents));
     });
 
-    on<LoadEventsList>((events, emit) async {
-      GetEventsListParams getEventsListParams = GetEventsListParams();
+    on<LoadEventsList>((eventsFiltersState, emit) async {
+      GetEventsListParams getEventsListParams = GetEventsListParams(
+          showAnswered: eventsFiltersState.value.showAnswered,
+          showUndefined: eventsFiltersState.value.showUndefined,
+          showWarning: eventsFiltersState.value.showWarning,
+          eventTypeFilters: eventsFiltersState.value.eventTypeFilters,
+          dayFilter: eventsFiltersState.value.dayFilterEnabled ? eventsFiltersState.value.dayFilter : null);
       var result = await sl<GetEventsList>().call(params: getEventsListParams);
 
       result.fold((failure) {
