@@ -4,8 +4,10 @@ import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart
 import 'package:fempinya3_flutter_app/core/navigation/route_names.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/enums/events_view_mode.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_calendar/events_calendar_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_list/events_list_bloc.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_view_mode/events_view_mode_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,23 +18,32 @@ class EventsListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late final eventsList = context.watch<EventsListBloc>().state.events;
+    late final calendarFormat =
+        context.watch<EventsCalendarBloc>().state.calendarFormat;
+    late final eventsViewMode =
+        context.watch<EventsViewModeBloc>().state.eventsViewMode;
 
-    return  _listView(eventsList);
+    return Visibility(
+        visible: !(calendarFormat == CalendarFormat.month &&
+            eventsViewMode == EventsViewModeEnum.calendar),
+        child: _listView());
   }
 
-  ListView _listView(DateEvents eventsList) {
-    return ListView.separated(
-    itemCount: eventsList.length,
-    separatorBuilder: (context, index) =>
-        const Divider(thickness: 1, indent: 20, endIndent: 20),
-    itemBuilder: (context, index) {
-      final date = eventsList.keys.toList()[index];
-      final events = eventsList[date] ?? [];
+  BlocBuilder _listView() {
+    return BlocBuilder<EventsListBloc, EventsListState>(
+        builder: (context, state) {
+      return ListView.separated(
+        itemCount: state.events.length,
+        separatorBuilder: (context, index) =>
+            const Divider(thickness: 1, indent: 20, endIndent: 20),
+        itemBuilder: (context, index) {
+          final date = state.events.keys.toList()[index];
+          final events = state.events[date] ?? [];
 
-      return _buildDateEventsList(date, events, context);
-    },
-  );
+          return _buildDateEventsList(date, events, context);
+        },
+      );
+    });
   }
 
   Widget _buildDateEventsList(

@@ -24,7 +24,7 @@ class EventsListPage extends StatelessWidget {
 
     EventsFiltersBloc eventsFiltersBloc = EventsFiltersBloc();
 
-    return MultiBlocProvider(      
+    return MultiBlocProvider(
       providers: [
         BlocProvider<EventsFiltersBloc>(
           create: (context) => eventsFiltersBloc,
@@ -33,7 +33,8 @@ class EventsListPage extends StatelessWidget {
           create: (context) => EventsViewModeBloc(),
         ),
         BlocProvider<EventsListBloc>(
-          create: (context) => EventsListBloc()..add(LoadEventsList(eventsFiltersBloc.state)),
+          create: (context) =>
+              EventsListBloc()..add(LoadEventsList(eventsFiltersBloc.state)),
         ),
         BlocProvider<EventsCalendarBloc>(
           create: (context) => EventsCalendarBloc(),
@@ -69,7 +70,8 @@ class EventsListPage extends StatelessWidget {
                   ]),
                   Divider(),
                   EventsCalendar(),
-                  Expanded(child: EventsListWidget()),
+                  Visibility(
+                    child: Expanded(child: EventsListWidget())),
                 ],
               ),
             ),
