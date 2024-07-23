@@ -259,13 +259,4 @@ Widget _buildEventCard(EventEntity event, BuildContext context) {
     List<EventEntity>? events = dateEvents[date];
     return {date: events ?? []};
   }
-
-  String formatDateToHumanLanguage(DateTime date, String locale) {
-    // TODO: this is not reloading when the user changes the language
-    // Initialize date format for the given locale
-    final DateFormat dateFormat = DateFormat.yMMMMd(locale);
-
-    // Format the date
-    return dateFormat.format(date);
-  }
 }

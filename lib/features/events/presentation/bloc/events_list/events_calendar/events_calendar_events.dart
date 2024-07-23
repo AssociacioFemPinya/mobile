@@ -24,9 +24,9 @@ class EventsCalendarFormatSet extends EventsCalendarEvent {
 
 class LoadCalendarEvents extends EventsCalendarEvent {}
 
-class CalendarEventsLoaded extends EventsCalendarEvent {
+class CalendarEventsLoadSuccess extends EventsCalendarEvent {
     final List<EventEntity> value;
-    CalendarEventsLoaded(this.value);
+    CalendarEventsLoadSuccess(this.value);
 }
 
 class CalendarEventsLoadFailure extends EventsCalendarEvent {

@@ -1,12 +1,30 @@
 import 'package:dartz/dartz.dart';
 import 'package:fempinya3_flutter_app/core/usecase/usecase.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/repositories/events_repository.dart';
 
 import 'package:fempinya3_flutter_app/features/events/service_locator.dart';
 
-class GetEventsList implements UseCase<Either, dynamic> {
+class GetEventsListParams {
+  final List<EventTypeEnum> eventTypeFilters;
+  final DateTime? dayFilter;
+  final bool showAnswered;
+  final bool showUndefined;
+  final bool showWarning;
+
+  GetEventsListParams({
+    this.eventTypeFilters = const [],
+    this.dayFilter,
+    this.showAnswered = false,
+    this.showUndefined = false,
+    this.showWarning = false,
+  });
+}
+class GetEventsList implements UseCase<Either, GetEventsListParams> {
+  final EventsRepository repository = sl<EventsRepository>();
+
   @override
-  Future<Either> call({params}) async {
-    return await sl<EventsRepository>().getEventsList();
+  Future<Either> call({required GetEventsListParams params}) async {
+    return await repository.getEventsList(params);
   }
 }

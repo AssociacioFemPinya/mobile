@@ -4,25 +4,16 @@ typedef DateEvents = Map<DateTime, List<EventEntity>>;
 
 class EventsListState {
   final DateEvents events;
+  final EventsFiltersState eventsFiltersState;
 
-  EventsListState({required this.events});
+  EventsListState({required this.events, required this.eventsFiltersState});
 
   EventsListState copyWith({
     DateEvents? events,
   }) {
     return EventsListState(
       events: events ?? this.events,
+      eventsFiltersState: eventsFiltersState,
     );
   }
-}
-
-class EventsListLoadSuccess extends EventsListState {
-  EventsListLoadSuccess(Map<DateTime, List<EventEntity>> events)
-      : super(events: events);
-}
-
-class EventsListLoadFailure extends EventsListState {
-  final String error;
-
-  EventsListLoadFailure(this.error) : super(events: {});
 }

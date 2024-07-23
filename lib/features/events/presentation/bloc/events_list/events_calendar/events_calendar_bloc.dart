@@ -32,15 +32,16 @@ class EventsCalendarBloc
           calendarFormat: event.value, selectedDay: state.selectedDay));
     });
     on<LoadCalendarEvents>((events, emit) async {
-      var result = await sl<GetEventsList>().call();
+      GetEventsListParams getEventsListParams = GetEventsListParams();
+      var result = await sl<GetEventsList>().call(params: getEventsListParams);
 
       result.fold((failure) {
         add(CalendarEventsLoadFailure('Failed to load events'));
       }, (data) {
-        add(CalendarEventsLoaded(data));
+        add(CalendarEventsLoadSuccess(data));
       });
     });
-    on<CalendarEventsLoaded>((events, emit) {
+    on<CalendarEventsLoadSuccess>((events, emit) {
       final DateEventsName dateEvents = {};
       for (var event in events.value) {
         final eventDay = DateTime.utc(

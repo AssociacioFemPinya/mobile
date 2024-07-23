@@ -22,7 +22,7 @@ class EventsListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var translate = AppLocalizations.of(context)!;
 
-    return MultiBlocProvider(
+    return MultiBlocProvider(      
       providers: [
         BlocProvider<EventsFiltersBloc>(
           create: (context) => EventsFiltersBloc(),
@@ -31,38 +31,53 @@ class EventsListPage extends StatelessWidget {
           create: (context) => EventsViewModeBloc(),
         ),
         BlocProvider<EventsListBloc>(
-          create: (context) => EventsListBloc()..add(LoadEventsList()),
+          create: (context) => EventsListBloc(EventsFiltersBloc().state)..add(LoadEventsList()),
         ),
         BlocProvider<EventsCalendarBloc>(
           create: (context) => EventsCalendarBloc(),
         ),
       ],
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(translate.eventsPageTitle),
-        ),
-        drawer: const MenuWidget(),
-        body: const Padding(
-          padding:  EdgeInsets.all(8.0),
-          child:  Column(
-            children: [
-               EventsWithAlertBannerWidget(),
-               EventsViewModeWidget(),
-                SizedBox(height: 5,),
-               EventsStatusFiltersWidget(),
-               Row(children: [
-                EventsFiltersButton(),
-                EventsFiltersInputChipsWidget()
-              ]),
-               Divider(),
-               EventsCalendar(),
-               Expanded(child: EventsListWidget()),
-            ],
+          appBar: AppBar(
+            title: Text(translate.eventsPageTitle),
           ),
-        ),
-      ),
+          drawer: const MenuWidget(),
+          body: MultiBlocListener(
+            listeners: [
+              BlocListener<EventsFiltersBloc, EventsFiltersState>(
+                // Whenever the filters are changed, we need to refresh the events list
+                listener: (context, state) {
+                  context.read<EventsListBloc>().add(LoadEventsList());
+                },
+              ),
+              BlocListener<EventsViewModeBloc, EventsViewModeState>(
+                // Whenever the mode view is changed, we need to refresh the events list
+                listener: (context, state) {
+                  context.read<EventsListBloc>().add(LoadEventsList());
+                },
+              ),
+            ],
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  EventsWithAlertBannerWidget(),
+                  EventsViewModeWidget(),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  EventsStatusFiltersWidget(),
+                  Row(children: [
+                    EventsFiltersButton(),
+                    EventsFiltersInputChipsWidget()
+                  ]),
+                  Divider(),
+                  EventsCalendar(),
+                  Expanded(child: EventsListWidget()),
+                ],
+              ),
+            ),
+          )),
     );
   }
 }
-
-
