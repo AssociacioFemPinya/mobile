@@ -55,6 +55,11 @@ class EventsServiceMockupImpl implements EventsService {
       params.showUndefined,
       params.showWarning,
     );
+
+    final random = Random();
+    final randomMilliseconds = random.nextInt(2001);
+    await Future.delayed(Duration(milliseconds: randomMilliseconds));
+
     return Right(events);
   }
 
