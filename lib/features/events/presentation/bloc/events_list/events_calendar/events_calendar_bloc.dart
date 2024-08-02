@@ -1,3 +1,4 @@
+import 'package:fempinya3_flutter_app/core/utils/datetime_utils.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/useCases/get_events_list.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_calendar/events_calendar_events.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_calendar/events_calendar_state.dart';
@@ -18,18 +19,16 @@ class EventsCalendarBloc
     on<EventsCalendarDateSelected>((event, emit) {
       emit(state.copyWith(selectedDay: event.value));
     });
-    // TODO: Is it possible to handle dayFilter as non-nullable?? Having nullable values in
-    // bloc is annoying due to copyWith function
     on<EventsCalendarDateSelectedUnset>((event, emit) {
       emit(state.copyWith(selectedDay: null));
     });
-    on<EventsCalendarDateFocused>((event, emit) {
+    on<EventsCalendarDateFocused>((event, emit) async {
       emit(state.copyWith(
-          focusedDay: event.value, selectedDay: state.selectedDay));
+          focusedDay: event.focusedDay, selectedDay: state.selectedDay));
     });
     on<EventsCalendarFormatSet>((event, emit) {
       emit(state.copyWith(
-          calendarFormat: event.value, selectedDay: state.selectedDay));
+          calendarFormat: event.format, selectedDay: state.selectedDay));
     });
     on<LoadCalendarEvents>((events, emit) async {
       GetEventsListParams getEventsListParams = GetEventsListParams();

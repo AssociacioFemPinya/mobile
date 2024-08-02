@@ -57,7 +57,7 @@ class EventsListWidget extends StatelessWidget {
               children: [
                 const Icon(Icons.calendar_month),
                 Text(
-                  DatetimeUtils.formatDateToHumanLanguage(
+                  DateTimeUtils.formatDateToHumanLanguage(
                       date, Localizations.localeOf(context).toString()),
                   style: Theme.of(context).textTheme.titleLarge,
                 ),

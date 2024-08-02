@@ -1,3 +1,4 @@
+import 'package:fempinya3_flutter_app/core/utils/datetime_utils.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/useCases/get_events_list.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_filters/events_filters_bloc.dart';
@@ -31,7 +32,7 @@ class EventsListBloc extends Bloc<EventsListEvent, EventsListState> {
           showUndefined: eventsFiltersState.value.showUndefined,
           showWarning: eventsFiltersState.value.showWarning,
           eventTypeFilters: eventsFiltersState.value.eventTypeFilters,
-          dayFilter: eventsFiltersState.value.dayFilterEnabled ? eventsFiltersState.value.dayFilter : null);
+          dayTimeRange: eventsFiltersState.value.dayFilterEnabled ? DateTimeRange.generateDateTimeRangeForDay(eventsFiltersState.value.dayFilter!) : null);
       var result = await sl<GetEventsList>().call(params: getEventsListParams);
 
       result.fold((failure) {

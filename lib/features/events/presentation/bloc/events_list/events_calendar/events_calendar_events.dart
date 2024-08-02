@@ -13,23 +13,23 @@ class EventsCalendarDateSelectedUnset extends EventsCalendarEvent {
 }
 
 class EventsCalendarDateFocused extends EventsCalendarEvent {
-  final DateTime value;
-  EventsCalendarDateFocused(this.value);
+  final DateTime focusedDay;
+  EventsCalendarDateFocused(this.focusedDay);
 }
 
 class EventsCalendarFormatSet extends EventsCalendarEvent {
-  final CalendarFormat value;
-  EventsCalendarFormatSet(this.value);
+  final CalendarFormat format;
+  EventsCalendarFormatSet(this.format);
 }
 
 class LoadCalendarEvents extends EventsCalendarEvent {}
 
 class CalendarEventsLoadSuccess extends EventsCalendarEvent {
-    final List<EventEntity> value;
-    CalendarEventsLoadSuccess(this.value);
+  final List<EventEntity> value;
+  CalendarEventsLoadSuccess(this.value);
 }
 
 class CalendarEventsLoadFailure extends EventsCalendarEvent {
-    final String value;
-    CalendarEventsLoadFailure(this.value);
+  final String value;
+  CalendarEventsLoadFailure(this.value);
 }

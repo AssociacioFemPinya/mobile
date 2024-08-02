@@ -73,7 +73,7 @@ class EventPage extends StatelessWidget {
                                             size: 20),
                                         const SizedBox(width: 8),
                                         Text(
-                                          DatetimeUtils
+                                          DateTimeUtils
                                               .formatDateToHumanLanguage(
                                                   event.startDate,
                                                   Localizations.localeOf(

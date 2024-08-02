@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fempinya3_flutter_app/core/utils/datetime_utils.dart';
 import 'package:fempinya3_flutter_app/features/events/data/sources/events_service.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
@@ -49,7 +50,7 @@ class EventsServiceMockupImpl implements EventsService {
     List<EventEntity> events = _filterEvents(
       eventList,
       params.eventTypeFilters,
-      params.dayFilter,
+      params.dayTimeRange,
       params.showAnswered,
       params.showUndefined,
       params.showWarning,
@@ -60,14 +61,13 @@ class EventsServiceMockupImpl implements EventsService {
   List<EventEntity> _filterEvents(
     List<EventEntity> eventsList,
     List<EventTypeEnum> eventTypeFilters,
-    DateTime? dayFilter,
+    final DateTimeRange? dayTimeRange,
     bool showAnswered,
     bool showUndefined,
     bool showWarning,
   ) {
-
-    List<EventEntity> events = dayFilter != null
-        ? _getEventsByDate(dayFilter, eventsList)
+    List<EventEntity> events = dayTimeRange != null
+        ? _getEventsByDateRange(dayTimeRange, eventsList)
         : eventsList;
 
     List<EventEntity> filteredEventsByType =
@@ -115,9 +115,15 @@ class EventsServiceMockupImpl implements EventsService {
     }).toList();
   }
 
-  List<EventEntity> _getEventsByDate(
-      DateTime date, List<EventEntity> eventsList) {
-    return eventsList.where((event) => date == DateTime.utc(
-            event.startDate.year, event.startDate.month, event.startDate.day)).toList();
+  List<EventEntity> _getEventsByDateRange(
+      DateTimeRange dateRange, List<EventEntity> eventsList) {
+    return eventsList.where((event) {
+      DateTime eventDate = DateTime.utc(
+          event.startDate.year, event.startDate.month, event.startDate.day);
+      return eventDate.isAfter(dateRange.start) &&
+              eventDate.isBefore(dateRange.end) ||
+          eventDate.isAtSameMomentAs(dateRange.start) ||
+          eventDate.isAtSameMomentAs(dateRange.end);
+    }).toList();
   }
 }
