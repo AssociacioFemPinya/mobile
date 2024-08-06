@@ -9,6 +9,13 @@ enum EventTypeEnum {
 }
 
 extension EventTypeEnumExtension on EventTypeEnum {
+  static EventTypeEnum fromString(String type) {
+    return EventTypeEnum.values.firstWhere(
+      (e) => e.toString().split('.').last == type,
+      orElse: () => throw ArgumentError('Invalid EventTypeEnum value'),
+    );
+  }
+
   String toLocalizedString(BuildContext context) {
     switch (this) {
       case EventTypeEnum.training:

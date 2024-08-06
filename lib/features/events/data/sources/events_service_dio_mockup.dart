@@ -1,17 +1,17 @@
-import 'package:dartz/dartz.dart';
+// lib/core/network/mock_interceptor.dart
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:dio/dio.dart';
 import 'package:fempinya3_flutter_app/core/utils/datetime_utils.dart';
-import 'package:fempinya3_flutter_app/features/events/data/sources/events_service.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.dart';
-import 'dart:math';
 
-import 'package:fempinya3_flutter_app/features/events/domain/useCases/get_events_list.dart';
-
-class EventsServiceMockupImpl implements EventsService {
+class EventsDioMockInterceptor extends Interceptor {
   late List<EventEntity> eventList;
 
-  EventsServiceMockupImpl() {
+  EventsDioMockInterceptor() {
     eventList = _generateEvents();
   }
 
@@ -44,27 +44,7 @@ class EventsServiceMockupImpl implements EventsService {
     });
   }
 
-  @override
-  Future<Either<Object, List<EventEntity>>> getEventsList(
-      GetEventsListParams params) async {
-    List<EventEntity> events = _filterEvents(
-      eventList,
-      params.eventTypeFilters,
-      params.dayTimeRange,
-      params.showAnswered,
-      params.showUndefined,
-      params.showWarning,
-    );
-
-    final random = Random();
-    final randomMilliseconds = random.nextInt(2001);
-    await Future.delayed(Duration(milliseconds: randomMilliseconds));
-
-    return Right(events);
-  }
-
   List<EventEntity> _filterEvents(
-    List<EventEntity> eventsList,
     List<EventTypeEnum> eventTypeFilters,
     final DateTimeRange? dayTimeRange,
     bool showAnswered,
@@ -72,8 +52,8 @@ class EventsServiceMockupImpl implements EventsService {
     bool showWarning,
   ) {
     List<EventEntity> events = dayTimeRange != null
-        ? _getEventsByDateRange(dayTimeRange, eventsList)
-        : eventsList;
+        ? _getEventsByDateRange(dayTimeRange, eventList)
+        : eventList;
 
     List<EventEntity> filteredEventsByType =
         _filterByType(events, eventTypeFilters);
@@ -130,5 +110,57 @@ class EventsServiceMockupImpl implements EventsService {
           eventDate.isAtSameMomentAs(dateRange.start) ||
           eventDate.isAtSameMomentAs(dateRange.end);
     }).toList();
+  }
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    // Check the request path and provide a mock response
+    if (options.path == '/events') {
+      final queryParams = options.queryParameters;
+      List<String> eventTypeFilters = queryParams["eventTypeFilters"] ?? [];
+
+      DateTimeRange? dayTimeRange;
+      if (queryParams['startDate'] != null) {
+        dayTimeRange = DateTimeRange.generateDateTimeRangeForDay(
+            DateTime.parse(queryParams['startDate']));
+      } else {
+        dayTimeRange = null;
+      }
+
+      final List<EventEntity> events = _filterEvents(
+          eventTypeFilters
+              .map((eventTypeFilter) =>
+                  EventTypeEnumExtension.fromString(eventTypeFilter))
+              .toList(),
+          dayTimeRange,
+          queryParams["showAnswered"],
+          queryParams["showUndefined"],
+          queryParams["showWarning"]);
+
+      // Create a response object
+      final response = Response(
+        requestOptions: options,
+        data: jsonEncode(events.map((event) => event.toJson()).toList()),
+        statusCode: 200,
+      );
+
+      // Complete the request with the mock response
+      handler.resolve(response);
+    } else {
+      // Forward the request if not mocking
+      handler.next(options);
+    }
+  }
+
+  @override
+  void onError(DioError err, ErrorInterceptorHandler handler) {
+    // Handle errors if needed
+    super.onError(err, handler);
+  }
+
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    // Handle responses if needed
+    super.onResponse(response, handler);
   }
 }
