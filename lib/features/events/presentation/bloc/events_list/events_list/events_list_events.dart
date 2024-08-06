@@ -1,6 +1,6 @@
 part of 'events_list_bloc.dart';
 
-class EventsListEvent {}
+abstract class EventsListEvent {}
 
 class LoadEventsList extends EventsListEvent {
   final EventsFiltersState value;
@@ -13,6 +13,6 @@ class EventsListLoadSuccess extends EventsListEvent {
 }
 
 class EventsListLoadFailure extends EventsListEvent {
-    final String value;
-    EventsListLoadFailure(this.value);
+  final String value;
+  EventsListLoadFailure(this.value);
 }

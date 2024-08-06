@@ -113,43 +113,67 @@ class EventsDioMockInterceptor extends Interceptor {
   }
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+  void onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
+    // Sleep between 0 and 1 seconds to simulate a slow API
+    final random = Random();
+    final randomDuration =
+        Duration(seconds: random.nextInt(2));
+    await Future.delayed(randomDuration);
+
     // Check the request path and provide a mock response
     if (options.path == '/events') {
-      final queryParams = options.queryParameters;
-      List<String> eventTypeFilters = queryParams["eventTypeFilters"] ?? [];
-
-      DateTimeRange? dayTimeRange;
-      if (queryParams['startDate'] != null) {
-        dayTimeRange = DateTimeRange.generateDateTimeRangeForDay(
-            DateTime.parse(queryParams['startDate']));
-      } else {
-        dayTimeRange = null;
-      }
-
-      final List<EventEntity> events = _filterEvents(
-          eventTypeFilters
-              .map((eventTypeFilter) =>
-                  EventTypeEnumExtension.fromString(eventTypeFilter))
-              .toList(),
-          dayTimeRange,
-          queryParams["showAnswered"],
-          queryParams["showUndefined"],
-          queryParams["showWarning"]);
-
-      // Create a response object
-      final response = Response(
-        requestOptions: options,
-        data: jsonEncode(events.map((event) => event.toModel().toJson()).toList()),
-        statusCode: 200,
-      );
-
-      // Complete the request with the mock response
-      handler.resolve(response);
+      handleEventsCall(options, handler);
     } else {
       // Forward the request if not mocking
       handler.next(options);
     }
+  }
+
+  void handleEventsCall(
+      RequestOptions options, RequestInterceptorHandler handler) {
+    final queryParams = options.queryParameters;
+    List<String> eventTypeFilters = queryParams["eventTypeFilters"] ?? [];
+
+    DateTimeRange? dayTimeRange;
+    if (queryParams['startDate'] != null) {
+      dayTimeRange = DateTimeRange.generateDateTimeRangeForDay(
+          DateTime.parse(queryParams['startDate']));
+    } else {
+      dayTimeRange = null;
+    }
+
+    final List<EventEntity> events = _filterEvents(
+        eventTypeFilters
+            .map((eventTypeFilter) =>
+                EventTypeEnumExtension.fromString(eventTypeFilter))
+            .toList(),
+        dayTimeRange,
+        queryParams["showAnswered"],
+        queryParams["showUndefined"],
+        queryParams["showWarning"]);
+
+    // Sleep between 0 and 2 seconds to simulate a slow API
+    final random = Random();
+    Response<dynamic> response;
+
+    // One of each 10 requests will "fail" with a 500
+    if (random.nextInt(11) > 9) {
+      response = Response(
+        requestOptions: options,
+        statusCode: 500,
+      );
+    } else {
+      // Create a response object
+      response = Response(
+        requestOptions: options,
+        data: jsonEncode(
+            events.map((event) => event.toModel().toJson()).toList()),
+        statusCode: 200,
+      );
+    }
+    // Complete the request with the mock response
+    handler.resolve(response);
   }
 
   @override

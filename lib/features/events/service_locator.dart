@@ -9,6 +9,7 @@ import 'package:get_it/get_it.dart';
 final sl = GetIt.instance;
 
 Future<void> setupEventsServiceLocator() async {
+  // Important: Keep dio instance on top, otherwise services (which use dio) will get a get_it not found error
   sl.registerLazySingleton<Dio>(() => DioFactory.getInstance());
   sl.registerSingleton<EventsService>(EventsServiceImpl());
   sl.registerSingleton<EventsRepository>(EventsRepositoryImpl());

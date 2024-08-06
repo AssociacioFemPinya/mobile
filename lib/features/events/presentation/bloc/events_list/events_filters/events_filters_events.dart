@@ -6,7 +6,7 @@ enum EventsStatusFilters {
   requiresAttention,
 }
 
-class EventsFiltersEvent {}
+abstract class EventsFiltersEvent {}
 
 class EventsStatusFilterUndefined extends EventsFiltersEvent {
   final bool value;

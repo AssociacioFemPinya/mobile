@@ -23,19 +23,25 @@ class EventsServiceImpl implements EventsService {
         queryParameters: params.toQueryParams(),
       );
 
-      if (response.data is String) {
-        // Decode the JSON data
-        final jsonList = jsonDecode(response.data as String) as List<dynamic>;
-        
-        // Convert each JSON object to EventModel and then to EventEntity
-        final events = jsonList
-            .map((json) => EventModel.fromJson(json))
-            .map((model) => EventEntity.fromModel(model))
-            .toList();
+      // Check for successful response status
+      if (response.statusCode == 200) {
+        if (response.data is String) {
+          // Decode the JSON data
+          final jsonList = jsonDecode(response.data as String) as List<dynamic>;
 
-        return Right(events);
+          // Convert each JSON object to EventModel and then to EventEntity
+          final events = jsonList
+              .map((json) => EventModel.fromJson(json))
+              .map((model) => EventEntity.fromModel(model))
+              .toList();
+
+          return Right(events);
+        } else {
+          return const Left('Unexpected response format');
+        }
       } else {
-        return const Left('Unexpected response format');
+        // Handle different status codes
+        return Left('Error: Received status code ${response.statusCode}');
       }
     } catch (e) {
       return Left('Error when calling /events endpoint: $e');

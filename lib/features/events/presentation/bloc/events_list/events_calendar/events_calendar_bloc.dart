@@ -34,7 +34,7 @@ class EventsCalendarBloc
       var result = await sl<GetEventsList>().call(params: getEventsListParams);
 
       result.fold((failure) {
-        add(CalendarEventsLoadFailure('Failed to load events'));
+        add(CalendarEventsLoadFailure(failure));
       }, (data) {
         add(CalendarEventsLoadSuccess(data));
       });
@@ -49,9 +49,10 @@ class EventsCalendarBloc
         }
         dateEvents[eventDay]!.add(event.title);
       }
-      emit(state.copyWith(
-        calendarEvents: dateEvents
-      ));
+      emit(state.copyWith(calendarEvents: dateEvents));
+    });
+    on<CalendarEventsLoadFailure>((errorMessage, emit) {
+      // TODO
     });
   }
 }

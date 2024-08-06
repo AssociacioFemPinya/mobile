@@ -1,7 +1,7 @@
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class EventsCalendarEvent {}
+abstract class EventsCalendarEvent {}
 
 class EventsCalendarDateSelected extends EventsCalendarEvent {
   final DateTime value;

@@ -36,10 +36,14 @@ class EventsListBloc extends Bloc<EventsListEvent, EventsListState> {
       var result = await sl<GetEventsList>().call(params: getEventsListParams);
 
       result.fold((failure) {
-        add(EventsListLoadFailure('Failed to load events'));
+        add(EventsListLoadFailure(failure));
       }, (data) {
         add(EventsListLoadSuccess(data));
       });
+    });
+
+    on<EventsListLoadFailure>((errorMessage, emit) {
+      // TODO
     });
   }
 }
