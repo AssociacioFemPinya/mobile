@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:fempinya3_flutter_app/features/events/data/sources/events_service_dio_mockup.dart';
+import 'package:fempinya3_flutter_app/features/events/data/mocks/events_service.dart';
 
 class DioFactory {
   static Dio? _dio;
