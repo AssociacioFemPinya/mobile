@@ -1,32 +1,38 @@
 import 'dart:convert';
-
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:fempinya3_flutter_app/features/events/data/models/event.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/useCases/get_events_list.dart';
 import 'package:fempinya3_flutter_app/features/events/service_locator.dart';
 
 abstract class EventsService {
-  Future<Either<String, List<EventEntity>>> getEventsList(GetEventsListParams params);
+  Future<Either<String, List<EventEntity>>> getEventsList(
+      GetEventsListParams params);
 }
 
 class EventsServiceImpl implements EventsService {
+  final Dio _dio = sl<Dio>();
 
   @override
-  Future<Either<String, List<EventEntity>>> getEventsList(GetEventsListParams params) async {
-    final Dio dio = sl<Dio>();
-
+  Future<Either<String, List<EventEntity>>> getEventsList(
+      GetEventsListParams params) async {
     try {
-      final response = await dio.get(
+      final response = await _dio.get(
         '/events',
         queryParameters: params.toQueryParams(),
       );
 
-      // Check if response data is a String and decode it
       if (response.data is String) {
-        String jsonString = response.data as String;
-        List<dynamic> jsonList = jsonDecode(jsonString);
-        List<EventEntity> events = jsonList.map((json) => EventEntity.fromJson(json)).toList();
+        // Decode the JSON data
+        final jsonList = jsonDecode(response.data as String) as List<dynamic>;
+        
+        // Convert each JSON object to EventModel and then to EventEntity
+        final events = jsonList
+            .map((json) => EventModel.fromJson(json))
+            .map((model) => EventEntity.fromModel(model))
+            .toList();
+
         return Right(events);
       } else {
         return const Left('Unexpected response format');

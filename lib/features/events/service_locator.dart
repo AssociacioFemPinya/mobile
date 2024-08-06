@@ -9,8 +9,8 @@ import 'package:get_it/get_it.dart';
 final sl = GetIt.instance;
 
 Future<void> setupEventsServiceLocator() async {
+  sl.registerLazySingleton<Dio>(() => DioFactory.getInstance());
   sl.registerSingleton<EventsService>(EventsServiceImpl());
   sl.registerSingleton<EventsRepository>(EventsRepositoryImpl());
   sl.registerSingleton<GetEventsList>(GetEventsList());
-  sl.registerLazySingleton<Dio>(() => DioFactory.getInstance());
 }

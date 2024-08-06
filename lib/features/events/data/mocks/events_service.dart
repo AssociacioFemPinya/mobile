@@ -20,7 +20,7 @@ class EventsDioMockInterceptor extends Interceptor {
     final now = DateTime.now();
     final oneWeekLater = now.add(const Duration(days: 7));
 
-    DateTime _getRandomDateTime() {
+    DateTime getRandomDateTime() {
       final differenceInMillis =
           oneWeekLater.millisecondsSinceEpoch - now.millisecondsSinceEpoch;
       final randomMillis = random.nextInt(differenceInMillis);
@@ -36,7 +36,7 @@ class EventsDioMockInterceptor extends Interceptor {
           address: "Address $index",
           type:
               EventTypeEnum.values[random.nextInt(EventTypeEnum.values.length)],
-          startDate: _getRandomDateTime(),
+          startDate: getRandomDateTime(),
           endDate: DateTime.parse('2024-07-01 02:00:00.000Z'),
           dateHour: '10:00 AM',
           description:
@@ -140,7 +140,7 @@ class EventsDioMockInterceptor extends Interceptor {
       // Create a response object
       final response = Response(
         requestOptions: options,
-        data: jsonEncode(events.map((event) => event.toJson()).toList()),
+        data: jsonEncode(events.map((event) => event.toModel().toJson()).toList()),
         statusCode: 200,
       );
 
