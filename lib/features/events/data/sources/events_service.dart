@@ -36,31 +36,16 @@ class EventsServiceImpl implements EventsService {
   Future<Either<String, List<EventEntity>>> getEventsList(
       GetEventsListParams params) async {
     try {
-      final response = await _dio.get(
-        '/events',
-        queryParameters: _buildGetEventsListQueryParams(params),
-      );
-
-      // Check for successful response status
-      if (response.statusCode == 200) {
-        if (response.data is String) {
-          // Decode the JSON data
-          final jsonList = jsonDecode(response.data as String) as List<dynamic>;
-
-          // Convert each JSON object to EventModel and then to EventEntity
-          final events = jsonList
-              .map((json) => EventModel.fromJson(json))
-              .map((model) => EventEntity.fromModel(model))
-              .toList();
-
-          return Right(events);
-        } else {
-          return const Left('Unexpected response format');
-        }
-      } else {
-        // Handle different status codes
-        return Left('Error: Received status code ${response.statusCode}');
+      final response =
+          await _dio.get('/events', queryParameters: _buildGetEventsListQueryParams(params));
+      if (response.statusCode == 200 && response.data is String) {
+        final jsonList = jsonDecode(response.data as String) as List<dynamic>;
+        final events = jsonList
+            .map((json) => EventEntity.fromModel(EventModel.fromJson(json)))
+            .toList();
+        return Right(events);
       }
+      return const Left('Unexpected response format');
     } catch (e) {
       return Left('Error when calling /events endpoint: $e');
     }
