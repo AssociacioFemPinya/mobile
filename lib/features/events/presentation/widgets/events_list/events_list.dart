@@ -31,19 +31,24 @@ class EventsListWidget extends StatelessWidget {
 
   BlocBuilder _listView() {
     return BlocBuilder<EventsListBloc, EventsListState>(
-        builder: (context, state) {
-      return ListView.separated(
-        itemCount: state.events.length,
-        separatorBuilder: (context, index) =>
-            const Divider(thickness: 1, indent: 20, endIndent: 20),
-        itemBuilder: (context, index) {
-          final date = state.events.keys.toList()[index];
-          final events = state.events[date] ?? [];
+      builder: (context, state) {
+        // Extract and sort the dates
+        final sortedDates = state.events.keys.toList()
+          ..sort((a, b) => a.compareTo(b));
 
-          return _buildDateEventsList(date, events, context);
-        },
-      );
-    });
+        return ListView.separated(
+          itemCount: sortedDates.length,
+          separatorBuilder: (context, index) =>
+              const Divider(thickness: 1, indent: 20, endIndent: 20),
+          itemBuilder: (context, index) {
+            final date = sortedDates[index];
+            final events = state.events[date] ?? [];
+
+            return _buildDateEventsList(date, events, context);
+          },
+        );
+      },
+    );
   }
 
   Widget _buildDateEventsList(

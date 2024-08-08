@@ -5,10 +5,26 @@ import 'package:fempinya3_flutter_app/core/navigation/route_names.dart';
 import 'package:provider/provider.dart';
 import 'package:fempinya3_flutter_app/features/menu/domain/entities/locale.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() {
   setupEventsServiceLocator();
   runApp(const MyApp());
+  configLoading();
+}
+
+void configLoading() {
+  EasyLoading.instance
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..backgroundColor = Colors.green
+    ..indicatorColor = Colors.white
+    ..textColor = Colors.white
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = false
+    ..dismissOnTap = false;
 }
 
 class MyApp extends StatelessWidget {
@@ -22,6 +38,7 @@ class MyApp extends StatelessWidget {
           builder: (context, localeModel, child) => MaterialApp(
                 title: 'FemPinya App',
                 routes: appRoutes,
+                builder: EasyLoading.init(),
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
                 locale: localeModel.locale,

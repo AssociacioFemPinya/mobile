@@ -9,9 +9,7 @@ part 'events_list_events.dart';
 part 'events_list_state.dart';
 
 class EventsListBloc extends Bloc<EventsListEvent, EventsListState> {
-  EventsListBloc()
-      : super(EventsListState(
-            events: {})) {
+  EventsListBloc() : super(EventsListState(events: {})) {
     on<EventsListLoadSuccess>((events, emit) {
       final DateEvents dateEvents = {};
       for (var event in events.value) {
@@ -32,7 +30,10 @@ class EventsListBloc extends Bloc<EventsListEvent, EventsListState> {
           showUndefined: eventsFiltersState.value.showUndefined,
           showWarning: eventsFiltersState.value.showWarning,
           eventTypeFilters: eventsFiltersState.value.eventTypeFilters,
-          dayTimeRange: eventsFiltersState.value.dayFilterEnabled ? DateTimeRange.generateDateTimeRangeForDay(eventsFiltersState.value.dayFilter!) : null);
+          dayTimeRange: eventsFiltersState.value.dayFilterEnabled
+              ? DateTimeRange.generateDateTimeRangeForDay(
+                  eventsFiltersState.value.dayFilter!)
+              : null);
       var result = await sl<GetEventsList>().call(params: getEventsListParams);
 
       result.fold((failure) {

@@ -7,6 +7,7 @@ import 'package:fempinya3_flutter_app/core/utils/datetime_utils.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class EventsDioMockInterceptor extends Interceptor {
   late List<EventEntity> eventList;
@@ -174,6 +175,9 @@ class EventsDioMockInterceptor extends Interceptor {
     }
     // Complete the request with the mock response
     handler.resolve(response);
+
+    // Close easyLoading as seems that resolve the query in the mock doesn't follow the interceptor chain
+    EasyLoading.dismiss();
   }
 
   @override
