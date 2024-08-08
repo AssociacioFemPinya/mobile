@@ -119,7 +119,7 @@ class EventsDioMockInterceptor extends Interceptor {
     // Sleep between 0 and 1 seconds to simulate a slow API
     final random = Random();
     final randomDuration =
-        Duration(seconds: random.nextInt(2));
+        Duration(milliseconds: random.nextInt(1000));
     await Future.delayed(randomDuration);
 
     // Check the request path and provide a mock response

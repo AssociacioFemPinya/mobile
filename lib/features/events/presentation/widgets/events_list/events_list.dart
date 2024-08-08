@@ -18,24 +18,22 @@ class EventsListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late final calendarFormat =
+    final calendarFormat =
         context.watch<EventsCalendarBloc>().state.calendarFormat;
-    late final eventsViewMode =
+    final eventsViewMode =
         context.watch<EventsViewModeBloc>().state.eventsViewMode;
 
     return Visibility(
-        visible: !(calendarFormat == CalendarFormat.month &&
-            eventsViewMode == EventsViewModeEnum.calendar),
-        child: _listView());
+      visible: !(calendarFormat == CalendarFormat.month &&
+          eventsViewMode == EventsViewModeEnum.calendar),
+      child: _listView(),
+    );
   }
 
-  BlocBuilder _listView() {
+  Widget _listView() {
     return BlocBuilder<EventsListBloc, EventsListState>(
       builder: (context, state) {
-        // Extract and sort the dates
-        final sortedDates = state.events.keys.toList()
-          ..sort((a, b) => a.compareTo(b));
-
+        final sortedDates = state.events.keys.toList()..sort();
         return ListView.separated(
           itemCount: sortedDates.length,
           separatorBuilder: (context, index) =>
@@ -43,7 +41,6 @@ class EventsListWidget extends StatelessWidget {
           itemBuilder: (context, index) {
             final date = sortedDates[index];
             final events = state.events[date] ?? [];
-
             return _buildDateEventsList(date, events, context);
           },
         );
@@ -56,120 +53,91 @@ class EventsListWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                const Icon(Icons.calendar_month),
-                Text(
-                  DateTimeUtils.formatDateToHumanLanguage(
-                      date, Localizations.localeOf(context).toString()),
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ],
-            )),
+        _buildDateHeader(date, context),
         Column(
-          children:
-              events.map((event) => _buildEventCard(event, context)).toList(),
-        ),
+            children: events
+                .map((event) => _buildEventCard(event, context))
+                .toList()),
       ],
+    );
+  }
+
+  Widget _buildDateHeader(DateTime date, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          const Icon(Icons.calendar_month),
+          Text(
+            DateTimeUtils.formatDateToHumanLanguage(
+                date, Localizations.localeOf(context).toString()),
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildEventCard(EventEntity event, BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.of(context).pushNamed(eventRoute, arguments: event);
-      },
+      onTap: () =>
+          Navigator.of(context).pushNamed(eventRoute, arguments: event),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         color: _getStatusBackgroundColor(event.status),
         elevation: 0.0,
         margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(
-                horizontal: 8.0), // Ajusta el margen interno del ListTile
-            leading: CircleAvatar(
-              backgroundColor: _getStatusColor(event.status),
-              child: Icon(_getStatusIcon(event.status), color: Colors.white),
-            ),
-            title: Text(event.title),
-            subtitle: Text('${event.address} - ${event.dateHour}'),
-            trailing: SvgPicture.asset(
-              _getTypeIcon(event.type),
-              width: 50, // Ajusta el ancho del ícono
-              height: 50, // Ajusta la altura del ícono
-            ),
+        child: ListTile(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+          leading: CircleAvatar(
+            backgroundColor: _getStatusColor(event.status),
+            child: Icon(_getStatusIcon(event.status), color: Colors.white),
           ),
+          title: Text(event.title),
+          subtitle: Text('${event.address} - ${event.dateHour}'),
+          trailing:
+              SvgPicture.asset(_getTypeIcon(event.type), width: 50, height: 50),
         ),
       ),
     );
   }
 
-  IconData _getStatusIcon(EventStatusEnum status) {
-    switch (status) {
-      case EventStatusEnum.accepted:
-        return Icons.check;
-      case EventStatusEnum.declined:
-        return Icons.close;
-      case EventStatusEnum.unknown:
-        return Icons.help_outline;
-      case EventStatusEnum.undefined:
-        return Icons.remove;
-      case EventStatusEnum.warning:
-        return Icons.warning;
-      default:
-        return Icons.help_outline;
-    }
-  }
+  IconData _getStatusIcon(EventStatusEnum status) =>
+      const {
+        EventStatusEnum.accepted: Icons.check,
+        EventStatusEnum.declined: Icons.close,
+        EventStatusEnum.unknown: Icons.help_outline,
+        EventStatusEnum.undefined: Icons.remove,
+        EventStatusEnum.warning: Icons.warning,
+      }[status] ??
+      Icons.help_outline;
 
-  String _getTypeIcon(EventTypeEnum type) {
-    switch (type) {
-      case EventTypeEnum.activity:
-        return AppIcons.activityIcon;
-      case EventTypeEnum.training:
-        return AppIcons.trainingIcon;
-      case EventTypeEnum.performance:
-        return AppIcons.performanceIcon;
-      default:
-        return AppIcons.miniArrowRight;
-    }
-  }
+  String _getTypeIcon(EventTypeEnum type) =>
+      const {
+        EventTypeEnum.activity: AppIcons.activityIcon,
+        EventTypeEnum.training: AppIcons.trainingIcon,
+        EventTypeEnum.performance: AppIcons.performanceIcon,
+      }[type] ??
+      AppIcons.miniArrowRight;
 
-  Color _getStatusBackgroundColor(EventStatusEnum status) {
-    switch (status) {
-      case EventStatusEnum.accepted:
-        return Color.fromRGBO(202, 245, 195, 100);
-      case EventStatusEnum.declined:
-        return const Color.fromRGBO(245, 127, 141, 100);
-      case EventStatusEnum.unknown:
-        return const Color.fromRGBO(249, 208, 130, 100);
-      case EventStatusEnum.undefined:
-        return const Color.fromRGBO(202, 196, 208, 100);
-      case EventStatusEnum.warning:
-        return Color.fromRGBO(202, 245, 195, 100);
-      default:
-        return const Color.fromRGBO(202, 196, 208, 100);
-    }
-  }
+  Color _getStatusBackgroundColor(EventStatusEnum status) =>
+      const {
+        EventStatusEnum.accepted: Color.fromRGBO(202, 245, 195, 1),
+        EventStatusEnum.declined: Color.fromRGBO(245, 127, 141, 1),
+        EventStatusEnum.unknown: Color.fromRGBO(249, 208, 130, 1),
+        EventStatusEnum.undefined: Color.fromRGBO(202, 196, 208, 1),
+        EventStatusEnum.warning: Color.fromRGBO(202, 245, 195, 1),
+      }[status] ??
+      const Color.fromRGBO(202, 196, 208, 1);
 
-  Color _getStatusColor(EventStatusEnum status) {
-    switch (status) {
-      case EventStatusEnum.accepted:
-        return Colors.green;
-      case EventStatusEnum.declined:
-        return Colors.red;
-      case EventStatusEnum.unknown:
-        return Colors.orange;
-      case EventStatusEnum.undefined:
-        return Colors.grey;
-      case EventStatusEnum.warning:
-        return Colors.orange;
-      default:
-        return Colors.grey;
-    }
-  }
+  Color _getStatusColor(EventStatusEnum status) =>
+      const {
+        EventStatusEnum.accepted: Colors.green,
+        EventStatusEnum.declined: Colors.red,
+        EventStatusEnum.unknown: Colors.orange,
+        EventStatusEnum.undefined: Colors.grey,
+        EventStatusEnum.warning: Colors.orange,
+      }[status] ??
+      Colors.grey;
 }
