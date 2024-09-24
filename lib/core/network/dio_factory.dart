@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fempinya3_flutter_app/core/network/loading_interceptor.dart';
-import 'package:fempinya3_flutter_app/features/events/data/mocks/events_service.dart';
+import 'package:fempinya3_flutter_app/features/events/data/mocks/events_service/events_service.dart';
 
 class DioFactory {
   static Dio? _dio;

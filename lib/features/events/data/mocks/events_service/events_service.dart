@@ -17,6 +17,24 @@ class EventsDioMockInterceptor extends Interceptor {
     eventList = _generateEvents();
   }
 
+  @override
+  void onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
+    // Sleep between 0 and 1 seconds to simulate a slow API
+    final random = Random();
+    final randomDuration =
+        Duration(milliseconds: random.nextInt(1000));
+    await Future.delayed(randomDuration);
+
+    // Check the request path and provide a mock response
+    if (options.path == '/events') {
+      handleEventsCall(options, handler);
+    } else {
+      // Forward the request if not mocking
+      handler.next(options);
+    }
+  }
+
   List<EventEntity> _generateEvents() {
     final random = Random();
     final now = DateTime.now();
@@ -123,24 +141,6 @@ class EventsDioMockInterceptor extends Interceptor {
           eventDate.isAtSameMomentAs(dateRange.start) ||
           eventDate.isAtSameMomentAs(dateRange.end);
     }).toList();
-  }
-
-  @override
-  void onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
-    // Sleep between 0 and 1 seconds to simulate a slow API
-    final random = Random();
-    final randomDuration =
-        Duration(milliseconds: random.nextInt(1000));
-    await Future.delayed(randomDuration);
-
-    // Check the request path and provide a mock response
-    if (options.path == '/events') {
-      handleEventsCall(options, handler);
-    } else {
-      // Forward the request if not mocking
-      handler.next(options);
-    }
   }
 
   void handleEventsCall(
