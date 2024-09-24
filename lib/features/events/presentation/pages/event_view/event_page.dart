@@ -2,6 +2,7 @@ import 'package:customizable_counter/customizable_counter.dart';
 import 'package:fempinya3_flutter_app/core/configs/assets/app_icons.dart';
 import 'package:fempinya3_flutter_app/core/utils/datetime_utils.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/entities/tag.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/pages/event_view/views/event_member_comments_screen.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/pages/event_view/views/event_schedule_screen.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/event_view/custom_modal_bottom_sheet.dart';
@@ -14,8 +15,6 @@ class EventPage extends StatelessWidget {
   final EventEntity event;
 
   const EventPage({super.key, required this.event});
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +125,7 @@ class EventPage extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(15),
                     child: Text(
-                      event.description,
+                      event.description ?? '',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
@@ -230,7 +229,7 @@ class EventPage extends StatelessWidget {
                       width: MediaQuery.of(context)
                           .size
                           .width, // Ajusta al ancho de la pantalla
-                      child: AdditionalInfoChips(),
+                      child: AdditionalInfoChips(tags: event.tags),
                     )
                   ],
                 )),
@@ -284,16 +283,11 @@ class _AssistanceSelectorState extends State<AssistanceSelector> {
 }
 
 class AdditionalInfoChips extends StatelessWidget {
-  AdditionalInfoChips({super.key});
+  final List<TagEntity>? tags;
+  final Map<String, bool> eventTags;
 
-  final Map<String, bool> eventTags = {
-    'Vegano': true,
-    'Arribarè tard': false,
-    'Celiac': true,
-    'Celiacw': true,
-    'Celiac5': true,
-    'Celia5c': true
-  };
+  AdditionalInfoChips({required this.tags, super.key})
+      : eventTags = {for (var tag in tags ?? []) tag.name: tag.isEnabled};
 
   @override
   Widget build(BuildContext context) {

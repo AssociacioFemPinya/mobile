@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:fempinya3_flutter_app/core/utils/datetime_utils.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/entities/tag.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -28,6 +29,16 @@ class EventsDioMockInterceptor extends Interceptor {
       return now.add(Duration(milliseconds: randomMillis));
     }
 
+    List<TagEntity>? generateTags() {
+      return [
+        TagEntity(id: 1, name: 'Vegano', isEnabled: true),
+        TagEntity(id: 2, name: 'Arribarè tard', isEnabled: true),
+        TagEntity(id: 3, name: 'Celiac', isEnabled: true),
+        TagEntity(id: 4, name: 'Vinc amb cotxe', isEnabled: true),
+        TagEntity(id: 5, name: 'Necessito cotxe', isEnabled: true),
+      ];
+    }
+
     return List<EventEntity>.generate(20, (index) {
       return EventEntity(
           id: index,
@@ -40,6 +51,7 @@ class EventsDioMockInterceptor extends Interceptor {
           startDate: getRandomDateTime(),
           endDate: DateTime.parse('2024-07-01 02:00:00.000Z'),
           dateHour: '10:00 AM',
+          tags: generateTags(),
           description:
               'Lorem ipsum dolor sit amet. Sed quisquam minus aut voluptas quibusdam in quia assumenda non consequatur voluptates in consequatur omnis. Qui praesentium officia aut neque neque qui omnis eligendi et eaque ducimus sit molestias harum. A obcaecati labore aut nobis ullam aut sint dolorem.');
     });

@@ -1,3 +1,4 @@
+import 'package:logger/logger.dart';
 import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -14,6 +15,7 @@ abstract class EventsService {
 
 class EventsServiceImpl implements EventsService {
   final Dio _dio = sl<Dio>();
+  final Logger _logger = sl<Logger>();
 
   Map<String, dynamic> _buildGetEventsListQueryParams(GetEventsListParams params) {
     final Map<String, dynamic> queryParams = {};
@@ -46,7 +48,8 @@ class EventsServiceImpl implements EventsService {
         return Right(events);
       }
       return const Left('Unexpected response format');
-    } catch (e) {
+    } catch (e, stacktrace) {
+      _logger.e('Error when calling /events endpoint', e, stacktrace);
       return Left('Error when calling /events endpoint: $e');
     }
   }

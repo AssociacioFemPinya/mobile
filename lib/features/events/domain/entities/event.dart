@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:fempinya3_flutter_app/features/events/data/models/event.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/entities/tag.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.dart';
 import 'package:intl/intl.dart';
@@ -13,7 +14,9 @@ class EventEntity extends Equatable {
   final String address;
   final EventStatusEnum status;
   final EventTypeEnum type;
-  final String description;
+  final String? description;
+  final List<TagEntity>? tags;
+  
 
   const EventEntity({
     required this.id,
@@ -25,11 +28,12 @@ class EventEntity extends Equatable {
     required this.status,
     required this.type,
     required this.description,
+    required this.tags,
   });
 
   @override
   List<Object?> get props {
-    return [id, title, startDate, endDate, address];
+    return [id, title, startDate, endDate, address, status, type, description, tags];
   }
 
   // Factory constructor to create an EventEntity from EventModel
@@ -44,8 +48,8 @@ class EventEntity extends Equatable {
       address: model.address ?? '',
       status: EventStatusEnumExtension.fromString(model.status ?? ""),
       type: EventTypeEnumExtension.fromString(model.type ?? ""),
-      
-      description: '', // Populate as needed
+      description: model.description ?? '',
+      tags: model.tags?.map((tag) => TagEntity.fromModel(tag)).toList() ?? [],
     );
   }
 
@@ -59,6 +63,8 @@ class EventEntity extends Equatable {
       address: address,
       status: status.toString().split('.').last,
       type: type.toString().split('.').last,
+      description: description,
+      tags: tags?.map((tag) => tag.toModel()).toList() ?? [],
     );
   }
 }
