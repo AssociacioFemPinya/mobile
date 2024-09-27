@@ -14,7 +14,7 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
 
     on<LoadEvent>((eventID, emit) async {
       GetEventParams getEventParams = GetEventParams(id: eventID.value);
-      var result = await sl<GetEventsList>().call(params: getEventParams);
+      var result = await sl<GetEvent>().call(params: getEventParams);
 
       result.fold((failure) {
         add(EventLoadFailure(failure));

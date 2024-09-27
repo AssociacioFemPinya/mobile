@@ -67,7 +67,8 @@ class EventsServiceImpl implements EventsService {
       final response = await _dio.get('/event',
           queryParameters: _buildGetEventQueryParams(params));
       if (response.statusCode == 200 && response.data is String) {
-        return Right(EventEntity.fromModel(EventModel.fromJson(response.data)));
+        final json = jsonDecode(response.data as String) as Map<String, dynamic>;
+        return Right(EventEntity.fromModel(EventModel.fromJson(json)));
       }
       return const Left('Unexpected response format');
     } catch (e, stacktrace) {

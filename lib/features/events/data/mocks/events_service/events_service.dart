@@ -1,9 +1,9 @@
 // lib/core/network/mock_interceptor.dart
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:dio/dio.dart';
-import 'package:fempinya3_flutter_app/core/utils/datetime_utils.dart';
+import 'package:fempinya3_flutter_app/features/events/data/mocks/events_service/get_event_handler.dart';
+import 'package:fempinya3_flutter_app/features/events/data/mocks/events_service/get_events_list_handler.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/tag.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
@@ -13,26 +13,18 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 class EventsDioMockInterceptor extends Interceptor {
   late List<EventEntity> eventList;
 
+  int percentageOfRandomFailures = 0;
+
+  Map<
+      String,
+      void Function(EventsDioMockInterceptor mock, RequestOptions options,
+          RequestInterceptorHandler handler)> mockRouter = {
+    "/events": GetEventsListHandler.handle,
+    "/event": GetEventHandler.handle,
+  };
+
   EventsDioMockInterceptor() {
     eventList = _generateEvents();
-  }
-
-  @override
-  void onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
-    // Sleep between 0 and 1 seconds to simulate a slow API
-    final random = Random();
-    final randomDuration =
-        Duration(milliseconds: random.nextInt(1000));
-    await Future.delayed(randomDuration);
-
-    // Check the request path and provide a mock response
-    if (options.path == '/events') {
-      handleEventsCall(options, handler);
-    } else {
-      // Forward the request if not mocking
-      handler.next(options);
-    }
   }
 
   List<EventEntity> _generateEvents() {
@@ -49,11 +41,11 @@ class EventsDioMockInterceptor extends Interceptor {
 
     List<TagEntity>? generateTags() {
       return [
-        TagEntity(id: 1, name: 'Vegano', isEnabled: true),
-        TagEntity(id: 2, name: 'Arribarè tard', isEnabled: true),
-        TagEntity(id: 3, name: 'Celiac', isEnabled: true),
-        TagEntity(id: 4, name: 'Vinc amb cotxe', isEnabled: true),
-        TagEntity(id: 5, name: 'Necessito cotxe', isEnabled: true),
+        const TagEntity(id: 1, name: 'Vegano', isEnabled: true),
+        const TagEntity(id: 2, name: 'Arribarè tard', isEnabled: true),
+        const TagEntity(id: 3, name: 'Celiac', isEnabled: true),
+        const TagEntity(id: 4, name: 'Vinc amb cotxe', isEnabled: true),
+        const TagEntity(id: 5, name: 'Necessito cotxe', isEnabled: true),
       ];
     }
 
@@ -75,121 +67,32 @@ class EventsDioMockInterceptor extends Interceptor {
     });
   }
 
-  List<EventEntity> _filterEvents(
-    List<EventTypeEnum> eventTypeFilters,
-    final DateTimeRange? dayTimeRange,
-    bool showAnswered,
-    bool showUndefined,
-    bool showWarning,
-  ) {
-    List<EventEntity> events = dayTimeRange != null
-        ? _getEventsByDateRange(dayTimeRange, eventList)
-        : eventList;
+  @override
+  void onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
 
-    List<EventEntity> filteredEventsByType =
-        _filterByType(events, eventTypeFilters);
-    return _filterByStatus(
-        filteredEventsByType, showAnswered, showUndefined, showWarning);
-  }
-
-  List<EventEntity> _filterByType(
-    List<EventEntity> eventsList,
-    List<EventTypeEnum> eventTypeFilters,
-  ) {
-    if (eventTypeFilters.isEmpty) {
-      return eventsList;
-    }
-
-    return eventsList
-        .where((event) => eventTypeFilters.contains(event.type))
-        .toList();
-  }
-
-  List<EventEntity> _filterByStatus(
-    List<EventEntity> eventsList,
-    bool showAnswered,
-    bool showUndefined,
-    bool showWarning,
-  ) {
-    return eventsList.where((event) {
-      if (showUndefined && event.status == EventStatusEnum.undefined) {
-        return true;
-      }
-      if (showAnswered &&
-          ([
-            EventStatusEnum.accepted,
-            EventStatusEnum.declined,
-            EventStatusEnum.warning,
-            EventStatusEnum.unknown
-          ].contains(event.status))) {
-        return true;
-      }
-      if (showWarning && event.status == EventStatusEnum.warning) {
-        return true;
-      }
-      return !showUndefined && !showAnswered && !showWarning;
-    }).toList();
-  }
-
-  List<EventEntity> _getEventsByDateRange(
-      DateTimeRange dateRange, List<EventEntity> eventsList) {
-    return eventsList.where((event) {
-      DateTime eventDate = DateTime.utc(
-          event.startDate.year, event.startDate.month, event.startDate.day);
-      return eventDate.isAfter(dateRange.start) &&
-              eventDate.isBefore(dateRange.end) ||
-          eventDate.isAtSameMomentAs(dateRange.start) ||
-          eventDate.isAtSameMomentAs(dateRange.end);
-    }).toList();
-  }
-
-  void handleEventsCall(
-      RequestOptions options, RequestInterceptorHandler handler) {
-    final queryParams = options.queryParameters;
-    List<String> eventTypeFilters = queryParams["eventTypeFilters"] ?? [];
-
-    DateTimeRange? dayTimeRange;
-    if (queryParams['startDate'] != null) {
-      dayTimeRange = DateTimeRange.generateDateTimeRangeForDay(
-          DateTime.parse(queryParams['startDate']));
-    } else {
-      dayTimeRange = null;
-    }
-
-    final List<EventEntity> events = _filterEvents(
-        eventTypeFilters
-            .map((eventTypeFilter) =>
-                EventTypeEnumExtension.fromString(eventTypeFilter))
-            .toList(),
-        dayTimeRange,
-        queryParams["showAnswered"],
-        queryParams["showUndefined"],
-        queryParams["showWarning"]);
-
-    // Sleep between 0 and 2 seconds to simulate a slow API
+    // Sleep between 0 and 1 seconds to simulate a slow API
     final random = Random();
-    Response<dynamic> response;
+    final randomDuration = Duration(milliseconds: random.nextInt(1000));
+    await Future.delayed(randomDuration);
 
-    // One of each 10 requests will "fail" with a 500
-    if (random.nextInt(11) > 9) {
-      response = Response(
-        requestOptions: options,
-        statusCode: 500,
-      );
+    // Check the request path and provide a mock response
+    if (mockRouter.containsKey(options.path)) {
+      final random = Random();
+      if (random.nextInt(101) > 100 - percentageOfRandomFailures) {
+        handler.resolve(Response(
+          requestOptions: options,
+          statusCode: 500,
+        ));
+      } else {
+        mockRouter[options.path]!(this, options, handler);
+        // Close easyLoading as seems that resolve the query in the mock doesn't follow the interceptor chain
+        EasyLoading.dismiss();
+      }
     } else {
-      // Create a response object
-      response = Response(
-        requestOptions: options,
-        data: jsonEncode(
-            events.map((event) => event.toModel().toJson()).toList()),
-        statusCode: 200,
-      );
+      // Forward the request if not mocking
+      handler.next(options);
     }
-    // Complete the request with the mock response
-    handler.resolve(response);
-
-    // Close easyLoading as seems that resolve the query in the mock doesn't follow the interceptor chain
-    EasyLoading.dismiss();
   }
 
   @override

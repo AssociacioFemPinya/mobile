@@ -38,9 +38,6 @@ class EventModel {
       type: data['type'],
       description: data['description'],
       tags: tagList,
-      // tags: (data['tags'] as List<dynamic>?)
-      //     ?.map((tag) => TagModel.fromJson(tag as Map<String, dynamic>))
-      //     .toList(),
     );
   }
 

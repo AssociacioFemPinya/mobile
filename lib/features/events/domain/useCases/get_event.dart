@@ -13,7 +13,7 @@ class GetEventParams {
   });
 }
 
-class GetEventsList implements UseCase<Either, GetEventParams> {
+class GetEvent implements UseCase<Either, GetEventParams> {
   final EventsRepository repository = sl<EventsRepository>();
 
   @override
