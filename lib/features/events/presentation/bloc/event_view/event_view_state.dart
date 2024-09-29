@@ -13,3 +13,15 @@ class EventViewState {
     );
   }
 }
+
+class EventViewInitial extends EventViewState {
+  EventViewInitial({required super.event});
+}
+
+class EventViewEventLoaded extends EventViewState {
+  EventViewEventLoaded({required super.event});
+}
+
+class EventViewEventLoadFailure extends EventViewState {
+  EventViewEventLoadFailure({required super.event});
+}

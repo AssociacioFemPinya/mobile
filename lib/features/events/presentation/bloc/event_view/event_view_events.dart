@@ -21,7 +21,7 @@ class UpdateEvent extends EventViewEvent {
   UpdateEvent();
 }
 
-class UpdateEventSuccess extends EventViewEvent { 
+class UpdateEventSuccess extends EventViewEvent {
   UpdateEventSuccess();
 }
 

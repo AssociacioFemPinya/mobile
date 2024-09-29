@@ -7,9 +7,9 @@ part 'event_view_events.dart';
 part 'event_view_state.dart';
 
 class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
-  EventViewBloc() : super(EventViewState(event: null)) {
+  EventViewBloc() : super(EventViewInitial(event: null)) {
     on<EventLoadSuccess>((event, emit) {
-      emit(state.copyWith(event: event.value));
+      emit(EventViewEventLoaded(event: event.value));
     });
 
     on<LoadEvent>((eventID, emit) async {
