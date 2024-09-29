@@ -93,7 +93,8 @@ class _EventsViewModeWidgetState extends State<EventsViewModeWidget>
         return SizedBox(
             width: MediaQuery.of(context).size.width,
             child: DecoratedBox(
-                decoration: BoxDecoration(
+                decoration: BoxDecoration( border: Border.all(color: Theme.of(context).colorScheme.primaryFixedDim,
+                width: 1.0) ,
                    borderRadius:  const BorderRadius.only(
                         topLeft: Radius.circular(8.0),
                         topRight: Radius.circular(8.0),
@@ -102,22 +103,21 @@ class _EventsViewModeWidgetState extends State<EventsViewModeWidget>
                       ),
                   color: Theme.of(context)
                     .colorScheme
-                    .primaryFixedDim
-                    .withOpacity(0.3),
+                    .primaryFixed
                 ),
                 child: TabBar(
                     controller: _tabController,
                     tabs: tabs.values.toList(),
-                    labelColor: Colors.white,
-                    unselectedLabelColor: Colors.black,
-                    indicator: const BoxDecoration(
+                    labelColor: Theme.of(context).colorScheme.onPrimaryFixed,
+                    unselectedLabelColor: Theme.of(context).colorScheme.onPrimaryFixedVariant,
+                    indicator: BoxDecoration(
                        borderRadius:  BorderRadius.only(
                          topLeft: Radius.circular(8.0),
                         topRight: Radius.circular(8.0),
                         bottomLeft: Radius.circular(8.0),
                         bottomRight: Radius.circular(8.0)
                       ),
-                      color:  Color.fromARGB(255, 45, 131, 236),
+                      color: Theme.of(context).colorScheme.primaryFixedDim,
                     ),
                     indicatorPadding: EdgeInsets.zero,
                     indicatorSize: TabBarIndicatorSize.tab,

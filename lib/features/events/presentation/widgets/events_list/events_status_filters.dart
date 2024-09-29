@@ -99,17 +99,17 @@ class EventsStatusFiltersWidget extends StatelessWidget {
               if (selected) ...[
                 Icon(
                   Icons.check,
-                  color: Theme.of(context).colorScheme.onPrimary,
+                  color: Theme.of(context).colorScheme.onPrimaryFixed,
                   size: 20,
                 ),
                 SizedBox(width: 8), // Espacio entre el icono y el texto
               ],
               Text(
                 label,
-                style: TextStyle(
+                style: TextStyle(fontWeight: selected ? FontWeight.bold : FontWeight.normal,
                   color: selected
-                      ? Theme.of(context).colorScheme.onPrimary
-                      : Colors.black, // Texto negro cuando no está seleccionado
+                      ? Theme.of(context).colorScheme.onPrimaryFixed
+                      : Theme.of(context).colorScheme. onPrimaryFixedVariant, 
                 ),
               ),
             ],

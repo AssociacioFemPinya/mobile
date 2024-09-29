@@ -12,20 +12,23 @@ class EventsFiltersInputChipsWidget extends StatelessWidget {
     return BlocBuilder<EventsFiltersBloc, EventsFiltersState>(
         builder: (context, state) {
       return Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(top: 8.0),
         child: Wrap(
           spacing: 8.0,
           children: <Widget>[
             for (var item in state.eventTypeFilters)
               InputChip(
-                label: Text(item.toLocalizedString(context)),
+                label: Text(
+                  item.toLocalizedString(context),
+                  style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryFixedVariant),
+                ),
                 onDeleted: () {
                   context
                       .read<EventsFiltersBloc>()
                       .add(EventsTypeFiltersRemove(item));
                 },
-                selectedColor: Theme.of(context).colorScheme.primaryFixedDim,
-                checkmarkColor: Theme.of(context).colorScheme.onPrimaryFixed,
+                selectedColor: Theme.of(context).colorScheme.primaryFixed,
+                checkmarkColor: Theme.of(context).colorScheme.primaryFixed,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),
                     side: const BorderSide(style: BorderStyle.none)),

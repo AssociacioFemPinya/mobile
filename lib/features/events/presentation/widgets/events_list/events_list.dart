@@ -36,8 +36,13 @@ class EventsListWidget extends StatelessWidget {
         final sortedDates = state.events.keys.toList()..sort();
         return ListView.separated(
           itemCount: sortedDates.length,
-          separatorBuilder: (context, index) =>
-              const Divider(thickness: 1, indent: 20, endIndent: 20),
+          separatorBuilder: (context, index) => const Padding(
+            padding: EdgeInsets.symmetric(vertical: 15.0),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 230.0),
+              child: DottedLineSeparator(),
+            ),
+          ),
           itemBuilder: (context, index) {
             final date = sortedDates[index];
             final events = state.events[date] ?? [];
@@ -47,6 +52,8 @@ class EventsListWidget extends StatelessWidget {
       },
     );
   }
+
+
 
   Widget _buildDateEventsList(
       DateTime date, List<EventEntity> events, BuildContext context) {
@@ -61,17 +68,24 @@ class EventsListWidget extends StatelessWidget {
       ],
     );
   }
-
+  
   Widget _buildDateHeader(DateTime date, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-          const Icon(Icons.calendar_month),
-          Text(
-            DateTimeUtils.formatDateToHumanLanguage(
-                date, Localizations.localeOf(context).toString()),
-            style: Theme.of(context).textTheme.titleLarge,
+          Icon(Icons.calendar_month, color: Colors.black.withOpacity(0.2)),
+          const SizedBox(width: 4), 
+          Expanded(
+            child: Text(
+              DateTimeUtils.formatDateToHumanLanguage(
+                  date, Localizations.localeOf(context).toString()),
+              style: const TextStyle(
+                fontSize: 14, 
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 90, 89, 89), 
+              ),
+            ),
           ),
         ],
       ),
@@ -83,16 +97,19 @@ class EventsListWidget extends StatelessWidget {
       onTap: () =>
           Navigator.of(context).pushNamed(eventRoute, arguments: event),
       child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), 
+        side: BorderSide(width: _getStatusBorderSizeCard(event.status), color: _getStatusBorderColorCard(event.status))),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         color: _getStatusBackgroundColor(event.status),
-        elevation: 0.0,
-        margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        elevation: 0,
+        margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
         child: ListTile(
           contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
           leading: CircleAvatar(
-            backgroundColor: _getStatusColor(event.status),
-            child: Icon(_getStatusIcon(event.status), color: Colors.white),
+            backgroundColor: _getStatusBackgroundIconColor(event.status),
+            child: Icon(_getStatusIcon(event.status),
+                color: _getStatusColor(event.status), 
+                size: 35), 
           ),
           title: Text(event.title),
           subtitle: Text('${event.address} - ${event.dateHour}'),
@@ -123,11 +140,42 @@ class EventsListWidget extends StatelessWidget {
 
   Color _getStatusBackgroundColor(EventStatusEnum status) =>
       const {
-        EventStatusEnum.accepted: Color.fromRGBO(202, 245, 195, 1),
-        EventStatusEnum.declined: Color.fromRGBO(245, 127, 141, 1),
-        EventStatusEnum.unknown: Color.fromRGBO(249, 208, 130, 1),
-        EventStatusEnum.undefined: Color.fromRGBO(202, 196, 208, 1),
+        EventStatusEnum.accepted: Color.fromRGBO(202, 245, 195, 0.4),
+        EventStatusEnum.declined: Color.fromRGBO(245, 127, 141, 0.2),
+        EventStatusEnum.unknown: Color.fromRGBO(249, 208, 130, 0.5),
+        EventStatusEnum.undefined: Color.fromRGBO(255, 255, 255, 1), 
+        EventStatusEnum.warning: Color.fromRGBO(202, 245, 195, 0.4),
+      }[status] ??
+      const Color.fromRGBO(202, 196, 208, 1);
+
+      Color _getStatusBorderColorCard(EventStatusEnum status) =>
+      const {
+        EventStatusEnum.accepted: Color.fromRGBO(202, 245, 195, 0.5),
+        EventStatusEnum.declined: Color.fromRGBO(245, 127, 141, 0.5),
+        EventStatusEnum.unknown: Color.fromRGBO(249, 208, 130, 0.5),
+        EventStatusEnum.undefined: Color.fromRGBO(202, 196, 208, 1), 
         EventStatusEnum.warning: Color.fromRGBO(202, 245, 195, 1),
+      }[status] ??
+      const Color.fromRGBO(202, 196, 208, 1);
+
+
+   _getStatusBorderSizeCard(EventStatusEnum status) =>
+      const {
+        EventStatusEnum.accepted: 0,
+        EventStatusEnum.declined: 0,
+        EventStatusEnum.unknown: 0,
+        EventStatusEnum.undefined: 1,
+        EventStatusEnum.warning: 0,
+      }[status] ??
+      4;
+
+  Color _getStatusBackgroundIconColor(EventStatusEnum status) =>
+      const {
+        EventStatusEnum.accepted: Color.fromRGBO(202, 245, 195, 0.9),
+        EventStatusEnum.declined: Color.fromRGBO(245, 127, 141, 0.5),
+        EventStatusEnum.unknown: Color.fromRGBO(249, 208, 130, 0.5),
+        EventStatusEnum.undefined: Color.fromRGBO(202, 196, 208, 0.2),
+        EventStatusEnum.warning: Color.fromRGBO(202, 245, 195, 0.4),
       }[status] ??
       const Color.fromRGBO(202, 196, 208, 1);
 
@@ -141,3 +189,33 @@ class EventsListWidget extends StatelessWidget {
       }[status] ??
       Colors.grey;
 }
+
+
+  class DottedLineSeparator extends StatelessWidget {
+    const DottedLineSeparator({super.key});
+
+    @override
+    Widget build(BuildContext context) {
+      return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final boxWidth = constraints.constrainWidth();
+          const dashWidth = 2.0;
+          const dashHeight = 2.0;
+          final dashCount = (boxWidth / (4 * dashWidth)).floor();
+          return Flex(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            direction: Axis.horizontal,
+            children: List.generate(dashCount, (_) {
+              return const SizedBox(
+                width: dashWidth,
+                height: dashHeight,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: Colors.grey),
+                ),
+              );
+            }),
+          );
+        },
+      );
+    }
+  }
