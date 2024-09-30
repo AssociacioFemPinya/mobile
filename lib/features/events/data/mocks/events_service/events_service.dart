@@ -1,9 +1,9 @@
-// lib/core/network/mock_interceptor.dart
 import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:fempinya3_flutter_app/features/events/data/mocks/events_service/get_event_handler.dart';
 import 'package:fempinya3_flutter_app/features/events/data/mocks/events_service/get_events_list_handler.dart';
+import 'package:fempinya3_flutter_app/features/events/data/mocks/events_service/post_event_handler.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/tag.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
@@ -14,13 +14,15 @@ class EventsDioMockInterceptor extends Interceptor {
   late List<EventEntity> eventList;
 
   int percentageOfRandomFailures = 0;
+  int maxDurationRequest = 200;
 
   Map<
-      String,
+      _MockRouteKey,
       void Function(EventsDioMockInterceptor mock, RequestOptions options,
           RequestInterceptorHandler handler)> mockRouter = {
-    "/events": GetEventsListHandler.handle,
-    "/event": GetEventHandler.handle,
+    _MockRouteKey('/events', 'GET'): GetEventsListHandler.handle,
+    _MockRouteKey('/event', 'GET'): GetEventHandler.handle,
+    _MockRouteKey('/event', 'POST'): PostEventHandler.handle,
   };
 
   EventsDioMockInterceptor() {
@@ -70,14 +72,14 @@ class EventsDioMockInterceptor extends Interceptor {
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-
     // Sleep between 0 and 1 seconds to simulate a slow API
     final random = Random();
-    final randomDuration = Duration(milliseconds: random.nextInt(1000));
+    final randomDuration = Duration(milliseconds: random.nextInt(maxDurationRequest));
     await Future.delayed(randomDuration);
 
-    // Check the request path and provide a mock response
-    if (mockRouter.containsKey(options.path)) {
+    // Check the request path and method and provide a mock response
+    final routeKey = _MockRouteKey(options.path, options.method);
+    if (mockRouter.containsKey(routeKey)) {
       final random = Random();
       if (random.nextInt(101) > 100 - percentageOfRandomFailures) {
         handler.resolve(Response(
@@ -85,7 +87,7 @@ class EventsDioMockInterceptor extends Interceptor {
           statusCode: 500,
         ));
       } else {
-        mockRouter[options.path]!(this, options, handler);
+        mockRouter[routeKey]!(this, options, handler);
         // Close easyLoading as seems that resolve the query in the mock doesn't follow the interceptor chain
         EasyLoading.dismiss();
       }
@@ -106,4 +108,22 @@ class EventsDioMockInterceptor extends Interceptor {
     // Handle responses if needed
     super.onResponse(response, handler);
   }
+}
+
+class _MockRouteKey {
+  final String path;
+  final String method;
+
+  _MockRouteKey(this.path, this.method);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is _MockRouteKey &&
+          runtimeType == other.runtimeType &&
+          path == other.path &&
+          method == other.method;
+
+  @override
+  int get hashCode => path.hashCode ^ method.hashCode;
 }

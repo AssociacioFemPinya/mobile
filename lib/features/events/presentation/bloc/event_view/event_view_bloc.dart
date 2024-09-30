@@ -1,6 +1,7 @@
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/useCases/get_event.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/useCases/post_event.dart';
 import 'package:fempinya3_flutter_app/features/events/service_locator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,6 +27,17 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
 
     on<EventLoadFailure>((errorMessage, emit) {
       // TODO
+    });
+
+    on<EventStatusModified>((status, emit) async {
+      var newEvent = state.event!.copyWith(status: status.value);
+      var result = await sl<PostEvent>().call(params: newEvent);
+
+      result.fold((failure) {
+        add(EventLoadFailure(failure));
+      }, (data) {
+        add(EventLoadSuccess(data));
+      });
     });
   }
 }

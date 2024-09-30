@@ -1,4 +1,5 @@
 import 'package:fempinya3_flutter_app/features/events/domain/useCases/get_event.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/useCases/post_event.dart';
 import 'package:logger/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:fempinya3_flutter_app/core/network/dio_factory.dart';
@@ -25,4 +26,5 @@ Future<void> setupEventsServiceLocator() async {
   sl.registerSingleton<EventsRepository>(EventsRepositoryImpl());
   sl.registerSingleton<GetEventsList>(GetEventsList());
   sl.registerSingleton<GetEvent>(GetEvent());
+  sl.registerSingleton<PostEvent>(PostEvent());
 }

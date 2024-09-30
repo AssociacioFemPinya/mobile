@@ -67,4 +67,19 @@ class EventEntity extends Equatable {
       tags: tags?.map((tag) => tag.toModel()).toList() ?? [],
     );
   }
+
+  EventEntity copyWith({EventStatusEnum? status}) {
+    return EventEntity(
+      id: id,
+      title: title,
+      startDate: startDate,
+      endDate: endDate,
+      dateHour: dateHour,
+      address: address,
+      status: status ?? this.status,
+      type: type,
+      description: description,
+      tags: tags,
+    );
+  }
 }
