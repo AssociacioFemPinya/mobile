@@ -6,6 +6,7 @@ import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_view_mode.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_calendar/events_calendar_bloc.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_filters/events_filters_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_list/events_list_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_list/events_view_mode/events_view_mode_bloc.dart';
 import 'package:flutter/material.dart';
@@ -95,8 +96,11 @@ class EventsListWidget extends StatelessWidget {
 
   Widget _buildEventCard(EventEntity event, BuildContext context) {
     return InkWell(
-      onTap: () =>
-          context.pushNamed(eventRoute, pathParameters: {'eventID': event.id.toString()}),
+      onTap: () {
+        context.pushNamed(eventRoute, pathParameters: {'eventID': event.id.toString()}).then((_) {
+          context.read<EventsListBloc>().add(LoadEventsList(context.read<EventsFiltersBloc>().state));
+        });
+      },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), 
         side: BorderSide(width: _getStatusBorderSizeCard(event.status), color: _getStatusBorderColorCard(event.status))),
