@@ -9,6 +9,6 @@ final Map<String, WidgetBuilder> eventsRoutes = {
   eventRoute: (context) {
     final event = ModalRoute.of(context)!.settings.arguments as EventEntity;
     //final event = EventEntity(id: 1, title: "EventTitle", startDate: DateTime.parse('2024-07-01 02:00:00.000Z'), endDate: DateTime.parse('2024-07-01 02:00:00.000Z'), dateHour: '2024-07-01', address: "Some Address", status: EventStatusEnum.accepted, type: EventTypeEnum.activity);
-    return EventPage(event: event);
+    return EventPage(eventID: event.id);
   }
 };

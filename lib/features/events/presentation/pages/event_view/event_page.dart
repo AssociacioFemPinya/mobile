@@ -14,15 +14,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class EventPage extends StatelessWidget {
-  final EventEntity event;
+  final int eventID;
 
-  const EventPage({super.key, required this.event});
+  const EventPage({super.key, required this.eventID});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
       BlocProvider<EventViewBloc>(
-        create: (context) => EventViewBloc()..add(LoadEvent(event.id)),
+        create: (context) => EventViewBloc()..add(LoadEvent(eventID)),
       ),
     ], child: eventView(context));
   }
@@ -34,7 +34,7 @@ class EventPage extends StatelessWidget {
         return Container();
       }
       return Scaffold(
-          appBar: AppBar(title: Text(event.title)),
+          appBar: AppBar(title: Text(state.event!.title)),
           //drawer: const MenuWidget(),
           body: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -47,7 +47,7 @@ class EventPage extends StatelessWidget {
                   AddComments(context),
                   AttendanceSwitch(context),
                   CompanionsSelector(context),
-                  OptionsSelector(context),
+                  optionsSelector(context),
                 ],
               ))));
     });
@@ -145,26 +145,29 @@ class EventPage extends StatelessWidget {
     });
   }
 
-  SliverToBoxAdapter OptionsSelector(BuildContext context) {
-    return SliverToBoxAdapter(
-        child: Column(
-      children: [
-        Row(children: [
-          Text(
-            "Informació adicional",
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-        ]),
-        SizedBox(
-          width: MediaQuery.of(context)
-              .size
-              .width, // Ajusta al ancho de la pantalla
-          child: AdditionalInfoChips(tags: event.tags),
-        )
-      ],
-    ));
+  BlocBuilder optionsSelector(BuildContext context) {
+    return BlocBuilder<EventViewBloc, EventViewState>(
+        builder: (context, state) {
+      return SliverToBoxAdapter(
+          child: Column(
+        children: [
+          Row(children: [
+            Text(
+              "Informació adicional",
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+          ]),
+          SizedBox(
+            width: MediaQuery.of(context)
+                .size
+                .width, // Ajusta al ancho de la pantalla
+            child: AdditionalInfoChips(tags: state.event?.tags ?? []),
+          )
+        ],
+      ));
+    });
   }
 
   SliverToBoxAdapter CompanionsSelector(BuildContext context) {
@@ -228,114 +231,123 @@ class EventPage extends StatelessWidget {
     );
   }
 
-  EventInfoTile AddComments(BuildContext context) {
-    return EventInfoTile(
-        svgSrc: AppIcons.scheduleHours,
-        title: "Afegir comentaris", // todo zan traducciones
-        isShowBottomTop: false,
-        press: () {
-          customModalBottomSheet(
-            context,
-            height: MediaQuery.of(context).size.height - 100,
-            child: EventMemberCommentsScreen(event: event),
-          );
-        });
-  }
-
-  EventInfoTile Schedule(BuildContext context) {
-    return EventInfoTile(
-        svgSrc: AppIcons.scheduleHours,
-        title: "Horaris", // todo zan traducciones
-        press: () {
-          customModalBottomSheet(context,
+  BlocBuilder AddComments(BuildContext context) {
+    return BlocBuilder<EventViewBloc, EventViewState>(
+        builder: (context, state) {
+      return EventInfoTile(
+          svgSrc: AppIcons.scheduleHours,
+          title: "Afegir comentaris", // todo zan traducciones
+          isShowBottomTop: false,
+          press: () {
+            customModalBottomSheet(
+              context,
               height: MediaQuery.of(context).size.height - 100,
-              child: EventScheduleScreen(event: event));
-        });
+              child: EventMemberCommentsScreen(event: state.event!),
+            );
+          });
+    });
   }
 
-  Card eventInfo(BuildContext context) {
-    return Card(
-      // Define the shape of the card
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
-      ),
-      // Define how the card's content should be clipped
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      // Define the child widget of the card
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          // Add padding around the row widget
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                //TODO
-                /* // Add an image widget to display an image
+  BlocBuilder Schedule(BuildContext context) {
+    return BlocBuilder<EventViewBloc, EventViewState>(
+        builder: (context, state) {
+      return EventInfoTile(
+          svgSrc: AppIcons.scheduleHours,
+          title: "Horaris", // todo zan traducciones
+          press: () {
+            customModalBottomSheet(context,
+                height: MediaQuery.of(context).size.height - 100,
+                child: EventScheduleScreen(event: state.event!));
+          });
+    });
+  }
+
+  BlocBuilder eventInfo(BuildContext context) {
+    return BlocBuilder<EventViewBloc, EventViewState>(
+        builder: (context, state) {
+      return Card(
+        // Define the shape of the card
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
+        // Define how the card's content should be clipped
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        // Define the child widget of the card
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            // Add padding around the row widget
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  //TODO
+                  /* // Add an image widget to display an image
                         Image.asset(
                           "foto",
                           height: 50,
                           width: 50,
                           fit: BoxFit.cover,
                         ),*/
-                SvgPicture.asset(
-                  AppIcons.activityIcon,
-                  width: 100, // Ajusta el ancho del ícono
-                  height: 100, // Ajusta la altura del ícono
-                ),
-                // Add some spacing between the image and the text
-                Container(width: 20),
-                // Add an expanded widget to take up the remaining horizontal space
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(height: 5),
-                      Row(
-                        children: [
-                          const Icon(Icons.calendar_month_outlined, size: 20),
-                          const SizedBox(width: 8),
-                          Text(
-                            DateTimeUtils.formatDateToHumanLanguage(
-                                event.startDate,
-                                Localizations.localeOf(context).toString()),
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                        ],
-                      ),
-                      Container(height: 5),
-                      Row(
-                        children: [
-                          const Icon(Icons.watch_later, size: 20),
-                          const SizedBox(width: 8),
-                          Text(
-                            event.dateHour,
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-                        ],
-                      ),
-                      Container(height: 10),
-                      Row(
-                        children: [
-                          const Icon(Icons.place, size: 20),
-                          const SizedBox(width: 8),
-                          Text(
-                            event.address,
-                            maxLines: 2,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ],
-                      ),
-                    ],
+                  SvgPicture.asset(
+                    AppIcons.activityIcon,
+                    width: 100, // Ajusta el ancho del ícono
+                    height: 100, // Ajusta la altura del ícono
                   ),
-                ),
-              ],
+                  // Add some spacing between the image and the text
+                  Container(width: 20),
+                  // Add an expanded widget to take up the remaining horizontal space
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(height: 5),
+                        Row(
+                          children: [
+                            const Icon(Icons.calendar_month_outlined, size: 20),
+                            const SizedBox(width: 8),
+                            Text(
+                              DateTimeUtils.formatDateToHumanLanguage(
+                                  state.event!.startDate,
+                                  Localizations.localeOf(context).toString()),
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ],
+                        ),
+                        Container(height: 5),
+                        Row(
+                          children: [
+                            const Icon(Icons.watch_later, size: 20),
+                            const SizedBox(width: 8),
+                            Text(
+                              state.event!.dateHour,
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          ],
+                        ),
+                        Container(height: 10),
+                        Row(
+                          children: [
+                            const Icon(Icons.place, size: 20),
+                            const SizedBox(width: 8),
+                            Text(
+                              state.event!.address,
+                              maxLines: 2,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   BlocBuilder eventDescription(BuildContext context) {
