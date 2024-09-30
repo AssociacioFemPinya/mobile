@@ -1,14 +1,19 @@
-import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/pages/event_view/event_page.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fempinya3_flutter_app/core/navigation/route_names.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/pages/events_list/events_list_page.dart';
+import 'package:go_router/go_router.dart';
 
-final Map<String, WidgetBuilder> eventsRoutes = {
-  eventsRoute: (context) => const EventsListPage(),
-  eventRoute: (context) {
-    final event = ModalRoute.of(context)!.settings.arguments as EventEntity;
-    //final event = EventEntity(id: 1, title: "EventTitle", startDate: DateTime.parse('2024-07-01 02:00:00.000Z'), endDate: DateTime.parse('2024-07-01 02:00:00.000Z'), dateHour: '2024-07-01', address: "Some Address", status: EventStatusEnum.accepted, type: EventTypeEnum.activity);
-    return EventPage(eventID: event.id);
-  }
-};
+
+final List<GoRoute> eventRoutes = [
+    GoRoute(
+      path: eventsRoute,
+      builder: (context, state) => const EventsListPage(),
+    ),
+    GoRoute(
+      path: '$eventRoute/:eventID',
+      builder: (context, state) {
+        final eventID = int.parse(state.params['eventID']!);
+        return EventPage(eventID: eventID);
+      },
+    ),
+];

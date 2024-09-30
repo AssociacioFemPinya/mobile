@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:fempinya3_flutter_app/core/navigation/route_names.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -32,19 +33,19 @@ class MenuWidget extends StatelessWidget {
           ListTile(
             title: Text(translate.menuHome),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(homeRoute);
+              context.push(homeRoute);
             },
           ),
           ListTile(
             title: Text(translate.menuEvents),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(eventsRoute);
+              context.push(eventsRoute);
             },
           ),
           ListTile(
             title: Text(translate.menuNotifications),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(notificationsRoute);
+              context.push(notificationsRoute);
             },
           ),
           const Divider(),

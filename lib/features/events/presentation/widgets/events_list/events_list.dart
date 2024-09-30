@@ -11,6 +11,7 @@ import 'package:fempinya3_flutter_app/features/events/presentation/bloc/events_l
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class EventsListWidget extends StatelessWidget {
@@ -95,7 +96,7 @@ class EventsListWidget extends StatelessWidget {
   Widget _buildEventCard(EventEntity event, BuildContext context) {
     return InkWell(
       onTap: () =>
-          Navigator.of(context).pushNamed(eventRoute, arguments: event),
+          context.push('${eventRoute}/${event.id}'),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), 
         side: BorderSide(width: _getStatusBorderSizeCard(event.status), color: _getStatusBorderColorCard(event.status))),

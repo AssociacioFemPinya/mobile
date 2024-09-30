@@ -1,7 +1,7 @@
+import 'package:fempinya3_flutter_app/core/navigation/route_names.dart';
 import 'package:fempinya3_flutter_app/features/events/service_locator.dart';
 import 'package:fempinya3_flutter_app/main_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:fempinya3_flutter_app/core/navigation/route_names.dart';
 import 'package:provider/provider.dart';
 import 'package:fempinya3_flutter_app/features/menu/domain/entities/locale.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -35,36 +35,36 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => LocaleModel(),
       child: Consumer<LocaleModel>(
-          builder: (context, localeModel, child) => MaterialApp(
-                title: 'FemPinya App',
-                routes: appRoutes,
-                builder: EasyLoading.init(),
-                localizationsDelegates: AppLocalizations.localizationsDelegates,
-                supportedLocales: AppLocalizations.supportedLocales,
-                locale: localeModel.locale,
-                debugShowCheckedModeBanner: false,
-                themeMode: ThemeMode.system, //or ThemeMode.dark 
-                //theme: GlobalThemeData.lightThemeData,
-                //darkTheme: GlobalThemeData.darkThemeData,
-                //To-do Zan
-                theme: ThemeData(
-                  colorScheme: ColorScheme.fromSeed(
-                    seedColor: Colors.orangeAccent,
-                    brightness: Brightness.light,
-                    dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
-                  ),
-                  useMaterial3: true,
-                ),
-                darkTheme: ThemeData(
-                  colorScheme: ColorScheme.fromSeed(
-                    seedColor: Colors.blue,
-                    brightness: Brightness.dark,
-                    dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
-                  ),
-                  useMaterial3: true,
-                ),
-                initialRoute: eventsRoute,
-              )),
+        builder: (context, localeModel, child) => MaterialApp.router(
+          title: 'FemPinya App',
+          routerConfig: appRouter, // Use the GoRouter configuration
+          builder: EasyLoading.init(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: localeModel.locale,
+          debugShowCheckedModeBanner: false,
+          themeMode: ThemeMode.system, //or ThemeMode.dark 
+          //theme: GlobalThemeData.lightThemeData,
+          //darkTheme: GlobalThemeData.darkThemeData,
+          //To-do Zan
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.orangeAccent,
+              brightness: Brightness.light,
+              dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+            ),
+            useMaterial3: true,
+          ),
+          darkTheme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.blue,
+              brightness: Brightness.dark,
+              dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+            ),
+            useMaterial3: true,
+          ),
+        ),
+      ),
     );
   }
 }

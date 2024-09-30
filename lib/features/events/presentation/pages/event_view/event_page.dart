@@ -1,7 +1,6 @@
 import 'package:customizable_counter/customizable_counter.dart';
 import 'package:fempinya3_flutter_app/core/configs/assets/app_icons.dart';
 import 'package:fempinya3_flutter_app/core/utils/datetime_utils.dart';
-import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/tag.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/event_view/event_view_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/pages/event_view/views/event_member_comments_screen.dart';
@@ -43,10 +42,10 @@ class EventPage extends StatelessWidget {
                 slivers: [
                   eventSummary(context),
                   eventDescription(context),
-                  Schedule(context),
-                  AddComments(context),
-                  AttendanceSwitch(context),
-                  CompanionsSelector(context),
+                  schedule(context),
+                  addComments(context),
+                  attendanceSwitch(context),
+                  companionsSelector(context),
                   optionsSelector(context),
                 ],
               ))));
@@ -170,7 +169,7 @@ class EventPage extends StatelessWidget {
     });
   }
 
-  SliverToBoxAdapter CompanionsSelector(BuildContext context) {
+  SliverToBoxAdapter companionsSelector(BuildContext context) {
     return SliverToBoxAdapter(
         child: Column(
       children: [
@@ -206,7 +205,7 @@ class EventPage extends StatelessWidget {
     ));
   }
 
-  SliverToBoxAdapter AttendanceSwitch(BuildContext context) {
+  SliverToBoxAdapter attendanceSwitch(BuildContext context) {
     return SliverToBoxAdapter(
       child: Column(
         children: [
@@ -231,7 +230,7 @@ class EventPage extends StatelessWidget {
     );
   }
 
-  BlocBuilder AddComments(BuildContext context) {
+  BlocBuilder addComments(BuildContext context) {
     return BlocBuilder<EventViewBloc, EventViewState>(
         builder: (context, state) {
       return EventInfoTile(
@@ -248,7 +247,7 @@ class EventPage extends StatelessWidget {
     });
   }
 
-  BlocBuilder Schedule(BuildContext context) {
+  BlocBuilder schedule(BuildContext context) {
     return BlocBuilder<EventViewBloc, EventViewState>(
         builder: (context, state) {
       return EventInfoTile(
