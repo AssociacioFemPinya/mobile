@@ -33,19 +33,19 @@ class MenuWidget extends StatelessWidget {
           ListTile(
             title: Text(translate.menuHome),
             onTap: () {
-              context.push(homeRoute);
+              context.pushNamed(homeRoute);
             },
           ),
           ListTile(
             title: Text(translate.menuEvents),
             onTap: () {
-              context.push(eventsRoute);
+              context.pushNamed(eventsRoute);
             },
           ),
           ListTile(
             title: Text(translate.menuNotifications),
             onTap: () {
-              context.push(notificationsRoute);
+              context.pushNamed(notificationsRoute);
             },
           ),
           const Divider(),

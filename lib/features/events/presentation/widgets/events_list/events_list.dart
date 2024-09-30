@@ -96,7 +96,7 @@ class EventsListWidget extends StatelessWidget {
   Widget _buildEventCard(EventEntity event, BuildContext context) {
     return InkWell(
       onTap: () =>
-          context.push('${eventRoute}/${event.id}'),
+          context.pushNamed(eventRoute, pathParameters: {'eventID': event.id.toString()}),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), 
         side: BorderSide(width: _getStatusBorderSizeCard(event.status), color: _getStatusBorderColorCard(event.status))),

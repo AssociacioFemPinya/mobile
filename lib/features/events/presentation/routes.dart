@@ -6,13 +6,15 @@ import 'package:go_router/go_router.dart';
 
 final List<GoRoute> eventRoutes = [
     GoRoute(
+      name: eventsRoute,
       path: eventsRoute,
       builder: (context, state) => const EventsListPage(),
     ),
     GoRoute(
+      name: eventRoute,
       path: '$eventRoute/:eventID',
       builder: (context, state) {
-        final eventID = int.parse(state.params['eventID']!);
+        final eventID = int.parse(state.pathParameters['eventID']!);
         return EventPage(eventID: eventID);
       },
     ),
