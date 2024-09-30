@@ -17,6 +17,11 @@ class EventLoadFailure extends EventViewEvent {
   EventLoadFailure(this.value);
 }
 
+class EventStatusModified extends EventViewEvent {
+  final EventStatusEnum value;
+  EventStatusModified(this.value);
+}
+
 class UpdateEvent extends EventViewEvent {
   UpdateEvent();
 }

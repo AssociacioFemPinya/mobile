@@ -2,9 +2,11 @@ import 'package:customizable_counter/customizable_counter.dart';
 import 'package:fempinya3_flutter_app/core/configs/assets/app_icons.dart';
 import 'package:fempinya3_flutter_app/core/utils/datetime_utils.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/tag.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/event_view/event_view_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/pages/event_view/views/event_member_comments_screen.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/pages/event_view/views/event_schedule_screen.dart';
+import 'package:fempinya3_flutter_app/features/events/presentation/widgets/event_view/assistance_selector.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/event_view/custom_modal_bottom_sheet.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/event_view/event_info_tile.dart';
 
@@ -362,50 +364,6 @@ class EventPage extends StatelessWidget {
         ),
       );
     });
-  }
-}
-
-//TODO
-enum Calendar { yes, no, unknown }
-
-class AssistanceSelector extends StatefulWidget {
-  const AssistanceSelector({super.key});
-
-  @override
-  State<AssistanceSelector> createState() => _AssistanceSelectorState();
-}
-
-class _AssistanceSelectorState extends State<AssistanceSelector> {
-  Calendar? calendarView;
-
-  @override
-  Widget build(BuildContext context) {
-    return SegmentedButton<Calendar>(
-      segments: const <ButtonSegment<Calendar>>[
-        ButtonSegment<Calendar>(
-          value: Calendar.yes,
-          label: Text('Sí'),
-        ),
-        ButtonSegment<Calendar>(
-          value: Calendar.no,
-          label: Text('No'),
-        ),
-        ButtonSegment<Calendar>(
-          value: Calendar.unknown,
-          label: Text('No ho sé'),
-        ),
-      ],
-      selected: calendarView != null ? <Calendar>{calendarView!} : {},
-      emptySelectionAllowed: true, // Pass an empty set if null
-      onSelectionChanged: (Set<Calendar> newSelection) {
-        setState(() {
-          // By default there is only a single segment that can be
-          // selected at one time, so its value is always the first
-          // item in the selected set.
-          calendarView = newSelection.first;
-        });
-      },
-    );
   }
 }
 

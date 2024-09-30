@@ -13,6 +13,7 @@ abstract class EventsService {
   Future<Either<String, List<EventEntity>>> getEventsList(
       GetEventsListParams params);
   Future<Either<String, EventEntity>> getEvent(GetEventParams params);
+  Future<Either<String, EventEntity>> postEvent(EventEntity params);
 }
 
 class EventsServiceImpl implements EventsService {
@@ -72,8 +73,24 @@ class EventsServiceImpl implements EventsService {
       }
       return const Left('Unexpected response format');
     } catch (e, stacktrace) {
-      _logError('Error when calling /event endpoint', e, stacktrace);
-      return Left('Error when calling /event endpoint: $e');
+      _logError('Error when calling get /event endpoint', e, stacktrace);
+      return Left('Error when calling get /event endpoint: $e');
+    }
+  }
+
+  @override
+  Future<Either<String, EventEntity>> postEvent(EventEntity params) async {
+    try {
+      final response = await _dio.post('/event',
+          data: jsonEncode(params.toModel().toJson()));
+      if (response.statusCode == 200 && response.data is String) {
+        final json = jsonDecode(response.data as String) as Map<String, dynamic>;
+        return Right(EventEntity.fromModel(EventModel.fromJson(json)));
+      }
+      return const Left('Unexpected response format');
+    } catch (e, stacktrace) {
+      _logError('Error when calling post /event endpoint', e, stacktrace);
+      return Left('Error when calling post /event endpoint: $e');
     }
   }
 

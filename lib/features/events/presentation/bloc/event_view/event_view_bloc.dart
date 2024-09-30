@@ -1,4 +1,5 @@
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/useCases/get_event.dart';
 import 'package:fempinya3_flutter_app/features/events/service_locator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
