@@ -22,6 +22,11 @@ class EventStatusModified extends EventViewEvent {
   EventStatusModified(this.value);
 }
 
+class EventCompanionsModified extends EventViewEvent {
+  final int value;
+  EventCompanionsModified(this.value);
+}
+
 class UpdateEvent extends EventViewEvent {
   UpdateEvent();
 }

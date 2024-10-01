@@ -9,6 +9,7 @@ class EventModel {
   final String? status;
   final String? type;
   final String? description;
+  final int? companions;
   final List<TagModel>? tags;
 
   EventModel({
@@ -20,6 +21,7 @@ class EventModel {
     required this.status,
     required this.type,
     required this.description,
+    required this.companions,
     required this.tags,
   });
 
@@ -37,6 +39,7 @@ class EventModel {
       status: data['status'],
       type: data['type'],
       description: data['description'],
+      companions: data['companions'],
       tags: tagList,
     );
   }
@@ -52,6 +55,7 @@ class EventModel {
       'status': status,
       'type': type,
       'description': description,
+      'companions': companions,
       'tags': tags?.map((tag) => tag.toJson()).toList() ?? [],
     };
   }

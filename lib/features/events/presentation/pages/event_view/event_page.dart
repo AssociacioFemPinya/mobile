@@ -2,7 +2,6 @@ import 'package:customizable_counter/customizable_counter.dart';
 import 'package:fempinya3_flutter_app/core/configs/assets/app_icons.dart';
 import 'package:fempinya3_flutter_app/core/utils/datetime_utils.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/tag.dart';
-import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/event_view/event_view_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/pages/event_view/views/event_member_comments_screen.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/pages/event_view/views/event_schedule_screen.dart';
@@ -171,40 +170,47 @@ class EventPage extends StatelessWidget {
     });
   }
 
-  SliverToBoxAdapter companionsSelector(BuildContext context) {
-    return SliverToBoxAdapter(
-        child: Column(
-      children: [
-        Row(children: [
-          Text(
-            "Algun acompanyant?",
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-          )
-        ]),
-        CustomizableCounter(
-            borderColor: Colors.white,
-            borderWidth: 0,
-            borderRadius: 100,
-            backgroundColor: Colors.lightBlueAccent,
-            buttonText: "Afegir acompanyats",
-            textColor: Colors.white,
-            textSize: 15,
-            count: 0,
-            step: 1,
-            minCount: 0,
-            incrementIcon: const Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-            decrementIcon: const Icon(
-              Icons.remove,
-              color: Colors.white,
-            ),
-            onCountChange: (count) {}),
-      ],
-    ));
+  BlocBuilder companionsSelector(BuildContext context) {
+    return BlocBuilder<EventViewBloc, EventViewState>(
+      builder: (context, state) {
+        return SliverToBoxAdapter(
+          child: Column(
+            children: [
+              Row(children: [
+                Text(
+                  "Algun acompanyant?",
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                )
+              ]),
+              CustomizableCounter(
+                  borderColor: Colors.white,
+                  borderWidth: 0,
+                  borderRadius: 100,
+                  backgroundColor: Colors.lightBlueAccent,
+                  buttonText: "Afegir acompanyats",
+                  textColor: Colors.white,
+                  textSize: 15,
+                  count: (state.event?.companions ?? 0).toDouble(),
+                  step: 1,
+                  minCount: 0,
+                  incrementIcon: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                  decrementIcon: const Icon(
+                    Icons.remove,
+                    color: Colors.white,
+                  ),
+                  onCountChange: (count) {
+                    context.read<EventViewBloc>().add(EventCompanionsModified(count.toInt()));
+                  }),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   SliverToBoxAdapter attendanceSwitch(BuildContext context) {

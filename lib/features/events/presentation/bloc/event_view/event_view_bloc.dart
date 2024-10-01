@@ -39,5 +39,16 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
         add(EventLoadSuccess(data));
       });
     });
+
+    on<EventCompanionsModified>((companions, emit) async {
+      var newEvent = state.event!.copyWith(companions: companions.value);
+      var result = await sl<PostEvent>().call(params: newEvent);
+
+      result.fold((failure) {
+        add(EventLoadFailure(failure));
+      }, (data) {
+        add(EventLoadSuccess(data));
+      });
+    });
   }
 }
