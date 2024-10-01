@@ -72,7 +72,7 @@ class EventEntity extends Equatable {
     );
   }
 
-  EventEntity copyWith({EventStatusEnum? status, int? companions}) {
+  EventEntity copyWith({EventStatusEnum? status, int? companions, List<TagEntity>? tags}) {
     return EventEntity(
       id: id,
       title: title,
@@ -84,7 +84,7 @@ class EventEntity extends Equatable {
       type: type,
       description: description,
       companions: companions ?? this.companions,
-      tags: tags,
+      tags: tags ?? this.tags,
     );
   }
 }

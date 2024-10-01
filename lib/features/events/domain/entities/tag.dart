@@ -6,7 +6,8 @@ class TagEntity extends Equatable {
   final String name;
   final bool isEnabled;
 
-  const TagEntity({required this.id, required this.name, required this.isEnabled});  
+  const TagEntity(
+      {required this.id, required this.name, required this.isEnabled});
 
   @override
   List<Object?> get props {
@@ -28,6 +29,14 @@ class TagEntity extends Equatable {
       id: id,
       name: name,
       isEnabled: isEnabled,
+    );
+  }
+
+  TagEntity copyWith({bool? isEnabled}) {
+    return TagEntity(
+      id: id,
+      name: name,
+      isEnabled: isEnabled ?? this.isEnabled,
     );
   }
 }

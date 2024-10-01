@@ -390,7 +390,9 @@ class AdditionalInfoChips extends StatelessWidget {
         children: <Widget>[
           for (var item in eventTags.entries)
             FilterChip(
-              onSelected: (selection) {},
+              onSelected: (selection) {
+                context.read<EventViewBloc>().add(EvenTagModified(item.key));
+              },
               selected: item.value,
               label: Text(item.key),
               selectedColor: Theme.of(context).colorScheme.primaryFixedDim,

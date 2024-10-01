@@ -1,4 +1,5 @@
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/entities/tag.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/useCases/get_event.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/useCases/post_event.dart';
@@ -54,6 +55,19 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
 
     on<EventCompanionsModified>((companions, emit) async {
       var newEvent = state.event!.copyWith(companions: companions.value);
+      add(UpdateEvent(newEvent));
+    });
+
+    on<EvenTagModified>((tagName, emit) async {
+      List<TagEntity>? tagsCopy = state.event!.tags != null ? List.from(state.event!.tags!) : null;
+
+      for (var i = 0; i < tagsCopy!.length; i++) {
+        if (tagsCopy[i].name == tagName.value) {
+          tagsCopy[i] = tagsCopy[i].copyWith(isEnabled: !tagsCopy[i].isEnabled);
+        }
+      }
+
+      var newEvent = state.event!.copyWith(tags: tagsCopy);
       add(UpdateEvent(newEvent));
     });
   }

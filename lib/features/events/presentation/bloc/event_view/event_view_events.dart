@@ -27,6 +27,11 @@ class EventCompanionsModified extends EventViewEvent {
   EventCompanionsModified(this.value);
 }
 
+class EvenTagModified extends EventViewEvent {
+  final String value;
+  EvenTagModified(this.value);
+}
+
 class UpdateEvent extends EventViewEvent {
   final EventEntity value;
   UpdateEvent(this.value);
