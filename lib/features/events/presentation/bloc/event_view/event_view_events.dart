@@ -28,13 +28,16 @@ class EventCompanionsModified extends EventViewEvent {
 }
 
 class UpdateEvent extends EventViewEvent {
-  UpdateEvent();
+  final EventEntity value;
+  UpdateEvent(this.value);
 }
 
-class UpdateEventSuccess extends EventViewEvent {
-  UpdateEventSuccess();
+class EventUpdateSuccess extends EventViewEvent {
+  final EventEntity value;
+  EventUpdateSuccess(this.value);
 }
 
-class UpdateEventFailure extends EventViewEvent {
-  UpdateEventFailure();
+class EventUpdateFailure extends EventViewEvent {
+  final String value;
+  EventUpdateFailure(this.value);
 }

@@ -25,3 +25,10 @@ class EventViewEventLoaded extends EventViewState {
 class EventViewEventLoadFailure extends EventViewState {
   EventViewEventLoadFailure({required super.event});
 }
+class EventViewEventUpdated extends EventViewState {
+  EventViewEventUpdated({required super.event});
+}
+class EventViewEventUpdateFailure extends EventViewState {
+  EventViewEventUpdateFailure({required super.event});
+}
+

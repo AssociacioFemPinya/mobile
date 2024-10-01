@@ -10,10 +10,6 @@ part 'event_view_state.dart';
 
 class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
   EventViewBloc() : super(EventViewInitial(event: null)) {
-    on<EventLoadSuccess>((event, emit) {
-      emit(EventViewEventLoaded(event: event.value));
-    });
-
     on<LoadEvent>((eventID, emit) async {
       GetEventParams getEventParams = GetEventParams(id: eventID.value);
       var result = await sl<GetEvent>().call(params: getEventParams);
@@ -25,30 +21,40 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
       });
     });
 
+    on<EventLoadSuccess>((event, emit) {
+      emit(EventViewEventLoaded(event: event.value));
+    });
+
     on<EventLoadFailure>((errorMessage, emit) {
+      // TODO
+    });
+
+    on<UpdateEvent>((event, emit) async {
+      var result = await sl<PostEvent>().call(params: event.value);
+
+      result.fold((failure) {
+        add(EventUpdateFailure(failure));
+      }, (data) {
+        add(EventUpdateSuccess(data));
+      });
+    });
+
+    on<EventUpdateSuccess>((event, emit) {
+      emit(EventViewEventUpdated(event: event.value));
+    });
+
+    on<EventUpdateFailure>((errorMessage, emit) {
       // TODO
     });
 
     on<EventStatusModified>((status, emit) async {
       var newEvent = state.event!.copyWith(status: status.value);
-      var result = await sl<PostEvent>().call(params: newEvent);
-
-      result.fold((failure) {
-        add(EventLoadFailure(failure));
-      }, (data) {
-        add(EventLoadSuccess(data));
-      });
+      add(UpdateEvent(newEvent));
     });
 
     on<EventCompanionsModified>((companions, emit) async {
       var newEvent = state.event!.copyWith(companions: companions.value);
-      var result = await sl<PostEvent>().call(params: newEvent);
-
-      result.fold((failure) {
-        add(EventLoadFailure(failure));
-      }, (data) {
-        add(EventLoadSuccess(data));
-      });
+      add(UpdateEvent(newEvent));
     });
   }
 }
