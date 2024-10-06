@@ -30,6 +30,11 @@ class EventsCalendar extends StatelessWidget {
     return BlocBuilder<EventsCalendarBloc, EventsCalendarState>(
         builder: (context, state) {
       return TableCalendar(
+        calendarStyle: CalendarStyle(
+          selectedDecoration: BoxDecoration(color: Theme.of(context).colorScheme.primaryFixedDim, shape: BoxShape.circle),
+          selectedTextStyle: TextStyle(color: Theme.of(context).colorScheme.onPrimaryFixed, fontSize: 16.0),
+          todayDecoration: BoxDecoration(color: Theme.of(context).colorScheme.primaryFixedDim.withOpacity(0.6), shape: BoxShape.circle),
+          todayTextStyle:TextStyle(color: Theme.of(context).colorScheme.onPrimaryFixed, fontSize: 16.0)),
         firstDay: DateTime.utc(2010, 10, 16),
         lastDay: DateTime.utc(2030, 3, 14),
         startingDayOfWeek: StartingDayOfWeek.monday,
@@ -77,10 +82,10 @@ class EventsCalendar extends StatelessWidget {
               return Positioned(
                 right: 1,
                 bottom: 1,
-                child: _buildEventsMarker(date, events),
+                child: _buildEventsMarker(date, events, context),
               );
             }
-            return SizedBox();
+            return const SizedBox();
           },
         ),
 
@@ -99,19 +104,19 @@ class EventsCalendar extends StatelessWidget {
     };
   }
 
-  Widget _buildEventsMarker(DateTime date, List events) {
+  Widget _buildEventsMarker(DateTime date, List events, context) {
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.blue,
+        color: Theme.of(context).colorScheme.primaryFixedDim.withOpacity(0.5),
       ),
       width: 16.0,
       height: 16.0,
       child: Center(
         child: Text(
           '${events.length}',
-          style: TextStyle().copyWith(
-            color: Colors.white,
+          style: const TextStyle().copyWith(
+            color: Theme.of(context).colorScheme.onPrimaryFixedVariant,
             fontSize: 12.0,
           ),
         ),

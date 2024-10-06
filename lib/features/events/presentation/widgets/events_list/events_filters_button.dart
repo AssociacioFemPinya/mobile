@@ -24,50 +24,51 @@ class EventsFiltersButton extends StatelessWidget {
       var translate = AppLocalizations.of(context)!;
 
       return BlocBuilder<EventsFiltersBloc, EventsFiltersState>(
-          builder: (context, state) {
-        return Material(
-          color: Theme.of(context).colorScheme.primaryFixed,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: PopupMenuButton<EventTypeEnum>(
-            color: Theme.of(context).colorScheme.primaryFixed,
-            onSelected: (EventTypeEnum value) {
-              context.read<EventsFiltersBloc>().add(EventsTypeFiltersAdd(value));
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    translate.eventsPageTypeFilterTitle,
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(width: 3),
-                  Icon(
-                    Icons.arrow_drop_down,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ],
-              ),
+        builder: (context, state) {
+      return Material(
+        color: Theme.of(context).colorScheme.primaryFixed,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
+        ),
+        child: PopupMenuButton<EventTypeEnum>(
+        color: Theme.of(context).colorScheme.primaryFixed,
+        shadowColor: Theme.of(context).colorScheme.primaryFixed, 
+        onSelected: (EventTypeEnum value) {
+          context.read<EventsFiltersBloc>().add(EventsTypeFiltersAdd(value));
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+          child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+            translate.eventsPageTypeFilterTitle,
+            style:
+              TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold),
             ),
-            itemBuilder: (BuildContext context) {
-              return [
-                for (var item in EventTypeEnum.values)
-                PopupMenuItem<EventTypeEnum>(
-                  value: item,
-                  child: Text(
-                    item.toLocalizedString(context),
-                    style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryFixedVariant), 
-                  ),
-                ),
-              ];
-            },
+            const SizedBox(width: 3),
+            Icon(
+            Icons.arrow_drop_down,
+            color: Theme.of(context).colorScheme.primary,
+            ),
+          ],
           ),
-        );
+        ),
+        itemBuilder: (BuildContext context) {
+          return [
+          for (var item in EventTypeEnum.values)
+          PopupMenuItem<EventTypeEnum>(
+            value: item,
+            child: Text(
+            item.toLocalizedString(context),
+            style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryFixedVariant), 
+            ),
+          ),
+          ];
+        },
+        ),
+      );
       });
     }
   }
