@@ -34,7 +34,10 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => LocaleModel(),
       child: Consumer<LocaleModel>(
-        builder: (context, localeModel, child) => MaterialApp.router(
+        builder: (context, localeModel, child) {
+        
+        
+        return MaterialApp.router(
           title: 'FemPinya App',
           routerConfig: appRouter, // Use the GoRouter configuration
           builder: EasyLoading.init(),
@@ -62,7 +65,8 @@ class MyApp extends StatelessWidget {
             ),
             useMaterial3: true,
           ),
-        ),
+        );
+        },
       ),
     );
   }

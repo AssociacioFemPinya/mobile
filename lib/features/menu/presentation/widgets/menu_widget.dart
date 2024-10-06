@@ -10,79 +10,68 @@ class MenuWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var translate = AppLocalizations.of(context)!;
+    final translate = AppLocalizations.of(context)!;
     var selectedLocale = Localizations.localeOf(context).toString();
 
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            child: Text(
-              AppLocalizations.of(context)!
-                  .menuAppName("Alansito"), //TODO Zan username
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimary,
-                fontSize: 24,
-              ),
-            ),
-          ),
-          ListTile(
-            title: Text(translate.menuHome),
-            onTap: () {
-              context.pushNamed(homeRoute);
-            },
-          ),
-          ListTile(
-            title: Text(translate.menuEvents),
-            onTap: () {
-              context.pushNamed(eventsRoute);
-            },
-          ),
-          ListTile(
-            title: Text(translate.menuNotifications),
-            onTap: () {
-              context.pushNamed(notificationsRoute);
-            },
-          ),
+          _buildDrawerHeader(context, translate),
+          _buildListTile(context, translate.menuHome, homeRoute),
+          _buildListTile(context, translate.menuEvents, eventsRoute),
+          _buildListTile(context, translate.menuNotifications, notificationsRoute),
           const Divider(),
-          Builder(
-            builder: (context) => Consumer<LocaleModel>(
-              builder: (context, localeModel, child) => ListTile(
-                title: DropdownButton(
-                  value: selectedLocale,
-                  items: [
-                    DropdownMenuItem(
-                      value: 'en',
-                      child: Text(translate.menuLanguageSettings("en")),
-                    ),
-                    DropdownMenuItem(
-                      value: 'es',
-                      child: Text(translate.menuLanguageSettings("es")),
-                    ),
-                    DropdownMenuItem(
-                      value: 'ca',
-                      child: Text(translate.menuLanguageSettings("ca")),
-                    ),
-                    DropdownMenuItem(
-                      value: 'fr',
-                      child: Text(translate.menuLanguageSettings("fr")),
-                    ),
-                  ],
-                  onChanged: (String? value) {
-                    if (value != null) {
-                      localeModel.set(Locale(value));
-                    }
-                  },
-                ),
-              ),
-            ),
-          ),
+          _buildLocaleDropdown(context, translate, selectedLocale),
         ],
       ),
+    );
+  }
+
+  Widget _buildDrawerHeader(BuildContext context, AppLocalizations translate) {
+    return DrawerHeader(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+      ),
+      child: Text(
+        translate.menuAppName("Alansito"), //TODO Zan username
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onPrimary,
+          fontSize: 24,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildListTile(BuildContext context, String title, String routeName) {
+    return ListTile(
+      title: Text(title),
+      onTap: () {
+        context.pushNamed(routeName);
+      },
+    );
+  }
+
+  Widget _buildLocaleDropdown(BuildContext context, AppLocalizations translate, String selectedLocale) {
+    return Consumer<LocaleModel>(
+      builder: (context, localeModel, child) {
+        return ListTile(
+          title: DropdownButton<String>(
+            value: selectedLocale,
+            items: ['en', 'es', 'ca', 'fr'].map((String locale) {
+              return DropdownMenuItem<String>(
+                value: locale,
+                child: Text(translate.menuLanguageSettings(locale)),
+              );
+            }).toList(),
+            onChanged: (String? value) {
+              if (value != null) {
+                localeModel.set(Locale(value));
+              }
+            },
+          ),
+        );
+      },
     );
   }
 }

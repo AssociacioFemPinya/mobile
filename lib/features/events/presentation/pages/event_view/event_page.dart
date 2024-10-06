@@ -8,6 +8,7 @@ import 'package:fempinya3_flutter_app/features/events/presentation/pages/event_v
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/event_view/assistance_selector.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/event_view/custom_modal_bottom_sheet.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/widgets/event_view/event_info_tile.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +29,8 @@ class EventPage extends StatelessWidget {
   }
 
   BlocBuilder eventView(BuildContext context) {
+    final translate = AppLocalizations.of(context)!;
+
     return BlocBuilder<EventViewBloc, EventViewState>(
         builder: (context, state) {
       if (state is EventViewInitial) {
@@ -43,11 +46,20 @@ class EventPage extends StatelessWidget {
                 slivers: [
                   eventSummary(context),
                   eventDescription(context),
-                  schedule(context),
-                  addComments(context),
-                  attendanceSwitch(context),
-                  companionsSelector(context),
-                  optionsSelector(context),
+                  schedule(context, translate),
+                  addComments(context, translate),
+                  SliverPadding(
+                  padding: const EdgeInsets.all(8.0),
+                  sliver: attendanceSwitch(context, state),
+                  ),
+                  SliverPadding(
+                  padding: const EdgeInsets.all(8.0),
+                  sliver: companionsSelector(context, translate),
+                  ),
+                  SliverPadding(
+                  padding: const EdgeInsets.all(8.0),
+                  sliver: optionsSelector(context, translate),
+                  ),
                 ],
               ))));
     });
@@ -145,7 +157,7 @@ class EventPage extends StatelessWidget {
     });
   }
 
-  BlocBuilder optionsSelector(BuildContext context) {
+  BlocBuilder optionsSelector(BuildContext context, translate) {
     return BlocBuilder<EventViewBloc, EventViewState>(
         builder: (context, state) {
       return SliverToBoxAdapter(
@@ -154,9 +166,10 @@ class EventPage extends StatelessWidget {
           Row(children: [
             SizedBox(height: Theme.of(context).textTheme.bodyLarge?.fontSize),
             Text(
-              "Informació adicional",
+              translate.eventPageAdditionalOptionSelector,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.bold,
+                    fontSize: Theme.of(context).textTheme.bodyLarge?.fontSize
                   ),
             ),
           ]),
@@ -172,7 +185,7 @@ class EventPage extends StatelessWidget {
     });
   }
 
-  BlocBuilder companionsSelector(BuildContext context) {
+  BlocBuilder companionsSelector(BuildContext context, translate) {
     return BlocBuilder<EventViewBloc, EventViewState>(
       builder: (context, state) {
         return SliverToBoxAdapter(
@@ -181,12 +194,13 @@ class EventPage extends StatelessWidget {
               SizedBox(height: Theme.of(context).textTheme.bodyLarge?.fontSize),
               Row(children: [
                 Text(
-                  "Algun acompanyant?",
+                  translate.eventPageCompanionsSelector,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    fontSize: Theme.of(context).textTheme.bodyLarge?.fontSize, 
+                    ),
                 )
-              ]),
+                ]),
               SizedBox(height: Theme.of(context).textTheme.bodyLarge?.fontSize),
               CustomizableCounter(
                   borderColor: Theme.of(context).colorScheme.primaryFixedDim,
@@ -220,19 +234,21 @@ class EventPage extends StatelessWidget {
     );
   }
 
-  SliverToBoxAdapter attendanceSwitch(BuildContext context) {
+  SliverToBoxAdapter attendanceSwitch(BuildContext context, state) {
     return SliverToBoxAdapter(
       child: Column(
         children: [
           SizedBox(height: Theme.of(context).textTheme.bodyLarge?.fontSize),
           Row(
             children: [
-              Text(
-                "Vindràs al event tap de suru?",
+                Text(
+                AppLocalizations.of(context)!
+                  .eventsPageAttendaceQuestion(state.event!.title),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              )
+                    fontWeight: FontWeight.bold,
+                    fontSize: Theme.of(context).textTheme.bodyLarge?.fontSize, 
+                  ),
+                )
             ],
           ),
           SizedBox(height: Theme.of(context).textTheme.bodyLarge?.fontSize),
@@ -247,12 +263,12 @@ class EventPage extends StatelessWidget {
     );
   }
 
-  BlocBuilder addComments(BuildContext context) {
+  BlocBuilder addComments(BuildContext context, translate) {
     return BlocBuilder<EventViewBloc, EventViewState>(
         builder: (context, state) {
       return EventInfoTile(
           svgSrc: AppIcons.scheduleHours,
-          title: "Afegir comentaris", // todo zan traducciones
+          title:  translate.eventPageAddCommentsTitle, 
           isShowBottomTop: false,
           press: () {
             customModalBottomSheet(
@@ -264,12 +280,13 @@ class EventPage extends StatelessWidget {
     });
   }
 
-  BlocBuilder schedule(BuildContext context) {
+  BlocBuilder schedule(BuildContext context, translate) {
+
     return BlocBuilder<EventViewBloc, EventViewState>(
         builder: (context, state) {
       return EventInfoTile(
           svgSrc: AppIcons.scheduleHours,
-          title: "Horaris", // todo zan traducciones
+          title: translate.eventPageScheduleTitle, 
           press: () {
             customModalBottomSheet(context,
                 height: MediaQuery.of(context).size.height - 100,
