@@ -30,6 +30,25 @@ class AssistanceSelector extends StatelessWidget {
         onSelectionChanged: (Set<EventStatusEnum> newSelection) {
           context.read<EventViewBloc>().add(EventStatusModified(newSelection.first));
         },
+        style: ButtonStyle(
+          side: WidgetStateProperty.all(BorderSide(color: Theme.of(context).colorScheme.primaryFixedDim)),
+          backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+            (Set<WidgetState> states) {
+              if (states.contains(WidgetState.selected)) {
+                return Theme.of(context).colorScheme.primaryFixedDim; 
+              }
+              return null; 
+            },
+          ),
+          overlayColor: WidgetStateProperty.resolveWith<Color?>(
+            (Set<WidgetState> states) {
+              if (states.contains(WidgetState.hovered)) {
+                return Theme.of(context).colorScheme.primaryFixed;
+              }
+              return null;
+            },
+          ),
+        ),
       );
     });
   }

@@ -55,8 +55,6 @@ class EventsListWidget extends StatelessWidget {
     );
   }
 
-
-
   Widget _buildDateEventsList(
       DateTime date, List<EventEntity> events, BuildContext context) {
     return Column(
@@ -101,6 +99,11 @@ class EventsListWidget extends StatelessWidget {
           context.read<EventsListBloc>().add(LoadEventsList(context.read<EventsFiltersBloc>().state));
         });
       },
+      hoverColor: Theme.of(context).colorScheme.primaryFixedDim.withOpacity(0.2), // Change hover color here
+      splashColor: Theme.of(context).colorScheme.primaryFixedDim.withOpacity(0.6), 
+      focusColor: Theme.of(context).colorScheme.primaryFixedDim.withOpacity(0.6),
+      highlightColor: Theme.of(context).colorScheme.primaryFixedDim.withOpacity(0.8),// Change click color here
+      borderRadius: BorderRadius.circular(5),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), 
         side: BorderSide(width: _getStatusBorderSizeCard(event.status), color: _getStatusBorderColorCard(event.status))),

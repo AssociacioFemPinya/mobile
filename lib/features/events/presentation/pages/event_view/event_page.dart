@@ -152,6 +152,7 @@ class EventPage extends StatelessWidget {
           child: Column(
         children: [
           Row(children: [
+            SizedBox(height: Theme.of(context).textTheme.bodyLarge?.fontSize),
             Text(
               "Informació adicional",
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -159,6 +160,7 @@ class EventPage extends StatelessWidget {
                   ),
             ),
           ]),
+          SizedBox(height: Theme.of(context).textTheme.bodyLarge?.fontSize),
           SizedBox(
             width: MediaQuery.of(context)
                 .size
@@ -176,6 +178,7 @@ class EventPage extends StatelessWidget {
         return SliverToBoxAdapter(
           child: Column(
             children: [
+              SizedBox(height: Theme.of(context).textTheme.bodyLarge?.fontSize),
               Row(children: [
                 Text(
                   "Algun acompanyant?",
@@ -184,27 +187,31 @@ class EventPage extends StatelessWidget {
                       ),
                 )
               ]),
+              SizedBox(height: Theme.of(context).textTheme.bodyLarge?.fontSize),
               CustomizableCounter(
-                  borderColor: Colors.white,
+                  borderColor: Theme.of(context).colorScheme.primaryFixedDim,
                   borderWidth: 0,
                   borderRadius: 100,
-                  backgroundColor: Colors.lightBlueAccent,
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primaryFixedDim,
                   buttonText: "Afegir acompanyats",
-                  textColor: Colors.white,
+                  textColor: Theme.of(context).colorScheme.onPrimaryFixed,
                   textSize: 15,
                   count: (state.event?.companions ?? 0).toDouble(),
                   step: 1,
                   minCount: 0,
-                  incrementIcon: const Icon(
+                  incrementIcon: Icon(
                     Icons.add,
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
-                  decrementIcon: const Icon(
+                  decrementIcon: Icon(
                     Icons.remove,
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                   onCountChange: (count) {
-                    context.read<EventViewBloc>().add(EventCompanionsModified(count.toInt()));
+                    context
+                        .read<EventViewBloc>()
+                        .add(EventCompanionsModified(count.toInt()));
                   }),
             ],
           ),
@@ -217,6 +224,7 @@ class EventPage extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Column(
         children: [
+          SizedBox(height: Theme.of(context).textTheme.bodyLarge?.fontSize),
           Row(
             children: [
               Text(
@@ -227,6 +235,7 @@ class EventPage extends StatelessWidget {
               )
             ],
           ),
+          SizedBox(height: Theme.of(context).textTheme.bodyLarge?.fontSize),
           SizedBox(
             width: MediaQuery.of(context)
                 .size

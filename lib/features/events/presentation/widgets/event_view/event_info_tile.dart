@@ -14,7 +14,6 @@ class EventInfoTile extends StatelessWidget {
   final String svgSrc, title;
   final bool isShowBottomTop;
   final VoidCallback press;
-
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -24,10 +23,18 @@ class EventInfoTile extends StatelessWidget {
           ListTile(
             onTap: press,
             minLeadingWidth: 24,
-            leading: SvgPicture.asset(svgSrc,height: 24,
+            leading: SvgPicture.asset(
+              svgSrc,
+              height: 24,
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.primaryFixedDim, 
+                BlendMode.srcIn,
+              ), // Use colorFilter instead of color
             ),
             title: Text(title),
-            trailing: SvgPicture.asset(AppIcons.miniArrowRight),
+            trailing: SvgPicture.asset(
+              AppIcons.miniArrowRight,
+            ),
           ),
           const Divider(height: 1),
         ],

@@ -59,8 +59,8 @@ class EventMemberCommentsScreen extends StatelessWidget {
             ),
             TextButton (
               onPressed: (){ _onSavePressed(context);},
-              style: TextButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
-              child: const Text("Guardar", style: TextStyle(color: Colors.white))
+              style: TextButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primaryFixedDim),
+              child: Text("Guardar", style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryFixed))
             )
           ],
         ),
