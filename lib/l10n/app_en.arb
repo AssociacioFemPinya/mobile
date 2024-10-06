@@ -1,0 +1,21 @@
+{
+    "@@locale": "en", 
+    "menuAppName": "FemPinya. Hello {userName}!",
+    "@menuAppName": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+    "menuHome": "Home",
+    "menuEvents": "Events",
+    "menuNotifications": "Notifications",
+    "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} other {-}}",
+"@menuLanguageSettings": {
+    "placeholders": {
+      "locale": {
+        "type": "String"
+      }
+    }
+}}
