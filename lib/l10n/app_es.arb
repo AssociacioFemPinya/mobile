@@ -1,34 +1,54 @@
 {
-  "@@locale": "es",
-  "menuAppName": "FemPinya. ¡Hola {userName}!",
-  "@menuAppName": {
-      "placeholders": {
-          "userName": {
-              "type": "String"
-          }
-      }
-  },
-  "menuHome": "Inicio",
-  "menuEvents": "Eventos",
-  "menuNotifications": "Notificaciones",
-    "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} other {-}}",
-  "@menuLanguageSettings": {
-      "placeholders": {
-          "locale": {
-              "type": "String"
-          }
-      }
-  },
-  "eventsPageTitle": "Eventos",
-  "eventsPageEventsWithAlertBanner": "Tienes eventos que requiren atención",
-  "eventsPageTypeChipTraining": "Ensayos",
-  "eventsPageTypeChipPerformance": "Salidas",
-  "eventsPageTypeChipActivity": "Actividades",
-  "eventsPageTypeFilterTitle": "Tipo",
-  "eventPageStatusFilterPending": "Pendiente",
-  "eventPageStatusFilterAnswered": "Respondido",
-  "eventPageStatusFilterWarning": "Con alerta",
-
-    "eventPageEventViewModeList" : "Lista",
-    "eventPageEventViewModeCalendar": "Calendario"
+    "@@locale": "es",
+    "menuAppName": "FemPinya. ¡Hola {userName}!",
+    "@menuAppName": {
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
+    "menuHome": "Inicio",
+    "menuEvents": "Eventos",
+    "menuNotifications": "Notificaciones",
+    "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} fr {Français} other {}}",
+    "@menuLanguageSettings": {
+        "placeholders": {
+            "locale": {
+                "type": "String"
+            }
+        }
+    },
+    "eventsPageTitle": "Eventos",
+    "eventsPageEventsWithAlertBanner": "¡Tienes eventos que requieren atención!",
+    "eventsPageTypeChipTraining": "Ensayos",
+    "eventsPageTypeChipPerformance": "Salidas",
+    "eventsPageTypeChipActivity": "Actividades",
+    "eventsPageTypeFilterTitle": "Tipo",
+    "eventsPageStatusFilterPending": "Pendiente",
+    "eventsPageStatusFilterAnswered": "Respondido",
+    "eventsPageStatusFilterWarning": "Con alerta",
+    "eventsPageEventViewModeList": "Lista",
+    "eventsPageEventViewModeCalendar": "Calendario",
+    "eventPageScheduleTitle": "Horarios",
+    "eventPageAddCommentsTitle": "Añadir comentarios",
+    "eventsPageAttendaceQuestion": "¿Vendrás a {eventName}?",
+    "@eventsPageAttendaceQuestion": {
+        "placeholders": {
+            "eventName": {
+                "type": "String"
+            }
+        }
+    },
+    "eventsPageAttendaceYesResponse": "Sí",
+    "eventsPageAttendaceNoResponse": "No",
+    "eventsPageAttendaceUnknowResponse": "No lo sé",
+    "eventPageAdditionalOptionSelector": "Información adicional",
+    "eventPageCompanionsSelector": "¿Algún acompañante?",
+    "commonReturn": "Volver",
+    "commonSave": "Guardar",
+    "commonFilter": "Filtrar",
+    "commonSnackBarSuccessSaving": "Guardado con éxito",
+    "commentsScreenHintText": "Escribe tus comentarios",
+    "commentsScreenLabelText": "Comentarios"
 }

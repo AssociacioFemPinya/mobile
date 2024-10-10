@@ -8,7 +8,7 @@ class EventsStatusFiltersWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var translate = AppLocalizations.of(context)!;
+    final translate = AppLocalizations.of(context)!;
 
     return BlocBuilder<EventsFiltersBloc, EventsFiltersState>(
       builder: (context, state) {
@@ -19,7 +19,7 @@ class EventsStatusFiltersWidget extends StatelessWidget {
               Expanded(
                 child: buildEventStatusFilterButton(
                   state.showUndefined,
-                  translate.eventPageStatusFilterPending,
+                  translate.eventsPageStatusFilterPending,
                   context,
                   (value) {
                     context
@@ -32,7 +32,7 @@ class EventsStatusFiltersWidget extends StatelessWidget {
               Expanded(
                 child: buildEventStatusFilterButton(
                   state.showAnswered,
-                  translate.eventPageStatusFilterAnswered,
+                  translate.eventsPageStatusFilterAnswered,
                   context,
                   (value) {
                     context
@@ -44,7 +44,7 @@ class EventsStatusFiltersWidget extends StatelessWidget {
               Expanded(
                 child: buildEventStatusFilterButton(
                   state.showWarning,
-                  translate.eventPageStatusFilterWarning,
+                  translate.eventsPageStatusFilterWarning,
                   context,
                   (value) {
                     context

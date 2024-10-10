@@ -1,21 +1,54 @@
 {
-    "@@locale": "en", 
+    "@@locale": "en",
     "menuAppName": "FemPinya. Hello {userName}!",
     "@menuAppName": {
-    "placeholders": {
-      "userName": {
-        "type": "String"
-      }
-    }
-  },
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
     "menuHome": "Home",
     "menuEvents": "Events",
     "menuNotifications": "Notifications",
-    "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} other {-}}",
-"@menuLanguageSettings": {
-    "placeholders": {
-      "locale": {
-        "type": "String"
-      }
-    }
-}}
+    "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} fr {Français} other {}}",
+    "@menuLanguageSettings": {
+        "placeholders": {
+            "locale": {
+                "type": "String"
+            }
+        }
+    },
+    "eventsPageTitle": "Events",
+    "eventsPageEventsWithAlertBanner": "You have events that require attention!",
+    "eventsPageTypeChipTraining": "Trainings",
+    "eventsPageTypeChipPerformance": "Performances",
+    "eventsPageTypeChipActivity": "Activities",
+    "eventsPageTypeFilterTitle": "Type",
+    "eventsPageStatusFilterPending": "Pending",
+    "eventsPageStatusFilterAnswered": "Answered",
+    "eventsPageStatusFilterWarning": "With alert",
+    "eventsPageEventViewModeList": "List",
+    "eventsPageEventViewModeCalendar": "Calendar",
+    "eventPageScheduleTitle": "Schedule",
+    "eventPageAddCommentsTitle": "Add comments",
+    "eventsPageAttendaceQuestion": "Will you come to {eventName}?",
+    "@eventsPageAttendaceQuestion": {
+        "placeholders": {
+            "eventName": {
+                "type": "String"
+            }
+        }
+    },
+    "eventsPageAttendaceYesResponse": "Yes",
+    "eventsPageAttendaceNoResponse": "No",
+    "eventsPageAttendaceUnknowResponse": "I don't know",
+    "eventPageAdditionalOptionSelector": "Additional information",
+    "eventPageCompanionsSelector": "Any companions?",
+    "commonReturn": "Return",
+    "commonSave": "Save",
+    "commonFilter": "Filter",
+    "commonSnackBarSuccessSaving": "Saved successfully",
+    "commentsScreenHintText": "Write your comments",
+    "commentsScreenLabelText": "Comments"
+}

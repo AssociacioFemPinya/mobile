@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LocaleModel extends ChangeNotifier {
-  Locale? _locale;
+  Locale? _locale = const Locale('ca', 'CA'); //TODO set default locale by user config
 
   Locale? get locale => _locale;
 
@@ -9,4 +9,5 @@ class LocaleModel extends ChangeNotifier {
     _locale = locale;
     notifyListeners();
   }
+  
 }

@@ -9,7 +9,7 @@ class EventsWithAlertBannerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var translate = AppLocalizations.of(context)!;
+    final translate = AppLocalizations.of(context)!;
     return BlocBuilder<EventsFiltersBloc, EventsFiltersState>(
         builder: (context, state) {
       return Visibility(
@@ -58,9 +58,9 @@ class EventsWithAlertBannerWidget extends StatelessWidget {
               onTap: () {
                 _onFilterClicked(context);
               },
-              child: const Text(
-                'Filtrar',
-                style: TextStyle(
+              child: Text(
+                translate.commonFilter,
+                style: const TextStyle(
                   fontSize: 16.0,
                   color: Colors.white, // Color del texto
                   decoration:

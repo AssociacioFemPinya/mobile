@@ -21,7 +21,7 @@ class EventsFiltersButton extends StatelessWidget {
 
     /// Builds a filter button with a dropdown menu
     Widget buildFilterButton(BuildContext context) {
-      var translate = AppLocalizations.of(context)!;
+      final translate = AppLocalizations.of(context)!;
 
       return BlocBuilder<EventsFiltersBloc, EventsFiltersState>(
         builder: (context, state) {

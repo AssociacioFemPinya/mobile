@@ -1,21 +1,54 @@
 {
-  "@@locale": "fr", 
-  "menuAppName": "FemPinya. Hola {userName}!",
-  "@menuAppName": {
-  "placeholders": {
-    "userName": {
-      "type": "String"
-    }
-  }
-},
-  "menuHome": "Inicio",
-  "menuEvents": "Eventos",
-  "menuNotifications": "Notificaciones",
-    "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} other {-}}",
-"@menuLanguageSettings": {
-  "placeholders": {
-    "locale": {
-      "type": "String"
-    }
-  }
-}}
+    "@@locale": "fr",
+    "menuAppName": "FemPinya. Bonjour {userName}!",
+    "@menuAppName": {
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
+    "menuHome": "Accueil",
+    "menuEvents": "Événements",
+    "menuNotifications": "Notifications",
+    "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} fr {Français} other {}}",
+    "@menuLanguageSettings": {
+        "placeholders": {
+            "locale": {
+                "type": "String"
+            }
+        }
+    },
+    "eventsPageTitle": "Événements",
+    "eventsPageEventsWithAlertBanner": "Vous avez des événements qui nécessitent une attention!",
+    "eventsPageTypeChipTraining": "Entraînements",
+    "eventsPageTypeChipPerformance": "Performances",
+    "eventsPageTypeChipActivity": "Activités",
+    "eventsPageTypeFilterTitle": "Type",
+    "eventsPageStatusFilterPending": "En attente",
+    "eventsPageStatusFilterAnswered": "Répondu",
+    "eventsPageStatusFilterWarning": "Avec alerte",
+    "eventsPageEventViewModeList": "Liste",
+    "eventsPageEventViewModeCalendar": "Calendrier",
+    "eventPageScheduleTitle": "Horaires",
+    "eventPageAddCommentsTitle": "Ajouter des commentaires",
+    "eventsPageAttendaceQuestion": "Vas-tu venir à {eventName}?",
+    "@eventsPageAttendaceQuestion": {
+        "placeholders": {
+            "eventName": {
+                "type": "String"
+            }
+        }
+    },
+    "eventsPageAttendaceYesResponse": "Oui",
+    "eventsPageAttendaceNoResponse": "Non",
+    "eventsPageAttendaceUnknowResponse": "Je ne sais pas",
+    "eventPageAdditionalOptionSelector": "Informations supplémentaires",
+    "eventPageCompanionsSelector": "Un accompagnant?",
+    "commonReturn": "Retourner",
+    "commonSave": "Sauvegarder",
+    "commonFilter": "Filtrer",
+    "commonSnackBarSuccessSaving": "Sauvegardé avec succès",
+    "commentsScreenHintText": "Écrivez vos commentaires",
+    "commentsScreenLabelText": "Commentaires"
+}

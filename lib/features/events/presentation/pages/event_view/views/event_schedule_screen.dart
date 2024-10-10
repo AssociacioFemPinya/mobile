@@ -1,6 +1,7 @@
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:flutter/material.dart';
 import 'package:fempinya3_flutter_app/core/theme_constants.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class EventScheduleScreen extends StatelessWidget {
@@ -11,6 +12,8 @@ class EventScheduleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final translate = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -27,7 +30,7 @@ class EventScheduleScreen extends StatelessWidget {
                     child: BackButton(),
                   ),
                   Text(
-                    "Return",
+                    translate.commonReturn,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                   const SizedBox(width: 40),
@@ -37,7 +40,7 @@ class EventScheduleScreen extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.all(defaultPadding),
               child: Text(
-                "Aquí va la tabla de horarios del evento",
+                "Aquí va la tabla de horarios del evento", // TODO
               ),
             )
           ],

@@ -20,7 +20,7 @@ class EventsListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var translate = AppLocalizations.of(context)!;
+    final translate = AppLocalizations.of(context)!;
 
     EventsFiltersBloc eventsFiltersBloc = EventsFiltersBloc();
 

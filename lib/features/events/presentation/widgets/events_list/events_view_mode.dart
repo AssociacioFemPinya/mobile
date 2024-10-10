@@ -61,7 +61,7 @@ class _EventsViewModeWidgetState extends State<EventsViewModeWidget>
 
   @override
   Widget build(BuildContext context) {
-    var translate = AppLocalizations.of(context)!;
+    final translate = AppLocalizations.of(context)!;
 
     final Map<EventsViewModeEnum, Tab> tabs = {
       EventsViewModeEnum.list: Tab(
@@ -70,7 +70,7 @@ class _EventsViewModeWidgetState extends State<EventsViewModeWidget>
           children: [
             const Icon(Icons.list, size: 20),
             const SizedBox(width: 8),
-            Text(translate.eventPageEventViewModeList,
+            Text(translate.eventsPageEventViewModeList,  
                 style: const TextStyle(fontSize: 16)),
           ],
         ),
@@ -81,7 +81,7 @@ class _EventsViewModeWidgetState extends State<EventsViewModeWidget>
           children: [
             const Icon(Icons.calendar_month, size: 20),
             const SizedBox(width: 8),
-            Text(translate.eventPageEventViewModeCalendar,
+            Text(translate.eventsPageEventViewModeCalendar,
                 style: const TextStyle(fontSize: 16)),
           ],
         ),

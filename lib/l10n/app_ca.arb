@@ -11,7 +11,7 @@
     "menuHome": "Inici",
     "menuEvents": "Esdeveniments",
     "menuNotifications": "Notificacions",
-    "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} other {-}}",
+    "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} fr {Français} other {}}",
     "@menuLanguageSettings": {
         "placeholders": {
             "locale": {
@@ -25,9 +25,30 @@
     "eventsPageTypeChipPerformance": "Sortides",
     "eventsPageTypeChipActivity": "Activitats",
     "eventsPageTypeFilterTitle": "Tipus",
-    "eventPageStatusFilterPending": "Pendent",
-    "eventPageStatusFilterAnswered": "Respost",
-    "eventPageStatusFilterWarning": "Amb alerta",
-    "eventPageEventViewModeList" : "Llista",
-    "eventPageEventViewModeCalendar": "Calendari"
+    "eventsPageStatusFilterPending": "Pendent",
+    "eventsPageStatusFilterAnswered": "Respost",
+    "eventsPageStatusFilterWarning": "Amb alerta",
+    "eventsPageEventViewModeList" : "Llista",
+    "eventsPageEventViewModeCalendar": "Calendari",
+      "eventPageScheduleTitle": "Horaris",
+  "eventPageAddCommentsTitle": "Afegir comentaris",
+  "eventsPageAttendaceQuestion": "Vindràs a {eventName}?",
+   "@eventsPageAttendaceQuestion": {
+      "placeholders": {
+          "eventName": {
+              "type": "String"
+          }
+      }
+  },
+  "eventsPageAttendaceYesResponse": "Si",
+  "eventsPageAttendaceNoResponse": "No",
+  "eventsPageAttendaceUnknowResponse": "No ho sé",
+  "eventPageAdditionalOptionSelector": "Información adicional",
+  "eventPageCompanionsSelector": "Algun acompanyant?",
+  "commonReturn": "Tornar",
+  "commonSave": "Guardar",
+  "commonFilter": "Filtrar",
+  "commonSnackBarSuccessSaving": "Desat amb èxit",
+  "commentsScreenHintText": "Escriu els teus comentaris",
+  "commentsScreenLabelText": "Comentaris"
 }

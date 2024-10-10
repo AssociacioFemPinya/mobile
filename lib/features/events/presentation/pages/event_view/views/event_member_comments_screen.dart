@@ -1,6 +1,7 @@
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:flutter/material.dart';
 import 'package:fempinya3_flutter_app/core/theme_constants.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class EventMemberCommentsScreen extends StatelessWidget {
@@ -9,17 +10,22 @@ class EventMemberCommentsScreen extends StatelessWidget {
   const EventMemberCommentsScreen({super.key, required this.event});
 
   void _onSavePressed(BuildContext context) {
+    final translate = AppLocalizations.of(context)!;
+
+    //TODO, success and error control
     // Aquí defines lo que quieres hacer cuando el botón de guardar sea presionado
     // Por ejemplo, podrías mostrar un mensaje, guardar datos, etc.
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Guardado exitoso'),
+      SnackBar(
+        content: Text(translate.commonSnackBarSuccessSaving),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final translate = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -36,7 +42,7 @@ class EventMemberCommentsScreen extends StatelessWidget {
                     child: BackButton(),
                   ),
                   Text(
-                    "Return",
+                    translate.commonReturn,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                   const SizedBox(width: 40),
@@ -50,17 +56,17 @@ class EventMemberCommentsScreen extends StatelessWidget {
                   onSaved: (value) {
                     print(value);
                   },
-                  decoration: const InputDecoration(
-                    hintText: "Escriu els teus comentaris",
-                    labelText: "Comentaris",
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    hintText: translate.commentsScreenHintText,
+                    labelText: translate.commentsScreenLabelText,
+                    border: const OutlineInputBorder(),
                   ),
                 )
             ),
             TextButton (
               onPressed: (){ _onSavePressed(context);},
               style: TextButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primaryFixedDim),
-              child: Text("Guardar", style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryFixed))
+              child: Text(translate.commonSave, style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryFixed))
             )
           ],
         ),
