@@ -77,6 +77,8 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
 
       if (commentsCopy != null) {
         commentsCopy.add(EventMemberCommentEntity(
+          //TODO Retrieve comment id from model
+          id: DateTime.now().millisecondsSinceEpoch,
           date: DateTime.now(),
           //TODO User object integration
           user: 'user',
@@ -93,7 +95,7 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
 
       if (commentsCopy != null){
         //TODO Remove only the single comment of the user
-        commentsCopy.removeWhere((element) => element.user == 'user');
+        commentsCopy.removeWhere((element) => element.id == comment.value);
       }
 
       var newEvent = state.event!.copyWith(comments: commentsCopy);

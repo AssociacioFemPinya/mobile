@@ -214,7 +214,7 @@ class CommentCard extends StatelessWidget {
               onPressed: () {
                       final eventViewBloc = context.read<EventViewBloc>();
 
-                      eventViewBloc.add(RemoveEventMemberComment(comment));
+                      eventViewBloc.add(RemoveEventMemberComment(comment.id));
                     },
                   )
                 : const SizedBox() ,
