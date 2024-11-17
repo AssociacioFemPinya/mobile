@@ -54,7 +54,8 @@ class EventsDioMockInterceptor extends Interceptor {
 
     List<EventMemberCommentEntity>? generateComments() {
       return [
-        const EventMemberCommentEntity(name: 'No tinc transport, quelcus pot acompanyar-me?'),
+        const EventMemberCommentEntity(comment: 'Lorem ipsum dolor sit amet.'),
+        const EventMemberCommentEntity(comment: 'Sed quisquam minus aut voluptas quibusdam in quia assumenda non consequatur voluptates in consequatur omnis.'),
       ];
     }
 

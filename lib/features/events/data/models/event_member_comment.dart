@@ -1,19 +1,19 @@
 class EventMemberCommentModel {
-  final String name;
+  final String comment;
 
-  EventMemberCommentModel({required this.name});
+  EventMemberCommentModel({required this.comment});
 
   // Convert the model to JSON
   Map<String, dynamic> toJson() {
     return {
-      'name': name,
+      'comment': comment,
     };
   }
 
   // Factory constructor for JSON deserialization
   factory EventMemberCommentModel.fromJson(Map<String, dynamic> data) {
     return EventMemberCommentModel(
-      name: data['name'] as String,
+      comment: data['comment'] as String,
     );
   }
 }

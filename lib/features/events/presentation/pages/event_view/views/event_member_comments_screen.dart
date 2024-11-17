@@ -191,10 +191,10 @@ class CommentCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              comment.name,
+              comment.comment,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Text(comment.name), // assuming comment.comment is the text of the comment
+            Text(comment.comment), // assuming comment.comment is the text of the comment
           ],
         ),
       ),
