@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:fempinya3_flutter_app/features/events/data/models/event.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/entities/event_member_comment.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/tag.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_type.dart';
@@ -17,6 +18,7 @@ class EventEntity extends Equatable {
   final String? description;
   final int? companions;
   final List<TagEntity>? tags;
+  final List<EventMemberCommentEntity>? comments;
   
 
   const EventEntity({
@@ -31,11 +33,12 @@ class EventEntity extends Equatable {
     required this.description,
     required this.companions,
     required this.tags,
+    required this.comments,
   });
 
   @override
   List<Object?> get props {
-    return [id, title, startDate, endDate, address, status, type, description, companions, tags];
+    return [id, title, startDate, endDate, address, status, type, description, companions, tags, comments];
   }
 
   // Factory constructor to create an EventEntity from EventModel
@@ -53,6 +56,7 @@ class EventEntity extends Equatable {
       description: model.description ?? '',
       companions: model.companions ?? 0,
       tags: model.tags?.map((tag) => TagEntity.fromModel(tag)).toList() ?? [],
+      comments: model.comments?.map((comment) => EventMemberCommentEntity.fromModel(comment)).toList() ?? [],
     );
   }
 
@@ -69,10 +73,11 @@ class EventEntity extends Equatable {
       description: description,
       companions: companions,
       tags: tags?.map((tag) => tag.toModel()).toList() ?? [],
+      comments: comments?.map((comment) => comment.toModel()).toList() ?? [],
     );
   }
 
-  EventEntity copyWith({EventStatusEnum? status, int? companions, List<TagEntity>? tags}) {
+  EventEntity copyWith({EventStatusEnum? status, int? companions, List<TagEntity>? tags, List<EventMemberCommentEntity>? comments}) {
     return EventEntity(
       id: id,
       title: title,
@@ -85,6 +90,7 @@ class EventEntity extends Equatable {
       description: description,
       companions: companions ?? this.companions,
       tags: tags ?? this.tags,
+      comments: comments ?? this.comments,
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:fempinya3_flutter_app/features/events/data/models/event_member_comment.dart';
 import 'package:fempinya3_flutter_app/features/events/data/models/tag.dart';
 
 class EventModel {
@@ -11,6 +12,7 @@ class EventModel {
   final String? description;
   final int? companions;
   final List<TagModel>? tags;
+  final List<EventMemberCommentModel>? comments;
 
   EventModel({
     required this.id,
@@ -23,12 +25,15 @@ class EventModel {
     required this.description,
     required this.companions,
     required this.tags,
+    required this.comments,
   });
 
   // Factory constructor for JSON deserialization
   factory EventModel.fromJson(Map<String, dynamic> data) {
     var tagsFromJson = data['tags'] as List?;
     List<TagModel>? tagList = tagsFromJson?.map((tag) => TagModel.fromJson(tag)).toList();
+    var commentsFromJson = data['comments'] as List?;
+    List<EventMemberCommentModel>? commentList = commentsFromJson?.map((comment) => EventMemberCommentModel.fromJson(comment)).toList();
 
     return EventModel(
       id: data['id'],
@@ -41,6 +46,7 @@ class EventModel {
       description: data['description'],
       companions: data['companions'],
       tags: tagList,
+      comments: commentList,
     );
   }
 
@@ -57,6 +63,7 @@ class EventModel {
       'description': description,
       'companions': companions,
       'tags': tags?.map((tag) => tag.toJson()).toList() ?? [],
+      'comments': comments?.map((comment) => comment.toJson()).toList() ?? [],
     };
   }
 }

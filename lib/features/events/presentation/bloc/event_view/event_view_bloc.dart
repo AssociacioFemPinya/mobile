@@ -1,4 +1,5 @@
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/entities/event_member_comment.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/tag.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/enums/events_status.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/useCases/get_event.dart';
@@ -68,6 +69,17 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
       }
 
       var newEvent = state.event!.copyWith(tags: tagsCopy);
+      add(UpdateEvent(newEvent));
+    });
+
+    on<AddEventMemberComment>((comment, emit) async {
+      List<EventMemberCommentEntity>? commentsCopy = state.event!.comments != null ? List.from(state.event!.comments!) : null;
+
+      if (commentsCopy != null) {
+        commentsCopy.add(EventMemberCommentEntity(name: comment.value));
+      }
+
+      var newEvent = state.event!.copyWith(comments: commentsCopy);
       add(UpdateEvent(newEvent));
     });
   }
