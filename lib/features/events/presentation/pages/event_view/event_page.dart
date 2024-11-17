@@ -2,7 +2,6 @@ import 'package:customizable_counter/customizable_counter.dart';
 import 'package:fempinya3_flutter_app/core/configs/assets/app_icons.dart';
 import 'package:fempinya3_flutter_app/core/utils/datetime_utils.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/tag.dart';
-import 'package:fempinya3_flutter_app/features/events/presentation/bloc/event_member_comments/event_member_comments_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/event_view/event_view_bloc.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/pages/event_view/views/event_member_comments_screen.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/pages/event_view/views/event_schedule_screen.dart';
@@ -26,9 +25,6 @@ class EventPage extends StatelessWidget {
       BlocProvider<EventViewBloc>(
         create: (context) => EventViewBloc()..add(LoadEvent(eventID)),
       ),
-      BlocProvider<EventMemberCommentsBloc>(
-        create: (context) => EventMemberCommentsBloc()..add(LoadEventMemberComments()),
-      )
     ], child: eventView(context));
   }
 
