@@ -3,22 +3,26 @@ import 'package:fempinya3_flutter_app/features/events/data/models/event_member_c
 
 class EventMemberCommentEntity extends Equatable {
   final DateTime date;
+  //TODO User object integration
+  final String user;
   final String comment;
 
   const EventMemberCommentEntity({
     required this.date,
+    required this.user,
     required this.comment,
   });
 
   @override
   List<Object?> get props {
-    return [date, comment];
+    return [date, user, comment];
   }
 
   // Factory constructor to create an EventEntity from EventModel
   factory EventMemberCommentEntity.fromModel(EventMemberCommentModel model) {
     return EventMemberCommentEntity(
       date: model.date ?? DateTime.now(),
+      user: model.user,
       comment: model.comment,
     );
   }
@@ -27,14 +31,16 @@ class EventMemberCommentEntity extends Equatable {
   EventMemberCommentModel toModel() {
     return EventMemberCommentModel(
       date: date,
-      comment: comment
+      user: user,
+      comment: comment,
     );
   }
 
   EventMemberCommentEntity copyWith({bool? isEnabled}) {
     return EventMemberCommentEntity(
       date: date,
-      comment: comment
+      user: user,
+      comment: comment,
     );
   }
 }

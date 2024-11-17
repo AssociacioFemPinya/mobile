@@ -78,6 +78,8 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
       if (commentsCopy != null) {
         commentsCopy.add(EventMemberCommentEntity(
           date: DateTime.now(),
+          //TODO User object integration
+          user: 'user',
           comment: comment.value));
       }
 

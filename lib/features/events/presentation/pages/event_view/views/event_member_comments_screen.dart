@@ -197,7 +197,7 @@ class CommentCard extends StatelessWidget {
                   Localizations.localeOf(context).toString())
             ),
             Text(
-              comment.comment,
+              comment.user,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             Text(comment.comment), // assuming comment.comment is the text of the comment
