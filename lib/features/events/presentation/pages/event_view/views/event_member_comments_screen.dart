@@ -18,19 +18,18 @@ class EventMemberCommentsScreen extends StatelessWidget {
     final textController = TextEditingController();
 
     return Scaffold(
-        body: SafeArea(
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              const SizedBox(height: defaultPadding),
-              CommentScreenHeader(translate: translate),
-              CommentScreenTextForm(textController: textController, translate: translate),
-              CommentScreenTextButton(textController: textController, translate: translate),
-              const CommentScreenCommentsList(),
-            ],
-          ),
-        ),
-    );
+        //drawer: const MenuWidget(),
+        body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SafeArea(
+                child: CustomScrollView(
+              slivers: [
+                CommentScreenHeader(translate: translate),
+                CommentScreenTextForm(textController: textController, translate: translate),
+                CommentScreenTextButton(textController: textController, translate: translate),
+                const CommentScreenCommentsList(),                
+              ],
+            ))));
   }
 }
 
@@ -41,30 +40,32 @@ class CommentScreenCommentsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(defaultPadding),
-        child: BlocBuilder<EventViewBloc, EventViewState>(
-          builder: (context, state){
-            if (state is EventViewInitial) {
-              return Container();
-            }
-            return SizedBox(
-                width: MediaQuery.of(context)
-                    .size
-                    .width, // Ajusta al ancho de la pantalla
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: (state.event?.comments ?? []).length,
-                  itemBuilder: (context, index) {
-                    return CommentCard(
-                      comment: (state.event?.comments ?? [])
-                          .reversed
-                          .toList()[index]);
-                  },
-                ),
-              );
-          },
-        ),
+    return SliverToBoxAdapter(
+      child: Padding(
+          padding: const EdgeInsets.all(defaultPadding),
+          child: BlocBuilder<EventViewBloc, EventViewState>(
+            builder: (context, state){
+              if (state is EventViewInitial) {
+                return Container();
+              }
+              return SizedBox(
+                  width: MediaQuery.of(context)
+                      .size
+                      .width, // Ajusta al ancho de la pantalla
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: (state.event?.comments ?? []).length,
+                    itemBuilder: (context, index) {
+                      return CommentCard(
+                        comment: (state.event?.comments ?? [])
+                            .reversed
+                            .toList()[index]);
+                    },
+                  ),
+                );
+            },
+          ),
+      ),
     );
   }
 }
@@ -95,20 +96,19 @@ class CommentScreenTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 40,
-      child: TextButton(
-          onPressed: () {
-            if (textController.text != "") {
-              _onSavePressed(context, textController.text);
-            } 
-          },
-          style: TextButton.styleFrom(
-              backgroundColor:
-                  Theme.of(context).colorScheme.primaryFixedDim),
-          child: Text(translate.commonSave,
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimaryFixed))
+    return SliverToBoxAdapter(
+      child: Center(
+        child: TextButton(
+            onPressed: () {
+              if (textController.text != "") {
+                _onSavePressed(context, textController.text);
+              }
+            },
+            style: TextButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primaryFixedDim),
+            child: Text(translate.commonSave,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.onPrimaryFixed))),
       ),
     );
   }
@@ -126,17 +126,19 @@ class CommentScreenTextForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(defaultPadding),
-        child: TextFormField(
-          controller: textController,
-          maxLines: 5,
-          decoration: InputDecoration(
-            hintText: translate.commentsScreenHintText,
-            labelText: translate.commentsScreenLabelText,
-            border: const OutlineInputBorder(),
-          ),
-    ));
+    return SliverToBoxAdapter(
+      child: Padding(
+          padding: const EdgeInsets.all(defaultPadding),
+          child: TextFormField(
+            controller: textController,
+            maxLines: 5,
+            decoration: InputDecoration(
+              hintText: translate.commentsScreenHintText,
+              labelText: translate.commentsScreenLabelText,
+              border: const OutlineInputBorder(),
+            ),
+      )),
+    );
   }
 }
 
@@ -150,22 +152,24 @@ class CommentScreenHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding:
-          const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const SizedBox(
-            width: 40,
-            child: BackButton(),
-          ),
-          Text(
-            translate.commonReturn,
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
-          const SizedBox(width: 40),
-        ],
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding:
+            const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const SizedBox(
+              width: 40,
+              child: BackButton(),
+            ),
+            Text(
+              translate.commonReturn,
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            const SizedBox(width: 40),
+          ],
+        ),
       ),
     );
   }
