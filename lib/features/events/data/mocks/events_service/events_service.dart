@@ -54,8 +54,14 @@ class EventsDioMockInterceptor extends Interceptor {
 
     List<EventMemberCommentEntity>? generateComments() {
       return [
-        const EventMemberCommentEntity(comment: 'Lorem ipsum dolor sit amet.'),
-        const EventMemberCommentEntity(comment: 'Sed quisquam minus aut voluptas quibusdam in quia assumenda non consequatur voluptates in consequatur omnis.'),
+        EventMemberCommentEntity(
+          date: getRandomDateTime(),
+          comment: 'Lorem ipsum dolor sit amet.'
+        ),
+        EventMemberCommentEntity(
+          date: getRandomDateTime(),
+          comment: 'Sed quisquam minus aut voluptas quibusdam in quia assumenda non consequatur voluptates in consequatur omnis.'
+        ),
       ];
     }
 

@@ -1,3 +1,4 @@
+import 'package:fempinya3_flutter_app/core/utils/datetime_utils.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event_member_comment.dart';
 import 'package:fempinya3_flutter_app/features/events/presentation/bloc/event_view/event_view_bloc.dart';
@@ -191,8 +192,13 @@ class CommentCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
+              DateTimeUtils.formatDateToHumanLanguage(
+                  comment.date, // TO FIX,
+                  Localizations.localeOf(context).toString())
+            ),
+            Text(
               comment.comment,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.titleMedium,
             ),
             Text(comment.comment), // assuming comment.comment is the text of the comment
           ],

@@ -76,7 +76,9 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
       List<EventMemberCommentEntity>? commentsCopy = state.event!.comments != null ? List.from(state.event!.comments!) : null;
 
       if (commentsCopy != null) {
-        commentsCopy.add(EventMemberCommentEntity(comment: comment.value));
+        commentsCopy.add(EventMemberCommentEntity(
+          date: DateTime.now(),
+          comment: comment.value));
       }
 
       var newEvent = state.event!.copyWith(comments: commentsCopy);
