@@ -212,12 +212,12 @@ class CommentCard extends StatelessWidget {
             ? IconButton(
               icon: const Icon(Icons.delete,),
               onPressed: () {
-                // Add your delete logic here
-                // For example:
-                // deleteComment(comment.id);
-              },
-            )
-            : const SizedBox() ,
+                      final eventViewBloc = context.read<EventViewBloc>();
+
+                      eventViewBloc.add(RemoveEventMemberComment(comment));
+                    },
+                  )
+                : const SizedBox() ,
           ),
         ],
       ),

@@ -52,3 +52,7 @@ class AddEventMemberComment extends EventViewEvent {
   AddEventMemberComment(this.value);
 }
 
+class RemoveEventMemberComment extends EventViewEvent {
+  final EventMemberCommentEntity comment;
+  RemoveEventMemberComment(this.comment);
+}

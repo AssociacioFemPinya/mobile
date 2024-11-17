@@ -86,5 +86,18 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
       var newEvent = state.event!.copyWith(comments: commentsCopy);
       add(UpdateEvent(newEvent));
     });
+
+    on<RemoveEventMemberComment>((comment, emit) async {
+
+      List<EventMemberCommentEntity>? commentsCopy = state.event!.comments != null ? List.from(state.event!.comments!) : null;
+
+      if (commentsCopy != null){
+        //TODO Remove only the single comment of the user
+        commentsCopy.removeWhere((element) => element.user == 'user');
+      }
+
+      var newEvent = state.event!.copyWith(comments: commentsCopy);
+      add(UpdateEvent(newEvent));
+    });
   }
 }
