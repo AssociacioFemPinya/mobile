@@ -186,23 +186,40 @@ class CommentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.all(8),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              DateTimeUtils.formatDateToHumanLanguage(
-                  comment.date, // TO FIX,
-                  Localizations.localeOf(context).toString())
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(DateTimeUtils.formatDateToHumanLanguage(
+                    comment.date, // TO FIX,
+                    Localizations.localeOf(context).toString())),
+                Text(
+                  comment.user,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                Text(comment
+                    .comment), // assuming comment.comment is the text of the comment
+              ],
             ),
-            Text(
-              comment.user,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            Text(comment.comment), // assuming comment.comment is the text of the comment
-          ],
-        ),
+          ),
+          Positioned(
+            top: 0,
+            right: 0,
+            child: comment.user == 'user'
+            ? IconButton(
+              icon: const Icon(Icons.delete,),
+              onPressed: () {
+                // Add your delete logic here
+                // For example:
+                // deleteComment(comment.id);
+              },
+            )
+            : const SizedBox() ,
+          ),
+        ],
       ),
     );
   }
