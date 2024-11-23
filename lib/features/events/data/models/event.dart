@@ -11,6 +11,7 @@ class EventModel {
   final String? description;
   final int? companions;
   final List<TagModel>? tags;
+  final String? comment;
 
   EventModel({
     required this.id,
@@ -23,6 +24,7 @@ class EventModel {
     required this.description,
     required this.companions,
     required this.tags,
+    required this.comment,
   });
 
   // Factory constructor for JSON deserialization
@@ -41,6 +43,7 @@ class EventModel {
       description: data['description'],
       companions: data['companions'],
       tags: tagList,
+      comment: data['comment'],
     );
   }
 
@@ -57,6 +60,7 @@ class EventModel {
       'description': description,
       'companions': companions,
       'tags': tags?.map((tag) => tag.toJson()).toList() ?? [],
+      'comment': comment,
     };
   }
 }
