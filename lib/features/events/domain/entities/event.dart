@@ -17,6 +17,7 @@ class EventEntity extends Equatable {
   final String? description;
   final int? companions;
   final List<TagEntity>? tags;
+  final String? comment;
   
 
   const EventEntity({
@@ -31,11 +32,12 @@ class EventEntity extends Equatable {
     required this.description,
     required this.companions,
     required this.tags,
+    required this.comment,
   });
 
   @override
   List<Object?> get props {
-    return [id, title, startDate, endDate, address, status, type, description, companions, tags];
+    return [id, title, startDate, endDate, address, status, type, description, companions, tags, comment];
   }
 
   // Factory constructor to create an EventEntity from EventModel
@@ -53,6 +55,7 @@ class EventEntity extends Equatable {
       description: model.description ?? '',
       companions: model.companions ?? 0,
       tags: model.tags?.map((tag) => TagEntity.fromModel(tag)).toList() ?? [],
+      comment: model.comment ?? '',
     );
   }
 
@@ -69,10 +72,11 @@ class EventEntity extends Equatable {
       description: description,
       companions: companions,
       tags: tags?.map((tag) => tag.toModel()).toList() ?? [],
+      comment: comment,
     );
   }
 
-  EventEntity copyWith({EventStatusEnum? status, int? companions, List<TagEntity>? tags}) {
+  EventEntity copyWith({EventStatusEnum? status, int? companions, List<TagEntity>? tags, String? comment}) {
     return EventEntity(
       id: id,
       title: title,
@@ -85,6 +89,7 @@ class EventEntity extends Equatable {
       description: description,
       companions: companions ?? this.companions,
       tags: tags ?? this.tags,
+      comment: comment,
     );
   }
 }
