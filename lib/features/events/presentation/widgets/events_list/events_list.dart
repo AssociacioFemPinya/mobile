@@ -169,11 +169,11 @@ class EventsListWidget extends StatelessWidget {
 
    _getStatusBorderSizeCard(EventStatusEnum status) =>
       const {
-        EventStatusEnum.accepted: 0,
-        EventStatusEnum.declined: 0,
-        EventStatusEnum.unknown: 0,
-        EventStatusEnum.undefined: 1,
-        EventStatusEnum.warning: 0,
+        EventStatusEnum.accepted: 0.0,
+        EventStatusEnum.declined: 0.0,
+        EventStatusEnum.unknown: 0.0,
+        EventStatusEnum.undefined: 1.0,
+        EventStatusEnum.warning: 0.0,
       }[status] ??
       4;
 
