@@ -274,7 +274,10 @@ class EventPage extends StatelessWidget {
             customModalBottomSheet(
               context,
               height: MediaQuery.of(context).size.height - 100,
-              child: EventMemberCommentsScreen(event: state.event!),
+              child: BlocProvider<EventViewBloc>.value(
+                value: context.read<EventViewBloc>(),
+                child: EventMemberCommentsScreen(event: state.event!),
+              ),
             );
           });
     });

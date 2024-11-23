@@ -70,5 +70,17 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
       var newEvent = state.event!.copyWith(tags: tagsCopy);
       add(UpdateEvent(newEvent));
     });
+
+    on<AddEventComment>((comment, emit) async {
+      EventEntity updatedEvent = state.event!.copyWith(comment: comment.value);
+
+      add(UpdateEvent(updatedEvent));
+    });
+
+    on<RemoveEventComment>((comment, emit) async {
+      EventEntity updatedEvent = state.event!.copyWith(comment: '');
+
+      add(UpdateEvent(updatedEvent));
+    });
   }
 }
