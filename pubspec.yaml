@@ -36,5 +36,11 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
-
+  assets:
+    - assets/icons/acrobatics.svg
+    - assets/icons/miniRight.svg
+    - assets/icons/paella.svg
+    - assets/icons/question.svg
+    - assets/icons/scheduleHours.svg
+    - assets/icons/weightlifting.svg
 
