@@ -2,6 +2,15 @@
 
 A new Flutter project.
 
+## Log in to app with mocked users
+
+Mocked users are created with the following credentials :
+
+    mail: "mail@mail.com"
+    password: "password"
+
+Use these credentials, otherwise you will get authentication errors.
+
 ## TO DOCUMENT SOMEWHERE
 
 ### Nullables in bloc states

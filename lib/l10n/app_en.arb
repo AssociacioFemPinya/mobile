@@ -11,6 +11,7 @@
     "menuHome": "Home",
     "menuEvents": "Events",
     "menuNotifications": "Notifications",
+    "menuDisconnect": "Disconnect",
     "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} fr {Français} other {}}",
     "@menuLanguageSettings": {
         "placeholders": {
@@ -19,6 +20,13 @@
             }
         }
     },
+    "loginPageTitle": "Log in",
+    "loginSnackBarError": "Authenticate error",
+    "loginPageEmailTitle": "Email",
+    "loginPagePasswordTitle": "Password",
+    "loginPageLoginButton": "Log in",
+    "loginPageInvalidMail": "Invalid email",
+    "loginPageInvalidPassword": "Invalid password",
     "eventsPageTitle": "Events",
     "eventsPageEventsWithAlertBanner": "You have events that require attention!",
     "eventsPageTypeChipTraining": "Trainings",
