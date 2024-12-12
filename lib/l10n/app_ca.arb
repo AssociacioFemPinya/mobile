@@ -11,6 +11,7 @@
     "menuHome": "Inici",
     "menuEvents": "Esdeveniments",
     "menuNotifications": "Notificacions",
+    "menuDisconnect": "Desconnectar",
     "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} fr {Français} other {}}",
     "@menuLanguageSettings": {
         "placeholders": {
@@ -19,6 +20,13 @@
             }
         }
     },
+    "loginPageTitle": "Iniciar sessió",
+    "loginSnackBarError": "Error d'autenticació",
+    "loginPageEmailTitle": "Correu electrònic",
+    "loginPagePasswordTitle": "Contrasenya",
+    "loginPageLoginButton": "Iniciar sessió",
+    "loginPageInvalidMail": "Correu electrònic invàlid",
+    "loginPageInvalidPassword": "Contrasenya invàlida",
     "eventsPageTitle": "Esdeveniments",
     "eventsPageEventsWithAlertBanner": "Tens events que requereixen atencio!",
     "eventsPageTypeChipTraining": "Assajos",
