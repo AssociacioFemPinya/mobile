@@ -11,6 +11,7 @@
     "menuHome": "Accueil",
     "menuEvents": "Événements",
     "menuNotifications": "Notifications",
+    "menuRondes": "Rondes",
     "menuDisconnect": "Déconnecter",
     "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} fr {Français} other {}}",
     "@menuLanguageSettings": {
@@ -58,5 +59,18 @@
     "commonFilter": "Filtrer",
     "commonSnackBarSuccessSaving": "Sauvegardé avec succès",
     "commentsScreenHintText": "Écrivez vos commentaires",
-    "commentsScreenLabelText": "Commentaires"
+    "commentsScreenLabelText": "Commentaires",
+    "rondesListRondaButton": "Ronda {rondaNumber} {eventName}",
+    "@rondesListRondaButton": {
+        "placeholders": {
+            "rondaNumber": {
+                "type": "int"
+            },
+            "eventName": {
+                "type": "String"
+            }
+        }
+    },
+    "rondaViewLoadFailureStateEmptyUri": "Ronda URI està vuida",
+    "rondaViewLoadFailureStateWrongUri": "Ronda URI incorrecta"
 }
