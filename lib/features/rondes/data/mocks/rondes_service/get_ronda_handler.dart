@@ -16,7 +16,7 @@ abstract class GetRondaHandler {
     if (!queryParams.containsKey("id") || queryParams["id"] == null) {
       response = Response(
         requestOptions: options,
-        statusCode: 500,
+        statusCode: 400,
       );
       handler.resolve(response);
       return;

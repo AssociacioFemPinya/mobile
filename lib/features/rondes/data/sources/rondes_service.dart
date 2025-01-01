@@ -8,6 +8,8 @@ abstract class RondesService {
   Future<Either<String, List<RondaEntity>>> getRondesList(
       GetRondesListParams params);
   Future<Either<String, RondaEntity>> getRonda(GetRondaParams params);
+  Future<Either<String, PublicDisplayUrlEntity>> getPublicDisplayUrl(
+      GetPublicDisplayUrlParams params);
 }
 
 class RondesServiceImpl implements RondesService {
@@ -26,7 +28,7 @@ class RondesServiceImpl implements RondesService {
             .map((json) => RondaEntity.fromModel(RondaModel.fromJson(json)))
             .toList();
         return Right(pinyes);
-      } else if (response.statusCode == 500) {
+      } else if (response.statusCode == 400) {
         return Left('Any user email provided');
       }
       return const Left('Unexpected response format');
@@ -56,7 +58,7 @@ class RondesServiceImpl implements RondesService {
         return Right(RondaEntity.fromModel(RondaModel.fromJson(json)));
       } else if (response.statusCode == 404) {
         return Left('Unknown ronda id');
-      } else if (response.statusCode == 500) {
+      } else if (response.statusCode == 400) {
         return Left('Any ronda id provided');
       }
       return const Left('Unexpected response format');
@@ -68,5 +70,32 @@ class RondesServiceImpl implements RondesService {
 
   _buildGetRondaQueryParams(GetRondaParams params) {
     return {'id': params.id};
+  }
+  
+  @override
+  Future<Either<String, PublicDisplayUrlEntity>> getPublicDisplayUrl(
+      GetPublicDisplayUrlParams params) async {
+    try {
+      final response = await _dio.get('/publicDisplayUrl',
+          queryParameters: _buildGetPublicDisplayUrl(params));
+      if (response.statusCode == 200 && response.data is String) {
+        final json =
+            jsonDecode(response.data as String) as Map<String, dynamic>;
+        return Right(PublicDisplayUrlEntity.fromModel(
+            PublicDisplayUrlModel.fromJson(json)));
+      } else if (response.statusCode == 404) {
+        return Left('Unknown email');
+      } else if (response.statusCode == 400) {
+        return Left('Any user email provided');
+      }
+      return const Left('Unexpected response format');
+    } catch (e, stacktrace) {
+      _logError('Error when calling /publicDisplayUrl endpoint', e, stacktrace);
+      return Left('Error when calling /publicDisplayUrl endpoint: $e');
+    }
+  }
+
+  _buildGetPublicDisplayUrl(GetPublicDisplayUrlParams params) {
+    return {'email': params.email};
   }
 }

@@ -11,4 +11,9 @@ class RondesRepositoryImpl extends RondesRepository {
   Future<Either> getRonda(GetRondaParams params) async {
     return await sl<RondesService>().getRonda(params);
   }
+  
+  @override
+  Future<Either> getPublicDisplayUrl(GetPublicDisplayUrlParams params) async {
+    return await sl<RondesService>().getPublicDisplayUrl(params);
+  }
 }

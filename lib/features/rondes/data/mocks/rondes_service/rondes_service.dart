@@ -6,6 +6,7 @@ import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 
 class RondesDioMockInterceptor extends Interceptor {
   late List<RondaEntity> rondesList;
+  late PublicDisplayUrlEntity publicDisplayUrl;
 
   int percentageOfRandomFailures = 0;
   int maxDurationRequest = 200;
@@ -16,10 +17,13 @@ class RondesDioMockInterceptor extends Interceptor {
           RequestInterceptorHandler handler)> mockRouter = {
     _MockRouteKey('/rondes', 'GET'): GetRondesListHandler.handle,
     _MockRouteKey('/ronda', 'GET'): GetRondaHandler.handle,
+    _MockRouteKey('/publicDisplayUrl', 'GET'):
+        GetPublicDisplayUrlHandler.handle,
   };
 
   RondesDioMockInterceptor() {
     rondesList = _generateRondes();
+    publicDisplayUrl = _generatePublicDisplayUrl();
   }
 
   List<RondaEntity> _generateRondes() {
@@ -85,6 +89,12 @@ class RondesDioMockInterceptor extends Interceptor {
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     // Handle responses if needed
     super.onResponse(response, handler);
+  }
+  
+  PublicDisplayUrlEntity _generatePublicDisplayUrl() {
+    return (PublicDisplayUrlEntity(
+        publicUrl:
+            'https://app.fempinya.cat/public/display/AireNou/WWN5Wk9aTnl4Q3FHUTE5bklsTkdCOFEvQ1BLWVB4M1BveVpRYlNJbkE1bDZ2SVBNTUlIbzI3S1RXUGRlVlBsUQ=='));
   }
 }
 

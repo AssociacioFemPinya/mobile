@@ -39,11 +39,3 @@ class RondaViewBloc extends Bloc<RondaViewEvent, RondaViewState> {
     return uri;
   }
 }
-
-class EmptyUriException implements Exception {
-  EmptyUriException();
-}
-
-class InvalidUriException implements Exception {
-  InvalidUriException();
-}

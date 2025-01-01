@@ -18,7 +18,7 @@ abstract class GetRondesListHandler {
     if (!queryParams.containsKey("email") || queryParams["email"] == null) {
       response = Response(
         requestOptions: options,
-        statusCode: 500,
+        statusCode: 400,
       );
       handler.resolve(response);
       return;

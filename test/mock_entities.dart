@@ -19,6 +19,16 @@ class MockRondaViewBloc extends RondaViewBloc {
   }
 }
 
+class MockPublicDisplayUrlViewBloc extends PublicDisplayUrlViewBloc {
+  PublicDisplayUrlViewState state = PublicDisplayUrlViewInitial();
+
+  void emit(PublicDisplayUrlViewState newState) {
+    state = newState;
+  }
+
+  MockPublicDisplayUrlViewBloc() : super();
+}
+
 class MockAuthenticationBloc extends AuthenticationBloc {
   final UserEntity _userEntity = UserEntity(
       mail: 'test@example.com', id: 0, name: "toto", password: "fifi");

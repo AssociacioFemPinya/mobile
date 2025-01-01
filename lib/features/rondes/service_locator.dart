@@ -10,4 +10,5 @@ Future<void> setupRondesServiceLocator() async {
   sl.registerSingleton<RondesRepository>(RondesRepositoryImpl());
   sl.registerSingleton<GetRondesList>(GetRondesList());
   sl.registerSingleton<GetRonda>(GetRonda());
+  sl.registerSingleton<GetPublicDisplayUrl>(GetPublicDisplayUrl());
 }

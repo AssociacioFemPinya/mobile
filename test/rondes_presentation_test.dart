@@ -19,6 +19,7 @@ void main() {
   late MockRondaViewBloc mockRondaViewBloc;
   late MockAuthenticationRepository mockAuthenticationRepository;
   late MockAuthenticationBloc mockAuthenticationBloc;
+  late MockPublicDisplayUrlViewBloc mockPublicDisplayUrlViewBloc;
 
   setUp(() {
     mockRondesListBloc = MockRondesListBloc();
@@ -26,6 +27,7 @@ void main() {
     mockAuthenticationRepository = MockAuthenticationRepository();
     mockAuthenticationBloc = MockAuthenticationBloc(
         authenticationRepository: mockAuthenticationRepository);
+    mockPublicDisplayUrlViewBloc = MockPublicDisplayUrlViewBloc();
   });
 
   setUpAll(() {
@@ -420,7 +422,9 @@ void main() {
       );
 
       expect(find.byType(RondesListPage), findsOneWidget);
-      tester.pumpAndSettle(const Duration(milliseconds: 200));
+      
+      await tester.pump(Duration(seconds: 10));
+      await tester.tap(find.byType(ElevatedButton).first);
     });
 
     testWidgets('Ronda Page route', (tester) async {
@@ -430,7 +434,7 @@ void main() {
           child: MaterialApp.router(
             routerConfig: GoRouter(
               routes: rondesRoutes,
-              initialLocation: rondesRoute,
+              initialLocation: '$rondaRoute/0',
             ),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
@@ -439,12 +443,237 @@ void main() {
       );
 
       await tester.pump(Duration(seconds: 10));
+      expect(find.byType(RondaPage), findsOneWidget);
 
-      await tester.tap(find.byType(ElevatedButton).first);
+      expect(find.byType(MyWebView), findsOneWidget);
+      final webView = tester.firstWidget(find.byType(MyWebView));
+      expect((webView as MyWebView).url,
+          'https://app.fempinya.cat/public/display/AireNou/WWN5Wk9aTnl4Q3FHUTE5bklsTkdCOFEvQ1BLWVB4M1BveVpRYlNJbkE1bDZ2SVBNTUlIbzI3S1RXUGRlVlBsUQ==');
+    });
+
+    testWidgets('PublicDisplayUrl Page route', (tester) async {
+      await tester.pumpWidget(
+        BlocProvider<AuthenticationBloc>(
+          create: (context) => mockAuthenticationBloc,
+          child: MaterialApp.router(
+            routerConfig: GoRouter(
+              routes: rondesRoutes,
+              initialLocation: publicDisplayUrlRoute,
+            ),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+          ),
+        ),
+      );
+
+      expect(find.byType(PublicDisplayUrlPage), findsOneWidget);
+      tester.pumpAndSettle(const Duration(milliseconds: 200));
+    });
+  });
+  group('PublicDisplayUrlViewBloc', () {
+    late PublicDisplayUrlViewBloc publicDisplayUrlViewBloc;
+
+    setUp(() {
+      publicDisplayUrlViewBloc = PublicDisplayUrlViewBloc();
+    });
+
+    test('givenPublicDisplayUrlViewBloc_whenInit_thenStateIsInitial', () {
+      expect(publicDisplayUrlViewBloc.state, PublicDisplayUrlViewInitial());
+    });
+
+    blocTest<PublicDisplayUrlViewBloc, PublicDisplayUrlViewState>(
+      'givenPublicDisplayUrlViewBloc_whenPublicDisplayUrlLoadEvent_thenStateIsLoadSuccessAndPublicDisplayUrlIsRetrieved',
+      build: () => publicDisplayUrlViewBloc,
+      act: (bloc) =>
+          bloc.add(PublicDisplayUrlLoadEvent(email: 'mail@mail.com')),
+      wait: const Duration(milliseconds: 200),
+      verify: (bloc) {
+        expect(bloc.state, isA<PublicDisplayUrlLoadSuccessState>());
+        expect(
+            (bloc.state as PublicDisplayUrlLoadSuccessState).publicDisplayUrl,
+            equals(PublicDisplayUrlEntity(
+              publicUrl:
+                  'https://app.fempinya.cat/public/display/AireNou/WWN5Wk9aTnl4Q3FHUTE5bklsTkdCOFEvQ1BLWVB4M1BveVpRYlNJbkE1bDZ2SVBNTUlIbzI3S1RXUGRlVlBsUQ==',
+            )));
+      },
+    );
+    blocTest<PublicDisplayUrlViewBloc, PublicDisplayUrlViewState>(
+      'givenPublicDisplayUrlViewBloc_whenPublicDisplayUrlLoadEventWithUnknownMail_thenStateIsFailureStateAndMsgIsCorrect',
+      build: () => publicDisplayUrlViewBloc,
+      act: (bloc) =>
+          bloc.add(PublicDisplayUrlLoadEvent(email: 'toto@toto.com')),
+      wait: const Duration(milliseconds: 200),
+      verify: (bloc) {
+        expect(bloc.state, isA<PublicDisplayUrlLoadFailureState>());
+        expect((bloc.state as PublicDisplayUrlLoadFailureState).failure,
+            equals('Unknown email'));
+      },
+    );
+
+    blocTest<PublicDisplayUrlViewBloc, PublicDisplayUrlViewState>(
+      'givenPublicDisplayUrlViewBloc_whenPublicDisplayUrlLoadEventWithCorrectMailWithoutPublicUrl_thenStateIsFailureStateAndMsgIsCorrect',
+      build: () => publicDisplayUrlViewBloc,
+      act: (bloc) =>
+          bloc.add(PublicDisplayUrlLoadEvent(email: 'emptyUrl@mail.com')),
+      wait: const Duration(milliseconds: 200),
+      verify: (bloc) {
+        expect(bloc.state, isA<PublicDisplayUrlLoadFailureStateEmptyUri>());
+        expect(
+            (bloc.state as PublicDisplayUrlLoadFailureStateEmptyUri)
+                .publicDisplayUrl
+                .publicUrl,
+            '');
+      },
+    );
+
+    blocTest<PublicDisplayUrlViewBloc, PublicDisplayUrlViewState>(
+      'givenPublicDisplayUrlViewBloc_whenPublicDisplayUrlLoadEventWithCorrectMailWithWrongPublicUrl_thenStateIsPublicDisplayUrlLoadFailureStateWrongUri',
+      build: () => publicDisplayUrlViewBloc,
+      act: (bloc) =>
+          bloc.add(PublicDisplayUrlLoadEvent(email: 'wrongUrl@mail.com')),
+      wait: const Duration(milliseconds: 200),
+      verify: (bloc) {
+        expect(bloc.state, isA<PublicDisplayUrlLoadFailureStateWrongUri>());
+      },
+    );
+  });
+
+  group('PublicDisplayUrlPage', () {
+    testWidgets(
+        'should display CircularProgressIndicator when state is PublicDisplayUrlViewInitial',
+        (tester) async {
+      // Arrange
+      mockPublicDisplayUrlViewBloc.state = PublicDisplayUrlViewInitial();
+
+      // Act
+      await tester.pumpWidget(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<PublicDisplayUrlViewBloc>(
+              create: (context) => mockPublicDisplayUrlViewBloc,
+            ),
+          ],
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: ChangeNotifierProvider<LocaleModel>(
+              create: (_) => LocaleModel(),
+              child: PublicDisplayUrlViewContentsPage(),
+            ),
+          ),
+        ),
+      );
+
+      // Assert
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    });
+
+    testWidgets(
+        'givenCorrectPublicDisplayUrl_whenPublicDisplayUrlLoadSuccessState_thenWebViewIsDisplayed',
+        (tester) async {
+      PublicDisplayUrlEntity publicDisplayUrl =
+          PublicDisplayUrlEntity(publicUrl: 'https://www.google.com');
+      // Arrange
+      mockPublicDisplayUrlViewBloc.state =
+          PublicDisplayUrlLoadSuccessState(publicDisplayUrl: publicDisplayUrl);
+
+      // Act
+      await tester.pumpWidget(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<PublicDisplayUrlViewBloc>(
+              create: (context) => mockPublicDisplayUrlViewBloc,
+            ),
+          ],
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: ChangeNotifierProvider<LocaleModel>(
+              create: (_) => LocaleModel(),
+              child: PublicDisplayUrlViewContentsPage(),
+            ),
+          ),
+        ),
+      );
+
+      // Assert
+      final appBar = tester.firstWidget(find.byType(AppBar));
+      expect((appBar as AppBar).title, isNotNull);
+      expect(appBar.title, isA<Text>());
+      expect((appBar.title as Text).data, 'Pinya');
+
+      expect(find.byType(MyWebView), findsOneWidget);
+      final webView = tester.firstWidget(find.byType(MyWebView));
+      expect((webView as MyWebView).url, 'https://www.google.com');
+    });
+
+    testWidgets(
+        'givenWrongPublicDisplayUrl_whenPublicDisplayUrlLoadSuccessState_thenWebViewIsDisplayed',
+        (tester) async {
+      PublicDisplayUrlEntity publicDisplayUrl =
+          PublicDisplayUrlEntity(publicUrl: 'wrong url');
+      // Arrange
+      mockPublicDisplayUrlViewBloc.state =
+          PublicDisplayUrlLoadFailureStateWrongUri(
+              publicDisplayUrl: publicDisplayUrl);
+
+      // Act
+      await tester.pumpWidget(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<PublicDisplayUrlViewBloc>(
+              create: (context) => mockPublicDisplayUrlViewBloc,
+            ),
+          ],
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: ChangeNotifierProvider<LocaleModel>(
+              create: (_) => LocaleModel(),
+              child: PublicDisplayUrlViewContentsPage(),
+            ),
+          ),
+        ),
+      );
+
+      // Assert
+      expect(find.text('URI pinya projectada incorrecta'), findsOneWidget);
+    });
+
+    testWidgets(
+        'givenEmptyPublicDisplayUrl_whenPublicDisplayUrlLoadSuccessState_thenWebViewIsDisplayed',
+        (tester) async {
+      PublicDisplayUrlEntity publicDisplayUrl =
+          PublicDisplayUrlEntity(publicUrl: '');
+      // Arrange
+      mockPublicDisplayUrlViewBloc.state =
+          PublicDisplayUrlLoadFailureStateEmptyUri(
+              publicDisplayUrl: publicDisplayUrl);
+
+      // Act
+      await tester.pumpWidget(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<PublicDisplayUrlViewBloc>(
+              create: (context) => mockPublicDisplayUrlViewBloc,
+            ),
+          ],
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: ChangeNotifierProvider<LocaleModel>(
+              create: (_) => LocaleModel(),
+              child: PublicDisplayUrlViewContentsPage(),
+            ),
+          ),
+        ),
+      );
+
+      // Assert
+      expect(find.text('Cap pinya projectada'), findsOneWidget);
     });
   });
 }
-
 
 class FakeWebViewPlatform extends WebViewPlatform {
   @override

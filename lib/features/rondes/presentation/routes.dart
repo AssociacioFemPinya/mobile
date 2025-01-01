@@ -17,4 +17,9 @@ final List<GoRoute> rondesRoutes = [
       return RondaPage(rondaID: rondaID);
     },
   ),
+  GoRoute(
+    name: publicDisplayUrlRoute,
+    path: publicDisplayUrlRoute,
+    builder: (context, state) => const PublicDisplayUrlPage(),
+  ),
 ];

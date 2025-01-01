@@ -50,6 +50,33 @@ void main() {
       expect(props[2], rondaEntity.ronda);
       expect(props[3], rondaEntity.eventName);
     });
+
+    test(
+        'givenPublicDisplayUrl_whenCopyWith_thenCopiedPublicDisplayUrlHasSameData',
+        () {
+      // Arrange
+      final publicDisplayUrlEntity = PublicDisplayUrlEntity(publicUrl: 'toto');
+
+      // Act
+      final copiedPublicDisplayUrl = publicDisplayUrlEntity.copyWith();
+
+      // Assert
+      expect(copiedPublicDisplayUrl, isNot(same(publicDisplayUrlEntity)));
+      expect(
+          copiedPublicDisplayUrl.publicUrl, publicDisplayUrlEntity.publicUrl);
+    });
+
+    test('givenPublicDisplayUrl_whenProps_thenSameDataReturned', () {
+      final publicDisplayUrlEntity = PublicDisplayUrlEntity(publicUrl: 'toto');
+
+      // Act
+      final props = publicDisplayUrlEntity.props;
+
+      // Assert
+      expect(props, isA<List>());
+      expect(props.length, 1);
+      expect(props[0], publicDisplayUrlEntity.publicUrl);
+    });
   });
 
   group('Dio', () {
@@ -134,5 +161,74 @@ void main() {
         (r) => fail('Expected a Left, but got a Right'),
       );
     });
+
+    test('givenEmail_whenGetPublicDisplayUrl_thenGetPublicDisplayUrl',
+        () async {
+      GetPublicDisplayUrlParams getPublicDisplayUrlParams =
+          GetPublicDisplayUrlParams(email: 'mail@mail.com');
+
+      var result = await sl<GetPublicDisplayUrl>()
+          .call(params: getPublicDisplayUrlParams);
+
+      result.fold(
+        (l) => fail('Expected a Right, but got a Left'),
+        (publicDisplayUrl) {
+          expect(publicDisplayUrl, isA<PublicDisplayUrlEntity>());
+          expect(publicDisplayUrl.publicUrl,
+              'https://app.fempinya.cat/public/display/AireNou/WWN5Wk9aTnl4Q3FHUTE5bklsTkdCOFEvQ1BLWVB4M1BveVpRYlNJbkE1bDZ2SVBNTUlIbzI3S1RXUGRlVlBsUQ==');
+        },
+      );
+    });
+
+    test('givenNullEmail_whenGetPublicDisplayUrl_thenGetErrorMsg', () async {
+      GetPublicDisplayUrlParams getPublicDisplayUrlParams =
+          GetPublicDisplayUrlParams(email: null);
+
+      var result = await sl<GetPublicDisplayUrl>()
+          .call(params: getPublicDisplayUrlParams);
+
+      result.fold(
+        (l) {
+          expect(l, isA<String>());
+          expect(l, 'Any user email provided');
+        },
+        (r) => fail('Expected a Left, but got a Right'),
+      );
+    });
+
+    test('givenWrongEmail_whenGetPublicDisplayUrl_thenGetErrorMsg', () async {
+      GetPublicDisplayUrlParams getPublicDisplayUrlParams =
+          GetPublicDisplayUrlParams(email: "toto@toto.com");
+
+      var result = await sl<GetPublicDisplayUrl>()
+          .call(params: getPublicDisplayUrlParams);
+
+      result.fold(
+        (l) {
+          expect(l, isA<String>());
+          expect(l, 'Unknown email');
+        },
+        (r) => fail('Expected a Left, but got a Right'),
+      );
+    });
+
+    test(
+        'givenEmail_whenGetPublicDisplayUrlWithEmptyUrl_thenGetPublicDisplayUrlWithEmptyUrl',
+        () async {
+      GetPublicDisplayUrlParams getPublicDisplayUrlParams =
+          GetPublicDisplayUrlParams(email: "emptyUrl@mail.com");
+
+      var result = await sl<GetPublicDisplayUrl>()
+          .call(params: getPublicDisplayUrlParams);
+
+      result.fold(
+        (l) => fail('Expected a Right, but got a Left'),
+        (publicDisplayUrl) {
+          expect(publicDisplayUrl, isA<PublicDisplayUrlEntity>());
+          expect(publicDisplayUrl.publicUrl, '');
+        },
+      );
+    });
+
   });
 }
