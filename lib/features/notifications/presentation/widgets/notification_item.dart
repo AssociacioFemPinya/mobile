@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fempinya3_flutter_app/features/notifications/domain/entities/notification.dart';
 import 'package:fempinya3_flutter_app/features/notifications/presentation/bloc/notifications_bloc.dart';
 
@@ -63,7 +64,7 @@ class NotificationItem extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                _formatTimestamp(notification.createdAt),
+                _formatTimestamp(context, notification.createdAt),
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
                 ),
@@ -75,18 +76,19 @@ class NotificationItem extends StatelessWidget {
     );
   }
 
-  String _formatTimestamp(DateTime timestamp) {
+  String _formatTimestamp(BuildContext context, DateTime timestamp) {
+    final translate = AppLocalizations.of(context)!;
     final now = DateTime.now();
     final difference = now.difference(timestamp);
 
     if (difference.inMinutes < 1) {
-      return 'hace unos segundos';
+      return translate.timeAgoSeconds;
     } else if (difference.inHours < 1) {
-      return 'hace ${difference.inMinutes} minutos';
+      return translate.timeAgoMinutes(difference.inMinutes);
     } else if (difference.inDays < 1) {
-      return 'hace ${difference.inHours} horas';
+      return translate.timeAgoHours(difference.inHours);
     } else {
-      return 'hace ${difference.inDays} días';
+      return translate.timeAgoDays(difference.inDays);
     }
   }
 } 

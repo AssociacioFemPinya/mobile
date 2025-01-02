@@ -77,5 +77,30 @@
   "publicDisplayUrlLoadFailureStateEmptyUri": "Cap pinya projectada",
   "publicDisplayUrlLoadFailureStateWrongUri" : "URI pinya projectada incorrecta"
   "notificationsTitle": "Notificacions",
-  "notificationsEmpty": "No hi ha notificacions"
+  "notificationsEmpty": "No hi ha notificacions",
+  "timeAgoSeconds": "fa uns segons",
+  "timeAgoMinutes": "fa {minutes} minuts",
+  "timeAgoHours": "fa {hours} hores",
+  "timeAgoDays": "fa {days} dies",
+  "@timeAgoMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "@timeAgoHours": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "@timeAgoDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  }
 }
