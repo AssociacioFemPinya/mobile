@@ -1,0 +1,23 @@
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
+
+part 'rondes_list_event.dart';
+part 'rondes_list_state.dart';
+
+class RondesListBloc extends Bloc<RondesListEvent, RondesListState> {
+  RondesListBloc() : super(RondesListInitial()) {
+    on<LoadRondesList>((event, emit) async {
+      GetRondesListParams getRondesListParams =
+          GetRondesListParams(email: event.email);
+
+      var result = await sl<GetRondesList>().call(params: getRondesListParams);
+
+      result.fold((failure) {
+        emit(RondesListLoadFailureState(failure));
+      }, (rondes) {
+        emit(RondesListLoadSuccessState(rondes));
+      });
+    });
+  }
+}

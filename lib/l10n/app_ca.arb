@@ -11,6 +11,8 @@
     "menuHome": "Inici",
     "menuEvents": "Esdeveniments",
     "menuNotifications": "Notificacions",
+    "menuRondes": "Rondes",
+    "menuPublicDisplayUrl": "Pinya",
     "menuDisconnect": "Desconnectar",
     "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} fr {Français} other {}}",
     "@menuLanguageSettings": {
@@ -58,5 +60,20 @@
   "commonFilter": "Filtrar",
   "commonSnackBarSuccessSaving": "Desat amb èxit",
   "commentsScreenHintText": "Escriu els teus comentaris",
-  "commentsScreenLabelText": "Comentaris"
+  "commentsScreenLabelText": "Comentaris",
+  "rondesListRondaButton": "Ronda {rondaNumber} {eventName}",
+   "@rondesListRondaButton": {
+      "placeholders": {
+          "rondaNumber": {
+              "type": "int"
+          },
+          "eventName": {
+              "type": "String"
+          }
+      }
+  },
+  "rondaViewLoadFailureStateEmptyUri": "Ronda URI està vuida",
+  "rondaViewLoadFailureStateWrongUri": "Ronda URI incorrecta",
+  "publicDisplayUrlLoadFailureStateEmptyUri": "Cap pinya projectada",
+  "publicDisplayUrlLoadFailureStateWrongUri" : "URI pinya projectada incorrecta"
 }
