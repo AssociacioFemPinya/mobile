@@ -60,5 +60,30 @@
     "commonSnackBarSuccessSaving": "Guardado con éxito",
     "commentsScreenHintText": "Escribe tus comentarios",
     "commentsScreenLabelText": "Comentarios",
-    "notificationsEmpty": "No hay notificaciones"
+    "notificationsEmpty": "No hay notificaciones",
+    "timeAgoSeconds": "hace unos segundos",
+    "timeAgoMinutes": "hace {minutes} minutos",
+    "timeAgoHours": "hace {hours} horas",
+    "timeAgoDays": "hace {days} días",
+    "@timeAgoMinutes": {
+        "placeholders": {
+            "minutes": {
+                "type": "int"
+            }
+        }
+    },
+    "@timeAgoHours": {
+        "placeholders": {
+            "hours": {
+                "type": "int"
+            }
+        }
+    },
+    "@timeAgoDays": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    }
 }
