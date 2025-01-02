@@ -1,4 +1,5 @@
-import '../models/notification_model.dart';
+import 'package:fempinya3_flutter_app/features/notifications/data/models/notification_model.dart';
+import 'package:fempinya3_flutter_app/features/notifications/data/mocks/notification_mock_handlers.dart';
 
 abstract class NotificationsService {
   Future<List<NotificationModel>> getNotifications();
@@ -12,13 +13,11 @@ class NotificationsServiceImpl implements NotificationsService {
 
   @override
   Future<List<NotificationModel>> getNotifications() async {
-    // TODO: Implement API call
-    throw UnimplementedError();
+    return NotificationMockHandlers.getNotifications();
   }
 
   @override
   Future<void> markAsRead(String notificationId) async {
-    // TODO: Implement API call
-    throw UnimplementedError();
+    return NotificationMockHandlers.markAsRead(notificationId);
   }
 } 

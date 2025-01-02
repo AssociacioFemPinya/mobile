@@ -1,19 +1,19 @@
-import '../../domain/entities/notification.dart';
+import 'package:fempinya3_flutter_app/features/notifications/domain/entities/notification.dart';
 
-class NotificationModel extends NotificationEntity {
+class NotificationModel {
+  final String id;
+  final String title;
+  final String message;
+  final DateTime createdAt;
+  final bool isRead;
+
   const NotificationModel({
-    required String id,
-    required String title,
-    required String message,
-    required DateTime createdAt,
-    bool isRead = false,
-  }) : super(
-          id: id,
-          title: title,
-          message: message,
-          createdAt: createdAt,
-          isRead: isRead,
-        );
+    required this.id,
+    required this.title,
+    required this.message,
+    required this.createdAt,
+    this.isRead = false,
+  });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(

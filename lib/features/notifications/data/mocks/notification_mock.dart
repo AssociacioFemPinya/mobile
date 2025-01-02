@@ -1,4 +1,4 @@
-import '../models/notification_model.dart';
+import 'package:fempinya3_flutter_app/features/notifications/data/models/notification_model.dart';
 
 final List<NotificationModel> notificationsMock = [
   NotificationModel(

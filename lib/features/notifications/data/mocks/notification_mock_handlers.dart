@@ -1,5 +1,5 @@
-import '../models/notification_model.dart';
-import 'notification_mock.dart';
+import 'package:fempinya3_flutter_app/features/notifications/data/models/notification_model.dart';
+import 'package:fempinya3_flutter_app/features/notifications/data/mocks/notification_mock.dart';
 
 class NotificationMockHandlers {
   static Future<List<NotificationModel>> getNotifications() async {
