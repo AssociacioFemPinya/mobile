@@ -75,7 +75,7 @@
     "rondaViewLoadFailureStateEmptyUri": "Ronda URI està vuida",
     "rondaViewLoadFailureStateWrongUri": "Ronda URI incorrecta",
     "publicDisplayUrlLoadFailureStateEmptyUri": "Cap pinya projectada",
-    "publicDisplayUrlLoadFailureStateWrongUri" : "URI pinya projectada incorrecta"
+    "publicDisplayUrlLoadFailureStateWrongUri" : "URI pinya projectada incorrecta",
     "notificationsTitle": "Notifications",
     "notificationsEmpty": "No notifications",
     "timeAgoSeconds": "a few seconds ago",
