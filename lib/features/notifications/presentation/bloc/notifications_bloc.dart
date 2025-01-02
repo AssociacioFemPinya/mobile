@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
-import '../../domain/entities/notification.dart';
-import '../../domain/usecases/get_notifications.dart';
-import '../../domain/usecases/mark_notification_as_read.dart';
+import 'package:fempinya3_flutter_app/features/notifications/domain/entities/notification.dart';
+import 'package:fempinya3_flutter_app/features/notifications/domain/useCases/get_notifications.dart';
+import 'package:fempinya3_flutter_app/features/notifications/domain/useCases/mark_notification_as_read.dart';
 
 part 'notifications_event.dart';
 part 'notifications_state.dart';
