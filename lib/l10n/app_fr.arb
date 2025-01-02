@@ -11,6 +11,7 @@
     "menuHome": "Accueil",
     "menuEvents": "Événements",
     "menuNotifications": "Notifications",
+    "notificationsTitle": "Notifications",
     "menuDisconnect": "Déconnecter",
     "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} fr {Français} other {}}",
     "@menuLanguageSettings": {

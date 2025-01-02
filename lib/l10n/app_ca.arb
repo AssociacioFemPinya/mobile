@@ -58,5 +58,6 @@
   "commonFilter": "Filtrar",
   "commonSnackBarSuccessSaving": "Desat amb èxit",
   "commentsScreenHintText": "Escriu els teus comentaris",
-  "commentsScreenLabelText": "Comentaris"
+  "commentsScreenLabelText": "Comentaris",
+  "notificationsTitle": "Notificacions"
 }
