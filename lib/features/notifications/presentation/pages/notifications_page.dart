@@ -10,12 +10,15 @@ class NotificationsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final translate = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
     
     return BlocProvider(
       create: (context) => NotificationsBloc()..add(LoadNotifications()),
       child: Scaffold(
+        backgroundColor: theme.colorScheme.background,
         appBar: AppBar(
           title: Text(translate.notificationsTitle),
+          backgroundColor: theme.colorScheme.surface,
         ),
         body: BlocBuilder<NotificationsBloc, NotificationsState>(
           builder: (context, state) {
