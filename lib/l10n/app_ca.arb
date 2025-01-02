@@ -59,5 +59,6 @@
   "commonSnackBarSuccessSaving": "Desat amb èxit",
   "commentsScreenHintText": "Escriu els teus comentaris",
   "commentsScreenLabelText": "Comentaris",
-  "notificationsTitle": "Notificacions"
+  "notificationsTitle": "Notificacions",
+  "notificationsEmpty": "No hi ha notificacions"
 }

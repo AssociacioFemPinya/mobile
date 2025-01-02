@@ -59,5 +59,6 @@
     "commonSnackBarSuccessSaving": "Saved successfully",
     "commentsScreenHintText": "Write your comments",
     "commentsScreenLabelText": "Comments",
-    "notificationsTitle": "Notifications"
+    "notificationsTitle": "Notifications",
+    "notificationsEmpty": "No notifications"
 }

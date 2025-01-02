@@ -59,5 +59,6 @@
     "commonFilter": "Filtrer",
     "commonSnackBarSuccessSaving": "Sauvegardé avec succès",
     "commentsScreenHintText": "Écrivez vos commentaires",
-    "commentsScreenLabelText": "Commentaires"
+    "commentsScreenLabelText": "Commentaires",
+    "notificationsEmpty": "Pas de notifications"
 }

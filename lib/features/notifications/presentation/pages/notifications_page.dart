@@ -26,13 +26,20 @@ class NotificationsPage extends StatelessWidget {
               return Center(child: Text(state.message));
             }
             if (state is NotificationsLoaded) {
-              return ListView.builder(
-                itemCount: state.notifications.length,
-                itemBuilder: (context, index) {
-                  return NotificationItem(
-                    notification: state.notifications[index],
-                  );
+              return RefreshIndicator(
+                onRefresh: () async {
+                  context.read<NotificationsBloc>().add(LoadNotifications());
                 },
+                child: state.notifications.isEmpty
+                    ? Center(child: Text(translate.notificationsEmpty))
+                    : ListView.builder(
+                        itemCount: state.notifications.length,
+                        itemBuilder: (context, index) {
+                          return NotificationItem(
+                            notification: state.notifications[index],
+                          );
+                        },
+                      ),
               );
             }
             return const SizedBox();
