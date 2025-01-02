@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:fempinya3_flutter_app/features/notifications/data/models/notification_model.dart';
 
 class NotificationEntity extends Equatable {
   final String id;
@@ -17,4 +18,24 @@ class NotificationEntity extends Equatable {
 
   @override
   List<Object?> get props => [id, title, message, createdAt, isRead];
+
+  factory NotificationEntity.fromModel(NotificationModel model) {
+    return NotificationEntity(
+      id: model.id,
+      title: model.title,
+      message: model.message,
+      createdAt: model.createdAt,
+      isRead: model.isRead,
+    );
+  }
+
+  NotificationModel toModel() {
+    return NotificationModel(
+      id: id,
+      title: title,
+      message: message,
+      createdAt: createdAt,
+      isRead: isRead,
+    );
+  }
 } 

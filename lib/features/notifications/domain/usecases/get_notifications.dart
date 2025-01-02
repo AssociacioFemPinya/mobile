@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import '../entities/notification.dart';
-import '../repositories/notifications_repository.dart';
+import 'package:fempinya3_flutter_app/features/notifications/domain/entities/notification.dart';
+import 'package:fempinya3_flutter_app/features/notifications/domain/repositories/notifications_repository.dart';
 
 class GetNotifications {
   final NotificationsRepository repository;
