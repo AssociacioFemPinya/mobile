@@ -9,10 +9,10 @@ abstract class NotificationsEvent extends Equatable {
 
 class LoadNotifications extends NotificationsEvent {}
 
-class MarkNotificationAsRead extends NotificationsEvent {
+class MarkAsReadEvent extends NotificationsEvent {
   final String notificationId;
 
-  const MarkNotificationAsRead(this.notificationId);
+  const MarkAsReadEvent(this.notificationId);
 
   @override
   List<Object> get props => [notificationId];
