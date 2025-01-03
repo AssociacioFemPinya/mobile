@@ -1,23 +1,55 @@
+import 'package:logger/logger.dart';
+import 'dart:convert';
+import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:fempinya3_flutter_app/features/notifications/data/models/notification_model.dart';
-import 'package:fempinya3_flutter_app/features/notifications/data/mocks/notification_mock_handlers.dart';
-
+import 'package:fempinya3_flutter_app/features/notifications/domain/entities/notification.dart';
+import 'package:fempinya3_flutter_app/features/notifications/service_locator.dart';
+import 'package:fempinya3_flutter_app/features/notifications/domain/useCases/get_notifications.dart';
 abstract class NotificationsService {
-  Future<List<NotificationModel>> getNotifications();
-  Future<void> markAsRead(String notificationId);
+  Future<Either<String, List<NotificationEntity>>> getNotifications(GetNotificationsParams params);
+  Future<Either<String, void>> updateReadStatus(String notificationId);
 }
 
 class NotificationsServiceImpl implements NotificationsService {
-  final String baseUrl;
-
-  NotificationsServiceImpl({required this.baseUrl});
+  final Dio _dio = sl<Dio>();
+  final Logger _logger = sl<Logger>();
 
   @override
-  Future<List<NotificationModel>> getNotifications() async {
-    return NotificationMockHandlers.getNotifications();
+  Future<Either<String, List<NotificationEntity>>> getNotifications(GetNotificationsParams params) async {
+    try {
+      final response = await _dio.get('/notifications');
+      if (response.statusCode == 200 && response.data is String) {
+        final jsonList = jsonDecode(response.data as String) as List<dynamic>;
+        final notifications = jsonList
+            .map((json) => NotificationEntity.fromModel(NotificationModel.fromJson(json)))
+            .toList();
+        return Right(notifications);
+      }
+      return const Left('Unexpected response format');
+    } catch (e, stacktrace) {
+      _logError('Error when calling /notifications endpoint', e, stacktrace);
+      return Left('Error when calling /notifications endpoint: $e');
+    }
   }
 
   @override
-  Future<void> markAsRead(String notificationId) async {
-    return NotificationMockHandlers.markAsRead(notificationId);
+  Future<Either<String, void>> updateReadStatus(String notificationId) async {
+    try {
+      final response = await _dio.patch(
+        '/notifications/$notificationId/read',
+      );
+      if (response.statusCode == 200) {
+        return const Right(null);
+      }
+      return const Left('Failed to update notification status');
+    } catch (e, stacktrace) {
+      _logError('Error when updating notification status', e, stacktrace);
+      return Left('Error when updating notification status: $e');
+    }
+  }
+
+  void _logError(String message, dynamic error, StackTrace stacktrace) {
+    _logger.e(message, error, stacktrace);
   }
 } 

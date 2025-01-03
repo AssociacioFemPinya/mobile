@@ -3,22 +3,15 @@ import 'package:fempinya3_flutter_app/features/notifications/data/repositories/n
 import 'package:fempinya3_flutter_app/features/notifications/data/sources/notifications_service.dart';
 import 'package:fempinya3_flutter_app/features/notifications/domain/repositories/notifications_repository.dart';
 import 'package:fempinya3_flutter_app/features/notifications/domain/useCases/get_notifications.dart';
-import 'package:fempinya3_flutter_app/features/notifications/domain/useCases/mark_notification_as_read.dart';
+import 'package:fempinya3_flutter_app/features/notifications/domain/useCases/update_read_status.dart';
 
-void setupNotificationsServiceLocator() {
-  final sl = GetIt.instance;
+final sl = GetIt.instance;
 
-  // Use cases
-  sl.registerLazySingleton(() => GetNotifications(sl()));
-  sl.registerLazySingleton(() => MarkNotificationAsRead(sl()));
 
-  // Repository
-  sl.registerLazySingleton<NotificationsRepository>(
-    () => NotificationsRepositoryImpl(sl()),
-  );
-
-  // Data sources
-  sl.registerLazySingleton<NotificationsService>(
-    () => NotificationsServiceImpl(baseUrl: ''),
-  );
-} 
+Future<void> setupRondesServiceLocator() async {
+  // Important: Keep dio instance on top, otherwise services (which use dio) will get a get_it not found error
+  sl.registerSingleton<NotificationsService>(NotificationsServiceImpl());
+  sl.registerSingleton<NotificationsRepository>(NotificationsRepositoryImpl());
+  sl.registerSingleton<GetNotifications>(GetNotifications());
+  sl.registerSingleton<UpdateReadStatus>(UpdateReadStatus());
+}

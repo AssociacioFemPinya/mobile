@@ -7,7 +7,7 @@ class NotificationMockHandlers {
     return notificationsMock;
   }
 
-  static Future<void> markAsRead(String notificationId) async {
+  static Future<void> updateReadStatus(String notificationId) async {
     await Future.delayed(const Duration(milliseconds: 500));
     final index = notificationsMock.indexWhere((n) => n.id == notificationId);
     if (index != -1) {

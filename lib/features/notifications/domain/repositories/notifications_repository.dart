@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import '../entities/notification.dart';
+import 'package:fempinya3_flutter_app/features/notifications/domain/useCases/get_notifications.dart';
 
 abstract class NotificationsRepository {
-  Future<Either<Exception, List<NotificationEntity>>> getNotifications();
-  Future<Either<Exception, void>> markAsRead(String notificationId);
-} 
+  Future<Either> getNotifications(GetNotificationsParams params);
+  Future<Either> updateReadStatus(String notificationId);
+}

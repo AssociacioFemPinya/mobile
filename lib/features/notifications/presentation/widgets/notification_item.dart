@@ -17,24 +17,24 @@ class NotificationItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: notification.isRead 
             ? theme.colorScheme.surface
-            : theme.colorScheme.primaryContainer.withOpacity(0.08),
+            : theme.colorScheme.primaryContainer.withAlpha((0.08 * 255).toInt()),
         border: Border(
           bottom: BorderSide(
-            color: theme.colorScheme.outline.withOpacity(0.1),
+            color: theme.colorScheme.outline.withAlpha((0.1 * 255).toInt()),
           ),
         ),
       ),
       child: InkWell(
         onTap: notification.isRead ? null : () {
           context.read<NotificationsBloc>().add(
-            MarkAsReadEvent(notification.id),
+            UpdateReadStatusEvent(notification.id),
           );
         },
         child: ListTile(
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           leading: CircleAvatar(
             backgroundColor: notification.isRead 
-                ? theme.colorScheme.surfaceVariant
+                ? theme.colorScheme.surfaceContainerHighest
                 : theme.colorScheme.primaryContainer,
             child: Icon(
               notification.isRead 
@@ -66,7 +66,7 @@ class NotificationItem extends StatelessWidget {
               Text(
                 _formatTimestamp(context, notification.createdAt),
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
+                  color: theme.colorScheme.onSurfaceVariant.withAlpha((0.7 * 255).toInt()),
                 ),
               ),
             ],
