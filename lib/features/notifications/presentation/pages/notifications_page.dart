@@ -22,9 +22,6 @@ class NotificationsPage extends StatelessWidget {
         ),
         body: BlocBuilder<NotificationsBloc, NotificationsState>(
           builder: (context, state) {
-            if (state is NotificationsLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
             if (state is NotificationsError) {
               return Center(child: Text(state.message));
             }

@@ -21,7 +21,9 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     LoadNotifications event,
     Emitter<NotificationsState> emit,
   ) async {
-    emit(NotificationsLoading());
+    if (state is! NotificationsLoaded) {
+      emit(NotificationsLoading());
+    }
     try {
       final result = await getNotifications(params: GetNotificationsParams());
       result.fold(
@@ -44,7 +46,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     final result = await updateReadStatus(notificationId: event.notificationId);
     result.fold(
       (failure) => emit(NotificationsError(failure.toString())),
-      (_) => add(LoadNotifications()), 
+      (_) => add(LoadNotifications()),
     );
   }
 } 
