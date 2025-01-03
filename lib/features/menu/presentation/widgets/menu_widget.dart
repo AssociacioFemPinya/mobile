@@ -24,6 +24,9 @@ class MenuWidget extends StatelessWidget {
           _buildListTile(context, translate.menuEvents, eventsRoute),
           _buildListTile(
               context, translate.menuNotifications, notificationsRoute),
+          _buildListTile(context, translate.menuRondes, rondesRoute),
+          _buildListTile(
+              context, translate.menuPublicDisplayUrl, publicDisplayUrlRoute),
           const Divider(),
           _buildLocaleDropdown(context, translate, selectedLocale),
           const Divider(),

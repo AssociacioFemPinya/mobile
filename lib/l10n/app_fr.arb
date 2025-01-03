@@ -11,6 +11,8 @@
     "menuHome": "Accueil",
     "menuEvents": "Événements",
     "menuNotifications": "Notifications",
+    "menuRondes": "Rondes",
+    "menuPublicDisplayUrl": "Pinya",
     "notificationsTitle": "Notifications",
     "menuDisconnect": "Déconnecter",
     "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} fr {Français} other {}}",
@@ -60,6 +62,21 @@
     "commonSnackBarSuccessSaving": "Sauvegardé avec succès",
     "commentsScreenHintText": "Écrivez vos commentaires",
     "commentsScreenLabelText": "Commentaires",
+    "rondesListRondaButton": "Ronda {rondaNumber} {eventName}",
+    "@rondesListRondaButton": {
+        "placeholders": {
+            "rondaNumber": {
+                "type": "int"
+            },
+            "eventName": {
+                "type": "String"
+            }
+        }
+    },
+    "rondaViewLoadFailureStateEmptyUri": "Ronda URI està vuida",
+    "rondaViewLoadFailureStateWrongUri": "Ronda URI incorrecta",
+    "publicDisplayUrlLoadFailureStateEmptyUri": "Cap pinya projectada",
+    "publicDisplayUrlLoadFailureStateWrongUri" : "URI pinya projectada incorrecta",
     "notificationsEmpty": "Pas de notifications",
     "timeAgoSeconds": "il y a quelques secondes",
     "timeAgoMinutes": "il y a {minutes} minutes",

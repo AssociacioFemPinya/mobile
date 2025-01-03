@@ -27,12 +27,18 @@ dependencies:
   logger: ^1.0.0
   go_router: ^14.2.8
   formz: ^0.8.0
+  bloc_test: ^9.1.7
+  webview_flutter: ^4.10.0
+  webview_flutter_android: ^4.2.0
+  webview_flutter_wkwebview: ^3.16.3
   
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
+  test: ^1.25.8
+  mockito: ^5.4.5
 
 flutter:
   uses-material-design: true

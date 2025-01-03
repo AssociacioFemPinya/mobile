@@ -1,5 +1,7 @@
+import 'package:fempinya3_flutter_app/core/service_locator.dart';
 import 'package:fempinya3_flutter_app/features/events/service_locator.dart';
 import 'package:fempinya3_flutter_app/features/login/login.dart';
+import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 import 'package:fempinya3_flutter_app/main_routes.dart';
 import 'package:fempinya3_flutter_app/features/menu/domain/entities/locale.dart';
 
@@ -12,8 +14,10 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fempinya3_flutter_app/features/notifications/service_locator.dart';
 
 void main() {
+  setupCommonServiceLocator();
   setupEventsServiceLocator();
   setupLoginServiceLocator();
+  setupRondesServiceLocator();
   setupNotificationsServiceLocator();
   runApp(const App());
   configLoading();
