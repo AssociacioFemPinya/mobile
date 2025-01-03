@@ -8,7 +8,7 @@ import 'package:fempinya3_flutter_app/features/notifications/domain/useCases/upd
 final sl = GetIt.instance;
 
 
-Future<void> setupRondesServiceLocator() async {
+Future<void> setupNotificationsServiceLocator() async {
   // Important: Keep dio instance on top, otherwise services (which use dio) will get a get_it not found error
   sl.registerSingleton<NotificationsService>(NotificationsServiceImpl());
   sl.registerSingleton<NotificationsRepository>(NotificationsRepositoryImpl());
