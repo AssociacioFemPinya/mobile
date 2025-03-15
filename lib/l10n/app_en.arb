@@ -75,5 +75,32 @@
     "rondaViewLoadFailureStateEmptyUri": "Ronda URI està vuida",
     "rondaViewLoadFailureStateWrongUri": "Ronda URI incorrecta",
     "publicDisplayUrlLoadFailureStateEmptyUri": "Cap pinya projectada",
-    "publicDisplayUrlLoadFailureStateWrongUri" : "URI pinya projectada incorrecta"
+    "publicDisplayUrlLoadFailureStateWrongUri" : "URI pinya projectada incorrecta",
+    "notificationsTitle": "Notifications",
+    "notificationsEmpty": "No notifications",
+    "timeAgoSeconds": "a few seconds ago",
+    "timeAgoMinutes": "{minutes} minutes ago",
+    "timeAgoHours": "{hours} hours ago",
+    "timeAgoDays": "{days} days ago",
+    "@timeAgoMinutes": {
+        "placeholders": {
+            "minutes": {
+                "type": "int"
+            }
+        }
+    },
+    "@timeAgoHours": {
+        "placeholders": {
+            "hours": {
+                "type": "int"
+            }
+        }
+    },
+    "@timeAgoDays": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    }
 }

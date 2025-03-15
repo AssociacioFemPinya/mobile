@@ -13,6 +13,7 @@
     "menuNotifications": "Notifications",
     "menuRondes": "Rondes",
     "menuPublicDisplayUrl": "Pinya",
+    "notificationsTitle": "Notifications",
     "menuDisconnect": "Déconnecter",
     "menuLanguageSettings": "{locale, select, ca {Català} en {English} es {Español} fr {Français} other {}}",
     "@menuLanguageSettings": {
@@ -75,5 +76,31 @@
     "rondaViewLoadFailureStateEmptyUri": "Ronda URI està vuida",
     "rondaViewLoadFailureStateWrongUri": "Ronda URI incorrecta",
     "publicDisplayUrlLoadFailureStateEmptyUri": "Cap pinya projectada",
-    "publicDisplayUrlLoadFailureStateWrongUri" : "URI pinya projectada incorrecta"
+    "publicDisplayUrlLoadFailureStateWrongUri" : "URI pinya projectada incorrecta",
+    "notificationsEmpty": "Pas de notifications",
+    "timeAgoSeconds": "il y a quelques secondes",
+    "timeAgoMinutes": "il y a {minutes} minutes",
+    "timeAgoHours": "il y a {hours} heures",
+    "timeAgoDays": "il y a {days} jours",
+    "@timeAgoMinutes": {
+        "placeholders": {
+            "minutes": {
+                "type": "int"
+            }
+        }
+    },
+    "@timeAgoHours": {
+        "placeholders": {
+            "hours": {
+                "type": "int"
+            }
+        }
+    },
+    "@timeAgoDays": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    }
 }
