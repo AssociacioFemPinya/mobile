@@ -60,35 +60,36 @@ class EventsServiceImpl implements EventsService {
     }
   }
 
-  Map<String, dynamic> _buildGetEventQueryParams(GetEventParams params) {
-    return {'id': params.id};
-  }
+  // Map<String, dynamic> _buildGetEventQueryParams(GetEventParams params) {
+  //   return {'id': params.id};
+  // }
 
   @override
   Future<Either<String, EventEntity>> getEvent(GetEventParams params) async {
     try {
-      final response = await _dio.get('/event',
-          queryParameters: _buildGetEventQueryParams(params));
-      if (response.statusCode == 200 && response.data is String) {
-        final json =
-            jsonDecode(response.data as String) as Map<String, dynamic>;
+      // TODO: the ID should not come from params?
+      final response = await _dio.get('/mobile_events/${params.id}');
+      _logger.d('Response data: ${response.data.runtimeType}');
+      if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
+        final json = response.data as Map<String, dynamic>;
         return Right(EventEntity.fromModel(EventModel.fromJson(json)));
       }
       return const Left('Unexpected response format');
     } catch (e, stacktrace) {
-      _logError('Error when calling get /event endpoint', e, stacktrace);
-      return Left('Error when calling get /event endpoint: $e');
+      _logError('Error when calling get /mobile_events/${params.id} endpoint', e, stacktrace);
+      return Left('Error when calling get /mobile_events/${params.id} endpoint: $e');
     }
   }
 
   @override
   Future<Either<String, EventEntity>> postEvent(EventEntity params) async {
     try {
-      final response = await _dio.post('/event',
-          data: jsonEncode(params.toModel().toJson()));
-      if (response.statusCode == 200 && response.data is String) {
-        final json =
-            jsonDecode(response.data as String) as Map<String, dynamic>;
+      // TODO: clean this code
+      final data = params.toModel().toJson();
+      data.remove('id');
+      final response = await _dio.put('/mobile_events/${params.id}', data: jsonEncode(data));
+      if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
+        final json = response.data as Map<String, dynamic>;
         return Right(EventEntity.fromModel(EventModel.fromJson(json)));
       }
       return const Left('Unexpected response format');

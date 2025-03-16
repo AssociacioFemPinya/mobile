@@ -11,8 +11,7 @@ import 'package:go_router/go_router.dart';
 
 GoRouter appRouter(AuthenticationBloc authenticationBloc) {
   return GoRouter(
-    //initialLocation: loginRoute,
-    initialLocation: eventsRoute,
+    initialLocation: loginRoute,
     routes: [
       GoRoute(
         path: homeRoute,
@@ -40,8 +39,7 @@ GoRouter appRouter(AuthenticationBloc authenticationBloc) {
       } else if (isAuthenticated == false) {
         // If the user is not authenticated, redirect to the login page
         if (state.matchedLocation != loginRoute) {
-          return eventsRoute;
-          //return loginRoute;
+          return loginRoute;
         }
       }
       // Otherwise do not modify the route

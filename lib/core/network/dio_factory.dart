@@ -26,7 +26,7 @@ class DioFactory {
       _dio!.interceptors.add(LogInterceptor(
         // request: true,
         // requestHeader: true,
-        // requestBody: true,
+        requestBody: true,
         responseHeader: true,
         responseBody: true,
         error: true,
