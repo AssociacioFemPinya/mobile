@@ -103,7 +103,7 @@ class MyApp extends StatelessWidget {
             //To-do Zan
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(
-                seedColor: Colors.orangeAccent,
+                seedColor: Colors.blueAccent,
                 brightness: Brightness.light,
                 dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
               ),

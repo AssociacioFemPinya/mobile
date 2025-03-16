@@ -138,3 +138,9 @@ Returns the public display URL for a given user email.
 }
 ```
 
+# Issues
+
+### Make api calls when running in chrome
+Seems a cors problem that it's not fixed even thought we add the headers on the api
+
+https://stackoverflow.com/questions/65630743/how-to-solve-flutter-web-api-cors-error-only-with-dart-code/74783428#74783428
