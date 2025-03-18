@@ -4,6 +4,8 @@ import 'package:fempinya3_flutter_app/features/login/login.dart';
 import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 import 'package:fempinya3_flutter_app/main_routes.dart';
 import 'package:fempinya3_flutter_app/features/menu/domain/entities/locale.dart';
+import 'package:fempinya3_flutter_app/services/notification_service.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +15,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fempinya3_flutter_app/features/notifications/service_locator.dart';
 
-void main() {
+Future<void> main() async {
+  await NotificationService.instance.initialize();
+  await Firebase.initializeApp(); // TODO: maybe this is not correct?
   setupCommonServiceLocator();
   setupEventsServiceLocator();
   setupLoginServiceLocator();
