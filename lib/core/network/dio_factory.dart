@@ -11,13 +11,13 @@ class DioFactory {
   static Dio getInstance() {
     if (_dio == null) {
       BaseOptions options = BaseOptions(
-        baseUrl: 'https://556c-37-222-242-105.ngrok-free.app/api-fempinya',
+        baseUrl: 'https://00e0-37-222-242-105.ngrok-free.app/api-fempinya',
         connectTimeout: Duration(milliseconds: 20000),
         receiveTimeout: Duration(milliseconds: 20000),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer suOrs6kIjDLaGr7d09rnA7NuZ45hht5J5DqSCkdQ9a923540',
+          'Authorization': 'Bearer 9d263kR32vQC332yCU41VjyFimi8EkEFfYj5kNfq851524ae',
           'ngrok-skip-browser-warning': '12345',
         },
       );
