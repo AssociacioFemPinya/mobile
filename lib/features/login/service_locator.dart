@@ -8,4 +8,5 @@ Future<void> setupLoginServiceLocator() async {
   sl.registerSingleton<UsersService>(UsersServiceImpl());
   sl.registerSingleton<UsersRepository>(UsersRepositoryImpl());
   sl.registerSingleton<GetUser>(GetUser());
+  sl.registerSingleton<GetToken>(GetToken());
 }

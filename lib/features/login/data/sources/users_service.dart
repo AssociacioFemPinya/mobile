@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 
 abstract class UsersService {
   Future<Either<String, UserEntity>> getUser(GetUserParams params);
+  Future<Either<String, TokenEntity>> getToken(GetTokenParams params);
 }
 
 class UsersServiceImpl implements UsersService {
@@ -31,6 +32,27 @@ class UsersServiceImpl implements UsersService {
     } catch (e, stacktrace) {
       _logError('Error when calling get /User endpoint', e, stacktrace);
       return Left('Error when calling get /User endpoint: $e');
+    }
+  }
+
+  Map<String, dynamic> _buildGetTokenQueryParams(GetTokenParams params) {
+    return {'email': params.mail, 'password': params.password};
+  }
+
+  @override
+  Future<Either<String, TokenEntity>> getToken(GetTokenParams params) async {
+    try {
+      final response = await _dio.post('/api/auth/login',
+          queryParameters: _buildGetTokenQueryParams(params));
+      if (response.statusCode == 200 && response.data is Map) {
+        final json = response.data as Map<String, dynamic>;
+        return Right(TokenEntity.fromModel(TokenModel.fromJson(json)));
+      }
+      return const Left('Unexpected response format');
+    } catch (e, stacktrace) {
+      _logError(
+          'Error when calling get /api/auth/login endpoint', e, stacktrace);
+      return Left('Error when calling get /api/auth/login endpoint: $e');
     }
   }
 
