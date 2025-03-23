@@ -30,7 +30,7 @@ abstract class GetUserHandler {
       data: responseData,
       statusCode: 200,
     );
-        handler.resolve(response);
+    handler.resolve(response);
     return;
   }
 }

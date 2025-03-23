@@ -75,7 +75,6 @@ class LinkedCastellerEntity extends Equatable {
   final int apiUserId;
   final int castellerId;
 
-
   const LinkedCastellerEntity({
     required this.idCastellerApiUser,
     required this.apiUserId,
