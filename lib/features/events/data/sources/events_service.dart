@@ -24,7 +24,7 @@ class EventsServiceImpl implements EventsService {
       GetEventsListParams params) {
     return {
       if (params.eventTypeFilters.isNotEmpty)
-        'eventTypeFilters': params.eventTypeFilters
+        'eventTypeFilters[]': params.eventTypeFilters
             .map((e) => e.toString().split('.').last)
             .toList(),
       if (params.dayTimeRange != null) ...{
@@ -42,49 +42,54 @@ class EventsServiceImpl implements EventsService {
   Future<Either<String, List<EventEntity>>> getEventsList(
       GetEventsListParams params) async {
     try {
-      final response = await _dio.get('/events',
-          queryParameters: _buildGetEventsListQueryParams(params));
-      if (response.statusCode == 200 && response.data is String) {
-        final jsonList = jsonDecode(response.data as String) as List<dynamic>;
+      final response = await _dio.get(
+        '/mobile_events',
+        queryParameters: _buildGetEventsListQueryParams(params),
+      );
+      if (response.statusCode == 200 && response.data is List<dynamic>) {
+        final jsonList = response.data as List<dynamic>;
         final events = jsonList
-            .map((json) => EventEntity.fromModel(EventModel.fromJson(json)))
+            .map((json) => EventEntity.fromModel(EventModel.fromJson(json as Map<String, dynamic>)))
             .toList();
         return Right(events);
       }
       return const Left('Unexpected response format');
     } catch (e, stacktrace) {
-      _logError('Error when calling /events endpoint', e, stacktrace);
-      return Left('Error when calling /events endpoint: $e');
+      _logError('Error when calling /mobile_events endpoint', e, stacktrace);
+      return Left('Error when calling /mobile_events endpoint: $e');
     }
   }
 
-  Map<String, dynamic> _buildGetEventQueryParams(GetEventParams params) {
-    return {'id': params.id};
-  }
+  // Map<String, dynamic> _buildGetEventQueryParams(GetEventParams params) {
+  //   return {'id': params.id};
+  // }
 
   @override
   Future<Either<String, EventEntity>> getEvent(GetEventParams params) async {
     try {
-      final response = await _dio.get('/event',
-          queryParameters: _buildGetEventQueryParams(params));
-      if (response.statusCode == 200 && response.data is String) {
-        final json = jsonDecode(response.data as String) as Map<String, dynamic>;
+      // TODO: the ID should not come from params?
+      final response = await _dio.get('/mobile_events/${params.id}');
+      _logger.d('Response data: ${response.data.runtimeType}');
+      if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
+        final json = response.data as Map<String, dynamic>;
         return Right(EventEntity.fromModel(EventModel.fromJson(json)));
       }
       return const Left('Unexpected response format');
     } catch (e, stacktrace) {
-      _logError('Error when calling get /event endpoint', e, stacktrace);
-      return Left('Error when calling get /event endpoint: $e');
+      _logError('Error when calling get /mobile_events/${params.id} endpoint', e, stacktrace);
+      return Left('Error when calling get /mobile_events/${params.id} endpoint: $e');
     }
   }
 
   @override
   Future<Either<String, EventEntity>> postEvent(EventEntity params) async {
     try {
-      final response = await _dio.post('/event',
-          data: jsonEncode(params.toModel().toJson()));
-      if (response.statusCode == 200 && response.data is String) {
-        final json = jsonDecode(response.data as String) as Map<String, dynamic>;
+      // TODO: clean this code
+      final data = params.toModel().toJson();
+      data.remove('id');
+      final response = await _dio.put('/mobile_events/${params.id}', data: jsonEncode(data));
+      if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
+        final json = response.data as Map<String, dynamic>;
         return Right(EventEntity.fromModel(EventModel.fromJson(json)));
       }
       return const Left('Unexpected response format');
