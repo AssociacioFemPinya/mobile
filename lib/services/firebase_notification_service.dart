@@ -1,24 +1,37 @@
+import 'dart:convert';
+
+import 'package:fempinya3_flutter_app/firebase_options.dart';
+import 'package:fempinya3_flutter_app/main.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroupHandler(RemoteMessage message) async {
+  print('_firebaseMessagingBackgroupHandler: $message');
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
   await FirebaseNotificationService.instance.setupFlutterNotifications();
-  await FirebaseNotificationService.instance.showNotification(message);
+  //await FirebaseNotificationService.instance.showNotification(message);
 }
 
 class FirebaseNotificationService {
   FirebaseNotificationService._();
-  static final FirebaseNotificationService instance = FirebaseNotificationService._();
+  static final FirebaseNotificationService instance =
+      FirebaseNotificationService._();
 
   final _messaging = FirebaseMessaging.instance;
   final _localNotifications = FlutterLocalNotificationsPlugin();
   bool _isFlutterLocalNotificationPluginInitialized = false;
 
   Future<void> initialize() async {
-
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroupHandler);
-
+    
     await _requestPermission();
 
     await _setupMessageHandlers();
@@ -80,7 +93,14 @@ class FirebaseNotificationService {
     // flutter notification setup
     await _localNotifications.initialize(initializationSettings,
         onDidReceiveNotificationResponse: (details) {
-      // TODO: here we would configure what happens when the user taps on the notification
+          print('onDidReceiveNotificationResponse: $details');
+      // final payload = details.payload;
+      // if (payload != null) {
+      //   final data = Map<String, dynamic>.from(jsonDecode(payload));
+      //   if (data.containsKey('action_url')) {
+      //     _handleActionRouting(data['action_url'], data['resource_id']);
+      //   }
+      // }
     });
 
     _isFlutterLocalNotificationPluginInitialized = true;
@@ -131,9 +151,20 @@ class FirebaseNotificationService {
   }
 
   void _handleBackgroundMessage(RemoteMessage message) {
-    if (message.data['type'] == 'chat') {
-      // open chat scrreen
-      // TODO: configure for correct type
+    print('_handleBackgroundMessage: $message');
+    // if (message.data.containsKey('action_url')) {
+    //   _handleActionRouting(
+    //       message.data['action_url'], message.data['resource_id']);
+    // }
+  }
+
+  void _handleActionRouting(String pathName, String resourceId) {
+    print('_handleActionRouting: Routing to path: $pathName with resource ID: $resourceId');
+    if (resourceId != '') {
+      GoRouter.of(MyApp.context)
+          .pushNamed(pathName, pathParameters: {'eventID': resourceId});
+    } else {
+      GoRouter.of(MyApp.context).pushNamed(pathName);
     }
   }
 }
