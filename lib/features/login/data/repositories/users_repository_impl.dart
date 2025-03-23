@@ -7,4 +7,9 @@ class UsersRepositoryImpl extends UsersRepository {
   Future<Either> getUser(GetUserParams params) async {
     return await sl<UsersService>().getUser(params);
   }
+  
+  @override
+  Future<Either> getToken(GetTokenParams params) async {
+    return await sl<UsersService>().getToken(params);
+  }
 }

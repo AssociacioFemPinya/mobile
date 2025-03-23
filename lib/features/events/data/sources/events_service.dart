@@ -43,7 +43,7 @@ class EventsServiceImpl implements EventsService {
       GetEventsListParams params) async {
     try {
       final response = await _dio.get(
-        '/mobile_events',
+        '/api-fempinya/mobile_events',
         queryParameters: _buildGetEventsListQueryParams(params),
       );
       if (response.statusCode == 200 && response.data is List<dynamic>) {

@@ -26,9 +26,9 @@ class UsersDioMockInterceptor extends Interceptor {
     return List<UserEntity>.generate(20, (index) {
       return UserEntity(
           id: index,
-          name: "name",
-          mail: "mail@mail.com",
-          password: "password",
+        name: "Alan",
+        mail: "alanbover@gmail.com",
+        password: "testtest",
       );
     });
   }
