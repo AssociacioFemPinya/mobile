@@ -65,15 +65,17 @@ Future<void> requestNotificationPermissions() async {
 
 void configLoading() {
   EasyLoading.instance
-    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
-    ..loadingStyle = EasyLoadingStyle.dark
-    ..indicatorSize = 45.0
+    ..loadingStyle = EasyLoadingStyle.custom
+    ..indicatorType = EasyLoadingIndicatorType.threeBounce
+    ..indicatorColor = Colors.indigo
+    ..backgroundColor = Colors.transparent
+    ..textColor = Colors.transparent
+    ..maskType = EasyLoadingMaskType.none
+    ..maskColor = Colors.transparent
+    ..indicatorSize = 30.0
     ..radius = 10.0
-    ..backgroundColor = Colors.green
-    ..indicatorColor = Colors.white
-    ..textColor = Colors.white
-    ..maskColor = Colors.blue.withOpacity(0.5)
     ..userInteractions = false
+    ..boxShadow = <BoxShadow>[]
     ..dismissOnTap = false;
 }
 
