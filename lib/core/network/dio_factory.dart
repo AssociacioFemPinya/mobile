@@ -48,7 +48,7 @@ class DioFactory {
       _dio!.interceptors.add(LoadingInterceptor());
       _dio!.interceptors.add(RondesDioMockInterceptor());
       //_dio!.interceptors.add(EventsDioMockInterceptor());
-      _dio!.interceptors.add(UsersDioMockInterceptor());
+      // _dio!.interceptors.add(UsersDioMockInterceptor());
       _dio!.interceptors.add(NotificationsDioMockInterceptor());
     }
 

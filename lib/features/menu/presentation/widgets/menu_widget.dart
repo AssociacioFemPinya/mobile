@@ -42,8 +42,10 @@ class MenuWidget extends StatelessWidget {
         color: Theme.of(context).colorScheme.primary,
       ),
       child: Text(
-        translate
-            .menuAppName(context.read<AuthenticationBloc>().userEntity!.name),
+        translate.menuAppName(context
+            .read<AuthenticationBloc>()
+            .userEntity!
+            .castellerActiveAlias),
         style: TextStyle(
           color: Theme.of(context).colorScheme.onPrimary,
           fontSize: 24,

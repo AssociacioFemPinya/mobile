@@ -1,11 +1,9 @@
-import 'package:fempinya3_flutter_app/features/login/login.dart';
 import 'package:fempinya3_flutter_app/features/menu/presentation/widgets/menu_widget.dart';
 import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fempinya3_flutter_app/core/navigation/route_names.dart';
-import 'package:fempinya3_flutter_app/features/login/presentation/bloc/authentication_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class RondesListPage extends StatelessWidget {
@@ -18,7 +16,7 @@ class RondesListPage extends StatelessWidget {
         BlocProvider<RondesListBloc>(
           create: (context) => RondesListBloc()
             ..add(LoadRondesList(
-                email: context.read<AuthenticationBloc>().userEntity!.mail)),
+                email: 'mail@mail.com')),
         ),
       ],
       child: RondesListPageContents(),

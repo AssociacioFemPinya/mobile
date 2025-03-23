@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class UsersDioMockInterceptor extends Interceptor {
-  late List<UserEntity> UserList;
+  late UserEntity user;
 
   int percentageOfRandomFailures = 0;
   int maxDurationRequest = 200;
@@ -14,23 +14,27 @@ class UsersDioMockInterceptor extends Interceptor {
       _MockRouteKey,
       void Function(UsersDioMockInterceptor mock, RequestOptions options,
           RequestInterceptorHandler handler)> mockRouter = {
-    _MockRouteKey('/User', 'GET'): GetUserHandler.handle,
+    _MockRouteKey('/api-fempinya/mobile_user_context', 'GET'):
+        GetUserHandler.handle,
   };
 
   UsersDioMockInterceptor() {
-    UserList = _generateUsers();
+    user = _generateUser();
   }
 
-  List<UserEntity> _generateUsers() {
-
-    return List<UserEntity>.generate(20, (index) {
-      return UserEntity(
-          id: index,
-        name: "Alan",
-        mail: "alanbover@gmail.com",
-        password: "testtest",
-      );
-    });
+  UserEntity _generateUser() {
+    return UserEntity(
+      castellerActiveId: 1,
+      castellerActiveAlias: "Josep Maria",
+        linkedCastellers: [
+        LinkedCastellerEntity(
+          idCastellerApiUser: 1,
+          apiUserId: 1,
+          castellerId: 1,
+          ),
+        ],
+        boardsEnabled: true,
+    );
   }
 
   @override
@@ -38,7 +42,8 @@ class UsersDioMockInterceptor extends Interceptor {
       RequestOptions options, RequestInterceptorHandler handler) async {
     // Sleep between 0 and 1 seconds to simulate a slow API
     final random = Random();
-    final randomDuration = Duration(milliseconds: random.nextInt(maxDurationRequest));
+    final randomDuration =
+        Duration(milliseconds: random.nextInt(maxDurationRequest));
     await Future.delayed(randomDuration);
 
     // Check the request path and method and provide a mock response
