@@ -3,11 +3,8 @@ import 'package:fempinya3_flutter_app/core/usecase/usecase.dart';
 import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 
 class GetRondesListParams {
-  final String? email;
 
-  GetRondesListParams({
-    this.email,
-  });
+  GetRondesListParams();
 }
 
 class GetRondesList implements UseCase<Either, GetRondesListParams> {

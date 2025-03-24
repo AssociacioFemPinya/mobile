@@ -5,18 +5,18 @@ class RondaEntity extends Equatable {
   final int id;
   final String publicUrl;
   final int ronda;
-  final String eventName;
+  final String name;
 
   const RondaEntity({
     required this.id,
     required this.publicUrl,
     required this.ronda,
-    required this.eventName,
+    this.name = "Default event",
   });
 
   @override
   List<Object?> get props {
-    return [id, publicUrl, ronda, eventName];
+    return [id, publicUrl, ronda, name];
   }
 
   // Factory constructor to create an RondaEntity from RondaModel
@@ -25,7 +25,7 @@ class RondaEntity extends Equatable {
       id: model.id ?? 0,
       publicUrl: model.publicUrl ?? '',
       ronda: model.ronda ?? 0,
-      eventName: model.eventName ?? '',
+      name: model.name ?? '',
     );
   }
 
@@ -35,7 +35,7 @@ class RondaEntity extends Equatable {
       id: id,
       publicUrl: publicUrl,
       ronda: ronda,
-      eventName: eventName,
+      name: name,
     );
   }
 
@@ -44,7 +44,7 @@ class RondaEntity extends Equatable {
       id: id,
       publicUrl: publicUrl,
       ronda: ronda,
-      eventName: eventName,
+      name: name,
     );
   }
 }

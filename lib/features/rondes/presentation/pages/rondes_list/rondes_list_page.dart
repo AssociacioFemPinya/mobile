@@ -14,9 +14,7 @@ class RondesListPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<RondesListBloc>(
-          create: (context) => RondesListBloc()
-            ..add(LoadRondesList(
-                email: 'mail@mail.com')),
+          create: (context) => RondesListBloc()..add(LoadRondesList()),
         ),
       ],
       child: RondesListPageContents(),
@@ -60,7 +58,7 @@ class RondesListPageContents extends StatelessWidget {
                       },
                       child: Text(AppLocalizations.of(context)!
                           .rondesListRondaButton(state.rondes[index].ronda,
-                              state.rondes[index].eventName)),
+                              state.rondes[index].name)),
                     ),
                   );
                 },

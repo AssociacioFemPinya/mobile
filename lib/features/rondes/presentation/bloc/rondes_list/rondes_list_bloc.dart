@@ -8,10 +8,9 @@ part 'rondes_list_state.dart';
 class RondesListBloc extends Bloc<RondesListEvent, RondesListState> {
   RondesListBloc() : super(RondesListInitial()) {
     on<LoadRondesList>((event, emit) async {
-      GetRondesListParams getRondesListParams =
-          GetRondesListParams(email: event.email);
 
-      var result = await sl<GetRondesList>().call(params: getRondesListParams);
+      var result =
+          await sl<GetRondesList>().call(params: GetRondesListParams());
 
       result.fold((failure) {
         emit(RondesListLoadFailureState(failure));
