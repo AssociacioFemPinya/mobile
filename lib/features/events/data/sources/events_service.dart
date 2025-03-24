@@ -55,8 +55,10 @@ class EventsServiceImpl implements EventsService {
       }
       return const Left('Unexpected response format');
     } catch (e, stacktrace) {
-      _logError('Error when calling /mobile_events endpoint', e, stacktrace);
-      return Left('Error when calling /mobile_events endpoint: $e');
+      _logError('Error when calling /api-fempinya/mobile_events endpoint', e,
+          stacktrace);
+      return Left(
+          'Error when calling /api-fempinya/mobile_events endpoint: $e');
     }
   }
 
@@ -68,7 +70,8 @@ class EventsServiceImpl implements EventsService {
   Future<Either<String, EventEntity>> getEvent(GetEventParams params) async {
     try {
       // TODO: the ID should not come from params?
-      final response = await _dio.get('/mobile_events/${params.id}');
+      final response =
+          await _dio.get('/api-fempinya/mobile_events/${params.id}');
       _logger.d('Response data: ${response.data.runtimeType}');
       if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
         final json = response.data as Map<String, dynamic>;
@@ -76,8 +79,12 @@ class EventsServiceImpl implements EventsService {
       }
       return const Left('Unexpected response format');
     } catch (e, stacktrace) {
-      _logError('Error when calling get /mobile_events/${params.id} endpoint', e, stacktrace);
-      return Left('Error when calling get /mobile_events/${params.id} endpoint: $e');
+      _logError(
+          'Error when calling get /api-fempinya/mobile_events/${params.id} endpoint',
+          e,
+          stacktrace);
+      return Left(
+          'Error when calling get /api-fempinya/mobile_events/${params.id} endpoint: $e');
     }
   }
 
@@ -87,15 +94,19 @@ class EventsServiceImpl implements EventsService {
       // TODO: clean this code
       final data = params.toModel().toJson();
       data.remove('id');
-      final response = await _dio.put('/mobile_events/${params.id}', data: jsonEncode(data));
+      final response = await _dio.put(
+          '/api-fempinya/mobile_events/${params.id}',
+          data: jsonEncode(data));
       if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
         final json = response.data as Map<String, dynamic>;
         return Right(EventEntity.fromModel(EventModel.fromJson(json)));
       }
       return const Left('Unexpected response format');
     } catch (e, stacktrace) {
-      _logError('Error when calling post /event endpoint', e, stacktrace);
-      return Left('Error when calling post /event endpoint: $e');
+      _logError('Error when calling post /api-fempinya/mobile_events endpoint',
+          e, stacktrace);
+      return Left(
+          'Error when calling post /api-fempinya/mobile_events endpoint: $e');
     }
   }
 
