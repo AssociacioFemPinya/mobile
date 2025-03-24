@@ -1,57 +1,57 @@
 part of 'event_view_bloc.dart';
 
-abstract class EventViewEvent {}
+abstract class EventViewEvents {}
 
-class LoadEvent extends EventViewEvent {
+class LoadEvent extends EventViewEvents {
   final int value;
   LoadEvent(this.value);
 }
 
-class EventLoadSuccess extends EventViewEvent {
+class EventLoadSuccess extends EventViewEvents {
   final EventEntity value;
   EventLoadSuccess(this.value);
 }
 
-class EventLoadFailure extends EventViewEvent {
+class EventLoadFailure extends EventViewEvents {
   final String value;
   EventLoadFailure(this.value);
 }
 
-class EventStatusModified extends EventViewEvent {
+class EventStatusModified extends EventViewEvents {
   final EventStatusEnum value;
   EventStatusModified(this.value);
 }
 
-class EventCompanionsModified extends EventViewEvent {
+class EventCompanionsModified extends EventViewEvents {
   final int value;
   EventCompanionsModified(this.value);
 }
 
-class EvenTagModified extends EventViewEvent {
+class EvenTagModified extends EventViewEvents {
   final String value;
   EvenTagModified(this.value);
 }
 
-class UpdateEvent extends EventViewEvent {
+class UpdateEvent extends EventViewEvents {
   final EventEntity value;
   UpdateEvent(this.value);
 }
 
-class EventUpdateSuccess extends EventViewEvent {
+class EventUpdateSuccess extends EventViewEvents {
   final EventEntity value;
   EventUpdateSuccess(this.value);
 }
 
-class EventUpdateFailure extends EventViewEvent {
+class EventUpdateFailure extends EventViewEvents {
   final String value;
   EventUpdateFailure(this.value);
 }
 
-class AddEventComment extends EventViewEvent {
+class AddEventComment extends EventViewEvents {
   final String value;
   AddEventComment(this.value);
 }
 
-class RemoveEventComment extends EventViewEvent {
+class RemoveEventComment extends EventViewEvents {
   RemoveEventComment();
 }

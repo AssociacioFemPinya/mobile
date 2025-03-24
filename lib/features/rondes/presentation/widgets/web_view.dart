@@ -74,7 +74,7 @@ class _MyWebViewState extends State<MyWebView> {
             ? Container(
                 width: double.infinity,
                 height: double.infinity,
-                color: Colors.white.withOpacity(0.7),
+                color: Colors.white.withValues(alpha:0.7),
                 child: Center(
                   child: CircularProgressIndicator(),
                 ),

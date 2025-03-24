@@ -4,27 +4,27 @@ import 'package:fempinya3_flutter_app/features/notifications/data/models/notific
 class NotificationEntity extends Equatable {
   final String id;
   final String title;
-  final String message;
-  final DateTime createdAt;
+  final String body;
+  final DateTime date;
   final bool isRead;
 
   const NotificationEntity({
     required this.id,
     required this.title,
-    required this.message,
-    required this.createdAt,
+    required this.body,
+    required this.date,
     this.isRead = false,
   });
 
   @override
-  List<Object?> get props => [id, title, message, createdAt, isRead];
+  List<Object?> get props => [id, title, body, date, isRead];
 
   factory NotificationEntity.fromModel(NotificationModel model) {
     return NotificationEntity(
       id: model.id,
       title: model.title,
-      message: model.message,
-      createdAt: model.createdAt,
+      body: model.body,
+      date: model.date,
       isRead: model.isRead,
     );
   }
@@ -33,8 +33,8 @@ class NotificationEntity extends Equatable {
     return NotificationModel(
       id: id,
       title: title,
-      message: message,
-      createdAt: createdAt,
+      body: body,
+      date: date,
       isRead: isRead,
     );
   }

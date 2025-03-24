@@ -35,7 +35,7 @@ class EventsFiltersInputChipsWidget extends StatelessWidget {
                 backgroundColor: Theme.of(context)
                     .colorScheme
                     .primaryFixedDim
-                    .withOpacity(0.3),
+                    .withValues(alpha:0.3),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               )
           ],

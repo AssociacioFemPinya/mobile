@@ -1,3 +1,5 @@
+import 'package:fempinya3_flutter_app/features/notifications/domain/useCases/get_notification.dart';
+import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'dart:convert';
 import 'package:dartz/dartz.dart';
@@ -9,6 +11,7 @@ import 'package:fempinya3_flutter_app/features/notifications/domain/useCases/get
 abstract class NotificationsService {
   Future<Either<String, List<NotificationEntity>>> getNotifications(GetNotificationsParams params);
   Future<Either<String, void>> updateReadStatus(String notificationId);
+  Future<Either<String, NotificationEntity>> getNotification(GetNotificationParams params);
 }
 
 class NotificationsServiceImpl implements NotificationsService {
@@ -35,6 +38,7 @@ class NotificationsServiceImpl implements NotificationsService {
 
   @override
   Future<Either<String, void>> updateReadStatus(String notificationId) async {
+
     try {
       final response = await _dio.patch(
         '/notifications/$notificationId/read',
@@ -51,5 +55,25 @@ class NotificationsServiceImpl implements NotificationsService {
 
   void _logError(String message, dynamic error, StackTrace stacktrace) {
     _logger.e(message, error, stacktrace);
+  }
+
+
+  @override
+  Future<Either<String, NotificationEntity>> getNotification(GetNotificationParams params) async {
+
+    try{
+      final response = await _dio.get('/notification/${params.id}');
+      //_logger.d('Response data: ${response.data.runtimeType}');
+      print(response.data);
+
+    if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
+        final json = response.data as Map<String, dynamic>;
+        return Right(NotificationEntity.fromModel(NotificationModel.fromJson(json)));
+      }
+      return const Left('Unexpected response format');
+    } catch(e, stacktrace){
+      _logError('Error when calling get /notification/${params.id} endpoint', e, stacktrace);
+     return Left('Error when calling get /notification/${params.id} endpoint: $e');
+    }
   }
 } 

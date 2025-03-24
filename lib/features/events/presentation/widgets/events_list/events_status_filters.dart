@@ -67,7 +67,7 @@ class EventsStatusFiltersWidget extends StatelessWidget {
     return Container(
       margin: EdgeInsets.zero, // Elimina márgenes
       child: Material(
-        shadowColor: Theme.of(context).colorScheme.primaryFixedDim.withOpacity(0.5),
+        shadowColor: Theme.of(context).colorScheme.primaryFixedDim.withValues(alpha: 0.5),
         elevation: selected ? 1 : 0, // Aplica elevación si está seleccionado
         borderRadius: BorderRadius.only(
           topLeft: isFirst ? Radius.circular(5.0) : Radius.circular(0),

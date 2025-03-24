@@ -5,10 +5,10 @@ import 'package:fempinya3_flutter_app/features/notifications/domain/entities/not
 import 'package:fempinya3_flutter_app/features/notifications/domain/useCases/get_notifications.dart';
 import 'package:fempinya3_flutter_app/features/notifications/domain/useCases/update_read_status.dart';
 
-part 'notifications_event.dart';
+part 'notifications_events.dart';
 part 'notifications_state.dart';
 
-class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
+class NotificationsBloc extends Bloc<NotificationsEvents, NotificationsState> {
   final getNotifications = GetIt.instance<GetNotifications>();
   final updateReadStatus = GetIt.instance<UpdateReadStatus>();
 

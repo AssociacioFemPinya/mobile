@@ -33,7 +33,7 @@ class EventsCalendar extends StatelessWidget {
         calendarStyle: CalendarStyle(
           selectedDecoration: BoxDecoration(color: Theme.of(context).colorScheme.primaryFixedDim, shape: BoxShape.circle),
           selectedTextStyle: TextStyle(color: Theme.of(context).colorScheme.onPrimaryFixed, fontSize: 16.0),
-          todayDecoration: BoxDecoration(color: Theme.of(context).colorScheme.primaryFixedDim.withOpacity(0.6), shape: BoxShape.circle),
+          todayDecoration: BoxDecoration(color: Theme.of(context).colorScheme.primaryFixedDim.withValues(alpha: 0.6), shape: BoxShape.circle),
           todayTextStyle:TextStyle(color: Theme.of(context).colorScheme.onPrimaryFixed, fontSize: 16.0)),
         firstDay: DateTime.utc(2010, 10, 16),
         lastDay: DateTime.utc(2030, 3, 14),
@@ -108,7 +108,7 @@ class EventsCalendar extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Theme.of(context).colorScheme.primaryFixedDim.withOpacity(0.5),
+        color: Theme.of(context).colorScheme.primaryFixedDim.withValues(alpha:0.5),
       ),
       width: 16.0,
       height: 16.0,

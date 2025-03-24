@@ -9,6 +9,8 @@ class GetNotificationsHandler {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) {
+
+    print(">>>>GetNotificationsHandler");
     handler.resolve(Response(
       requestOptions: options,
       statusCode: 200,

@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'event_view_events.dart';
 part 'event_view_state.dart';
 
-class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
+class EventViewBloc extends Bloc<EventViewEvents, EventViewState> {
   EventViewBloc() : super(EventViewInitial(event: null)) {
     on<LoadEvent>((eventID, emit) async {
       GetEventParams getEventParams = GetEventParams(id: eventID.value);

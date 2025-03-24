@@ -6,7 +6,7 @@ part 'events_view_mode_events.dart';
 part 'events_view_mode_state.dart';
 
 class EventsViewModeBloc
-    extends Bloc<EventsViewModeEvent, EventsViewModeState> {
+    extends Bloc<EventsViewModeEvents, EventsViewModeState> {
   EventsViewModeBloc()
       : super(EventsViewModeState(
           eventsViewMode: EventsViewModeEnum.list,

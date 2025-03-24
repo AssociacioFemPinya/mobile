@@ -3,15 +3,15 @@ import 'package:fempinya3_flutter_app/features/notifications/domain/entities/not
 class NotificationModel {
   final String id;
   final String title;
-  final String message;
-  final DateTime createdAt;
+  final String body;
+  final DateTime date;
   final bool isRead;
 
   const NotificationModel({
     required this.id,
     required this.title,
-    required this.message,
-    required this.createdAt,
+    required this.body,
+    required this.date,
     this.isRead = false,
   });
 
@@ -19,8 +19,8 @@ class NotificationModel {
     return NotificationModel(
       id: json['id'] as String,
       title: json['title'] as String,
-      message: json['message'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      body: json['body'] as String,
+      date: DateTime.parse(json['date'] as String),
       isRead: json['isRead'] as bool? ?? false,
     );
   }
@@ -28,8 +28,8 @@ class NotificationModel {
   Map<String, dynamic> toJson() => {
         'id': id,
         'title': title,
-        'message': message,
-        'createdAt': createdAt.toIso8601String(),
+        'body': body,
+        'date': date.toIso8601String(),
         'isRead': isRead,
       };
 } 

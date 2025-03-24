@@ -20,9 +20,9 @@ class EventsDioMockInterceptor extends Interceptor {
       _MockRouteKey,
       void Function(EventsDioMockInterceptor mock, RequestOptions options,
           RequestInterceptorHandler handler)> mockRouter = {
-    _MockRouteKey('/events', 'GET'): GetEventsListHandler.handle,
-    _MockRouteKey('/event', 'GET'): GetEventHandler.handle,
-    _MockRouteKey('/event', 'POST'): PostEventHandler.handle,
+    _MockRouteKey('/mobile_events', 'GET'): GetEventsListHandler.handle,
+    _MockRouteKey('/mobile_event', 'GET'): GetEventHandler.handle,
+    _MockRouteKey('/mobile_event', 'POST'): PostEventHandler.handle,
   };
 
   EventsDioMockInterceptor() {
@@ -76,7 +76,8 @@ class EventsDioMockInterceptor extends Interceptor {
       RequestOptions options, RequestInterceptorHandler handler) async {
     // Sleep between 0 and 1 seconds to simulate a slow API
     final random = Random();
-    final randomDuration = Duration(milliseconds: random.nextInt(maxDurationRequest));
+    final randomDuration =
+        Duration(milliseconds: random.nextInt(maxDurationRequest));
     await Future.delayed(randomDuration);
 
     // Check the request path and method and provide a mock response

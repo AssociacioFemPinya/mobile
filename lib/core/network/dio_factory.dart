@@ -23,18 +23,18 @@ class DioFactory {
       );
       _dio = Dio(options);
 
-      _dio!.interceptors.add(LogInterceptor(
-        // request: true,
-        // requestHeader: true,
-        requestBody: true,
-        responseHeader: true,
-        responseBody: true,
-        error: true,
-      ));
+      // _dio!.interceptors.add(LogInterceptor(
+      //   // request: true,
+      //   // requestHeader: true,
+      //   requestBody: true,
+      //   responseHeader: true,
+      //   responseBody: true,
+      //   error: true,
+      // ));
       // Add interceptors, set base options, etc.
       _dio!.interceptors.add(LoadingInterceptor());
       _dio!.interceptors.add(RondesDioMockInterceptor());
-      //_dio!.interceptors.add(EventsDioMockInterceptor());
+      _dio!.interceptors.add(EventsDioMockInterceptor());
       _dio!.interceptors.add(UsersDioMockInterceptor());
       _dio!.interceptors.add(NotificationsDioMockInterceptor());
     }

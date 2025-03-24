@@ -26,7 +26,7 @@ class EventsWithAlertBannerWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(5.0), // Ajusta el radio aquí
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 4.0,
             offset: Offset(0, 2), // Sombra debajo
           ),

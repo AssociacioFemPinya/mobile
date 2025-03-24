@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'events_list_events.dart';
 part 'events_list_state.dart';
 
-class EventsListBloc extends Bloc<EventsListEvent, EventsListState> {
+class EventsListBloc extends Bloc<EventsListEvents, EventsListState> {
   EventsListBloc() : super(EventsListState(events: {})) {
     on<EventsListLoadSuccess>((events, emit) {
       final DateEvents dateEvents = {};

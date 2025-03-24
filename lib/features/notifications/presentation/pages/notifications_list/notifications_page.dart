@@ -1,8 +1,8 @@
+import 'package:fempinya3_flutter_app/features/notifications/presentation/bloc/notifications_list/notifications_bloc.dart';
+import 'package:fempinya3_flutter_app/features/notifications/presentation/widgets/notification_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../bloc/notifications_bloc.dart';
-import '../widgets/notification_item.dart';
 
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({super.key});
@@ -15,7 +15,7 @@ class NotificationsPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => NotificationsBloc()..add(LoadNotifications()),
       child: Scaffold(
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         appBar: AppBar(
           title: Text(translate.notificationsTitle),
           backgroundColor: theme.colorScheme.surface,

@@ -40,8 +40,7 @@ abstract class GetEventsListHandler {
     // Create a response object
     response = Response(
       requestOptions: options,
-      data:
-          jsonEncode(events.map((event) => event.toModel().toJson()).toList()),
+      data: events.map((event) => event.toModel().toJson()).toList(),
       statusCode: 200,
     );
 

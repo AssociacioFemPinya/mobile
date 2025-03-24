@@ -74,7 +74,7 @@ class EventsListWidget extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-          Icon(Icons.calendar_month, color: Colors.black.withOpacity(0.2)),
+          Icon(Icons.calendar_month, color: Colors.black.withValues(alpha: 0.2)),
           const SizedBox(width: 4), 
           Expanded(
             child: Text(
@@ -99,10 +99,10 @@ class EventsListWidget extends StatelessWidget {
           context.read<EventsListBloc>().add(LoadEventsList(context.read<EventsFiltersBloc>().state));
         });
       },
-      hoverColor: Theme.of(context).colorScheme.primaryFixedDim.withOpacity(0.2), // Change hover color here
-      splashColor: Theme.of(context).colorScheme.primaryFixedDim.withOpacity(0.6), 
-      focusColor: Theme.of(context).colorScheme.primaryFixedDim.withOpacity(0.6),
-      highlightColor: Theme.of(context).colorScheme.primaryFixedDim.withOpacity(0.8),// Change click color here
+      hoverColor: Theme.of(context).colorScheme.primaryFixedDim.withValues(alpha: 0.2), // Change hover color here
+      splashColor: Theme.of(context).colorScheme.primaryFixedDim.withValues(alpha: 0.6), 
+      focusColor: Theme.of(context).colorScheme.primaryFixedDim.withValues(alpha: 0.6),
+      highlightColor: Theme.of(context).colorScheme.primaryFixedDim.withValues(alpha: 0.8),// Change click color here
       borderRadius: BorderRadius.circular(5),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), 

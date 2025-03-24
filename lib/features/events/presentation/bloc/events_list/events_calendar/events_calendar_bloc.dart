@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class EventsCalendarBloc
-    extends Bloc<EventsCalendarEvent, EventsCalendarState> {
+    extends Bloc<EventsCalendarEvents, EventsCalendarState> {
   EventsCalendarBloc()
       : super(EventsCalendarState(
           calendarEvents: {},

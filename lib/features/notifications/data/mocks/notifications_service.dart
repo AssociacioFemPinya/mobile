@@ -1,10 +1,12 @@
 import 'dart:math';
 import 'package:dio/dio.dart';
+import 'package:fempinya3_flutter_app/features/notifications/data/mocks/get_notification_handler.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fempinya3_flutter_app/features/notifications/data/mocks/get_notifications_handler.dart';
-import 'package:fempinya3_flutter_app/features/notifications/data/mocks/update_read_status_handler.dart';
+import 'package:fempinya3_flutter_app/features/notifications/data/mocks/update_read_notification_status_handler.dart';
 
 class NotificationsDioMockInterceptor extends Interceptor {
+
   int percentageOfRandomFailures = 0;
   int maxDurationRequest = 200;
 
@@ -12,7 +14,8 @@ class NotificationsDioMockInterceptor extends Interceptor {
           RequestOptions options, RequestInterceptorHandler handler)>
       mockRouter = {
     _MockRouteKey('/notifications', 'GET'): GetNotificationsHandler.handle,
-    _MockRouteKey('/notifications/:id/read', 'PATCH'): UpdateReadStatusHandler.handle,
+    _MockRouteKey('/notifications/:id/read', 'PATCH'): UpdateReadNotificationStatusHandler.handle,
+    _MockRouteKey('/notification/:id', 'GET'): GetNotificationHandler.handle
   };
 
   @override
@@ -40,9 +43,18 @@ class NotificationsDioMockInterceptor extends Interceptor {
 
   _MockRouteKey _processRouteKey(RequestOptions options) {
     final path = options.path;
+    print(">>>> NotificationsDioMockInterceptor: _processRouteKey");
+    print(options.path);
+    print(options.method);
+    
     if (options.method == 'PATCH' && path.contains('/notifications/') && path.endsWith('/read')) {
       return _MockRouteKey('/notifications/:id/read', 'PATCH');
     }
+
+     if (options.method == 'GET' && path.contains('/notification/')) {
+      return _MockRouteKey('/notification/:id', 'GET');
+    }
+
     return _MockRouteKey(path, options.method);
   }
 }

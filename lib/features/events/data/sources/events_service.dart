@@ -46,6 +46,7 @@ class EventsServiceImpl implements EventsService {
         '/mobile_events',
         queryParameters: _buildGetEventsListQueryParams(params),
       );
+
       if (response.statusCode == 200 && response.data is List<dynamic>) {
         final jsonList = response.data as List<dynamic>;
         final events = jsonList

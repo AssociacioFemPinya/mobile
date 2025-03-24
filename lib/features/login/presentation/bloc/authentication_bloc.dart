@@ -4,11 +4,11 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-part 'authentication_event.dart';
+part 'authentication_events.dart';
 part 'authentication_state.dart';
 
 class AuthenticationBloc
-    extends Bloc<AuthenticationEvent, AuthenticationState> {
+    extends Bloc<AuthenticationEvents, AuthenticationState> {
   AuthenticationBloc({
     required this.authenticationRepository,
     UserEntity? userEntity,

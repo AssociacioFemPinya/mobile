@@ -1,8 +1,8 @@
 part of 'events_view_mode_bloc.dart';
 
-abstract class EventsViewModeEvent {}
+abstract class EventsViewModeEvents {}
 
-class EventsViewModeSet extends EventsViewModeEvent {
+class EventsViewModeSet extends EventsViewModeEvents {
   final EventsViewModeEnum value;
   EventsViewModeSet(this.value);
 }

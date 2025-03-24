@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'events_filters_state.dart';
 part 'events_filters_events.dart';
 
-class EventsFiltersBloc extends Bloc<EventsFiltersEvent, EventsFiltersState> {
+class EventsFiltersBloc extends Bloc<EventsFiltersEvents, EventsFiltersState> {
   EventsFiltersBloc()
       : super(const EventsFiltersState(
           // TODO: See if we can merge all those three state in a single one for the filter buttons
