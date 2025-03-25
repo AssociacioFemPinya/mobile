@@ -33,11 +33,11 @@ class DioFactory {
         error: true,
       ));
 
-      // _dio!.interceptors.add(InterceptorsWrapper(
-      //   onRequest: (options, handler) async {
-      //     // Récupérer le token d'authentification
-      //     final prefs = await SharedPreferences.getInstance();
-      //     final token = prefs.getString('auth_token');
+      _dio!.interceptors.add(InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          // Récupérer le token d'authentification
+          final prefs = await SharedPreferences.getInstance();
+          final token = prefs.getString('auth_token');
 
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
@@ -51,6 +51,7 @@ class DioFactory {
       // _dio!.interceptors.add(RondesDioMockInterceptor());
       // _dio!.interceptors.add(EventsDioMockInterceptor());
       // _dio!.interceptors.add(UsersDioMockInterceptor());
+      // _dio.interceptors.add(TokensDioMockInterceptor());
       _dio!.interceptors.add(NotificationsDioMockInterceptor());
     }
 

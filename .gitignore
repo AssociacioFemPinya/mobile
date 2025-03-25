@@ -2,6 +2,7 @@
 .dart_tool/
 .packages
 .pub-cache/
+pubspec.lock
 build/
 android/.gradle/
 android/app/generated/
@@ -14,6 +15,7 @@ ios/Flutter/Flutter.podspec
 ios/Flutter/App.framework
 ios/Flutter/Generated.xcconfig
 macos/Flutter/ephemeral/
+macos/Flutter/GeneratedPluginRegistrant.swift
 linux/flutter/ephemeral/
 windows/flutter/ephemeral/
 .flutter-plugins

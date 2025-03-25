@@ -8,6 +8,7 @@ import 'package:fempinya3_flutter_app/services/firebase_notification_service.dar
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +21,15 @@ import 'package:fempinya3_flutter_app/features/notifications/service_locator.dar
 import 'package:get_it/get_it.dart';
 
 final sl = GetIt.instance;
+
+class AuthInitializationResult {
+  final AuthenticationRepository authenticationRepository;
+  final AuthenticationBloc authenticationBloc;
+
+  AuthInitializationResult(
+      {required this.authenticationRepository,
+      required this.authenticationBloc});
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -83,41 +93,65 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  late final AuthenticationRepository _authenticationRepository;
-  late AuthenticationBloc authenticationBloc;
 
-  @override
-  void initState() {
-    super.initState();
-    _authenticationRepository = AuthenticationRepository();
-    authenticationBloc =
-        AuthenticationBloc(authenticationRepository: _authenticationRepository);
-  }
-
-  @override
-  void dispose() {
-    _authenticationRepository.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // Create the router and register it with the service locator
+  Future<AuthInitializationResult> initAuthenticationRepository() async {
+    // FP and Firebase token are saved in shared preferences
+    final sharedPreferences = await SharedPreferences.getInstance();
+    // Init authentication repository with shared preferences
+    final authenticationRepository =
+        AuthenticationRepository(sharedPreferences);
+    // Init authentication Bloc with repository
+    final authenticationBloc =
+        AuthenticationBloc(authenticationRepository: authenticationRepository);
+    // Init router with authentication bloc
     if (!sl.isRegistered<GoRouter>()) {
       sl.registerSingleton<GoRouter>(appRouter(authenticationBloc));
-      
+
       // Process any pending notifications after the router is registered
       WidgetsBinding.instance.addPostFrameCallback((_) {
         FirebaseNotificationService.processPendingNotifications();
       });
     }
-    
-    return RepositoryProvider.value(
-      value: _authenticationRepository,
-      child: BlocProvider.value(
-        value: authenticationBloc..add(AuthenticationSubscriptionRequested()),
-        child: MyApp(),
-      ),
+
+    return AuthInitializationResult(
+      authenticationRepository: authenticationRepository,
+      authenticationBloc: authenticationBloc,
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    final Future<AuthInitializationResult> initializationFuture =
+        initAuthenticationRepository();
+
+    return FutureBuilder<AuthInitializationResult>(
+      future: initializationFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          AuthenticationRepository authenticationRepository =
+              snapshot.data!.authenticationRepository;
+          AuthenticationBloc authenticationBloc =
+              snapshot.data!.authenticationBloc;
+          return RepositoryProvider.value(
+            value: authenticationRepository,
+            child: BlocProvider.value(
+              value: authenticationBloc
+                ..add(AuthenticationSubscriptionRequested()),
+              child: const MyApp(),
+            ),
+          );
+        }
+      },
     );
   }
 }
