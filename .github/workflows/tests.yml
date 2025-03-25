@@ -1,0 +1,33 @@
+name: Flutter_Tests
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v2
+
+    - name: Install and set Flutter version
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.29.2'
+
+    - name: Restore packages
+      run: flutter pub get
+
+    # - name: Analyze
+    #   run: flutter analyze
+
+    - name: Run tests
+      run: flutter test --coverage
+
+    - name: 📊 Reports Coverage to Github Pages
+      id: flutter-coverage-action
+      uses: ProjectAJ14/flutter-coverage-action@v1.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

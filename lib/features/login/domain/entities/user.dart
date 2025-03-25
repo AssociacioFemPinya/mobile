@@ -9,9 +9,9 @@ class UserEntity extends Equatable {
   final String password;
 
   const UserEntity(
-      {required this.id,
+      {required this.mail,
+      required this.id,
       required this.name,
-      required this.mail,
       required this.password});
 
   @override

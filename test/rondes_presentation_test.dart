@@ -1,7 +1,8 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dio/dio.dart';
 import 'package:fempinya3_flutter_app/core/navigation/route_names.dart';
 import 'package:fempinya3_flutter_app/core/service_locator.dart';
-import 'package:fempinya3_flutter_app/features/login/login.dart';
+import 'package:fempinya3_flutter_app/features/login/login.dart' hide sl;
 import 'package:fempinya3_flutter_app/features/menu/domain/entities/locale.dart';
 import 'package:fempinya3_flutter_app/features/rondes/rondes.dart' hide sl;
 import 'package:flutter/material.dart';
@@ -10,9 +11,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter/webview_flutter.dart' hide ProgressCallback;
 import 'mock_entities.dart';
-import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
+import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart'
+    hide ProgressCallback;
 
 void main() {
   late MockRondesListBloc mockRondesListBloc;
@@ -33,6 +35,9 @@ void main() {
   setUpAll(() {
     setupCommonServiceLocator();
     setupRondesServiceLocator();
+    final Dio _dio = sl<Dio>();
+    _dio.interceptors.clear();
+    _dio.interceptors.add(RondesDioMockInterceptor());
     WebViewPlatform.instance = FakeWebViewPlatform();
   });
 
@@ -254,16 +259,15 @@ void main() {
                   path: '/',
                   builder: (context, state) =>
                       ChangeNotifierProvider<LocaleModel>(
-                    create: (_) => LocaleModel(),
+                          create: (_) => LocaleModel(),
                           child: BlocProvider<MockRondesListBloc>(
                             create: (context) => mockRondesListBloc,
                             child: RondesListPageContents(),
-                          )
-                  ),
+                          )),
                 ),
                 GoRoute(
                   name: "ronda",
-                  path: 'ronda/:rondaID',
+                  path: '/ronda/:rondaID',
                   builder: (context, state) =>
                       Container(), // Mock RondaPage with Container
                 ),
@@ -275,7 +279,7 @@ void main() {
           ),
         ),
       );
-      
+
       await tester.pump();
       expect(find.text('Ronda 1 Event 1'), findsOneWidget);
       await tester.press(find.byType(ElevatedButton));
@@ -422,7 +426,7 @@ void main() {
       );
 
       expect(find.byType(RondesListPage), findsOneWidget);
-      
+
       await tester.pump(Duration(seconds: 10));
       await tester.tap(find.byType(ElevatedButton).first);
     });
@@ -760,7 +764,7 @@ class FakeNavigationDelegate extends PlatformNavigationDelegate {
   Future<void> setOnPageStarted(PageEventCallback onPageStarted) async {}
 
   @override
-  Future<void> setOnProgress(ProgressCallback onProgress) async {}
+  Future<void> setOnProgress(void Function(int) onProgress) async {}
 
   @override
   Future<void> setOnWebResourceError(
