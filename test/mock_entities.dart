@@ -31,7 +31,17 @@ class MockPublicDisplayUrlViewBloc extends PublicDisplayUrlViewBloc {
 
 class MockAuthenticationBloc extends AuthenticationBloc {
   final UserEntity _userEntity = UserEntity(
-      mail: 'test@example.com', id: 0, name: "toto", password: "fifi");
+    castellerActiveId: 1,
+    castellerActiveAlias: "Josep Maria",
+    linkedCastellers: [
+      LinkedCastellerEntity(
+        idCastellerApiUser: 1,
+        apiUserId: 1,
+        castellerId: 1,
+      ),
+    ],
+    boardsEnabled: true,
+  );
 
   MockAuthenticationBloc({required super.authenticationRepository});
 

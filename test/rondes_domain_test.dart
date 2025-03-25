@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:fempinya3_flutter_app/core/service_locator.dart';
 import 'package:fempinya3_flutter_app/features/rondes/rondes.dart' hide sl;
 
@@ -7,6 +8,9 @@ void main() {
   setUpAll(() {
     setupCommonServiceLocator();
     setupRondesServiceLocator();
+    final Dio _dio = sl<Dio>();
+    _dio.interceptors.clear();
+    _dio.interceptors.add(RondesDioMockInterceptor());
   });
 
   group('Entities', () {
