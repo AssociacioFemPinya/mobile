@@ -34,12 +34,12 @@ GoRouter appRouter(AuthenticationBloc authenticationBloc) {
       if (isAuthenticated) {
         // If the user is authenticated, redirect to the home page
         if (state.matchedLocation == loginRoute) {
-          return eventsRoute;
+          return homeRoute;
         }
       } else if (isAuthenticated == false) {
         // If the user is not authenticated, redirect to the login page
-        if (state.matchedLocation != loginRoute) {
-          return eventsRoute;
+        if (state.matchedLocation == loginRoute) {
+          return loginRoute;
         }
       }
       // Otherwise do not modify the route

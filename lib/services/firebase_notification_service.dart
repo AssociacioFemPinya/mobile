@@ -10,14 +10,11 @@ import 'package:go_router/go_router.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroupHandler(RemoteMessage message) async {
-  print('_firebaseMessagingBackgroupHandler: $message');
   if (Firebase.apps.isEmpty) {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
-  await FirebaseNotificationService.instance.setupFlutterNotifications();
-  //await FirebaseNotificationService.instance.showNotification(message);
 }
 
 class FirebaseNotificationService {
@@ -28,20 +25,33 @@ class FirebaseNotificationService {
   final _messaging = FirebaseMessaging.instance;
   final _localNotifications = FlutterLocalNotificationsPlugin();
   bool _isFlutterLocalNotificationPluginInitialized = false;
+  
+  // Store pending navigation to be executed when app is in foreground
+  Function? _pendingNavigation;
 
   Future<void> initialize() async {
+    // Set up background message handler first
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroupHandler);
     
+    // Initialize the Flutter Local Notifications Plugin
+    await setupFlutterNotifications();
+    
+    // Request permissions
     await _requestPermission();
 
+    // Set up message handlers
     await _setupMessageHandlers();
+    
+    // Execute any pending navigation if the app was opened from a notification
+    _executePendingNavigationIfNeeded();
 
-    // this token should be pushed to the API
+    // TODO: this token should be pushed to the API
     final token = await _messaging.getToken();
     print('FCM Token: $token');
   }
 
   Future<void> _requestPermission() async {
+    // Request Firebase Messaging permissions
     final settings = await _messaging.requestPermission(
       alert: true,
       badge: true,
@@ -51,8 +61,17 @@ class FirebaseNotificationService {
       carPlay: false,
       criticalAlert: false,
     );
-
-    print('Permission status: ${settings.authorizationStatus}');
+    
+    // Request specific Android notification permissions
+    if (await _localNotifications
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.areNotificationsEnabled() == false) {
+      await _localNotifications
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
+          ?.areNotificationsEnabled(); // Removed invalid method call
+    }
   }
 
   Future<void> setupFlutterNotifications() async {
@@ -67,6 +86,9 @@ class FirebaseNotificationService {
       'Fempinya Channel',
       description: 'Channel for Fempinya notifications',
       importance: Importance.high,
+      playSound: true,
+      enableVibration: true,
+      showBadge: true,
     );
 
     await _localNotifications
@@ -79,38 +101,56 @@ class FirebaseNotificationService {
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
     // ios setup
-    // final initializationSettingsDarwin = DarwinInitializationSettings(
-    //   onDidReceiveLocalNotification: (id, title, body, payload) async {
-    //     // Handle iOS foreground notification
-    //   },
-    // );
+    final initializationSettingsDarwin = DarwinInitializationSettings(
+      // Removed onDidReceiveLocalNotification as it is no longer supported
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+    );
 
     final initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
-      // iOS: initializationSettingsDarwin,
+      iOS: initializationSettingsDarwin,
     );
+
+    void onDidReceiveNotificationResponse(NotificationResponse notificationResponse) async {
+        final String? payload = notificationResponse.payload;
+        
+        if (payload != null) {
+          try {
+            final data = Map<String, dynamic>.from(jsonDecode(payload));
+            
+            // Create a RemoteMessage-like object to reuse the same handler
+            final message = RemoteMessage(data: data);
+            _handleBackgroundMessage(message);
+            
+            // If you need specific routing
+            if (data.containsKey('action_url')) {
+              _handleActionRouting(data['action_url'], data['resource_id'] ?? '');
+            }
+          } catch (e) {
+            print('Error processing notification payload: $e');
+          }
+        } else {
+          print('WARNING: Notification payload is null');
+        }
+    }
 
     // flutter notification setup
     await _localNotifications.initialize(initializationSettings,
-        onDidReceiveNotificationResponse: (details) {
-          print('onDidReceiveNotificationResponse: $details');
-      // final payload = details.payload;
-      // if (payload != null) {
-      //   final data = Map<String, dynamic>.from(jsonDecode(payload));
-      //   if (data.containsKey('action_url')) {
-      //     _handleActionRouting(data['action_url'], data['resource_id']);
-      //   }
-      // }
-    });
+      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
+    );
 
     _isFlutterLocalNotificationPluginInitialized = true;
   }
 
-  Future<void> showNotification(RemoteMessage message) async {
+  Future<void> showNotification(RemoteMessage message) async {    
     // message.data.notification is a json, where we can store more information than message.notification
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     if (notification != null && android != null) {
+      final encodedPayload = jsonEncode(message.data);
+      
       await _localNotifications.show(
         notification.hashCode,
         notification.title,
@@ -123,15 +163,24 @@ class FirebaseNotificationService {
             importance: Importance.high,
             priority: Priority.high,
             icon: '@mipmap/ic_launcher',
+            playSound: true,
+            enableVibration: true,
+            autoCancel: true,  // Auto dismiss when tapped
+            ongoing: false,    // Not persistent
+            channelShowBadge: true,
+            fullScreenIntent: true,  // Important for user interaction
           ),
           iOS: const DarwinNotificationDetails(
             presentAlert: true,
             presentBadge: true,
             presentSound: true,
+            interruptionLevel: InterruptionLevel.active,  // Important for user interaction
           ),
         ),
-        payload: message.data.toString(),
+        payload: encodedPayload,
       );
+    } else {
+      print('WARNING: Cannot show notification - notification or android is null');
     }
   }
 
@@ -150,21 +199,13 @@ class FirebaseNotificationService {
     }
   }
 
-  void _handleBackgroundMessage(RemoteMessage message) {
-    print('_handleBackgroundMessage: $message');
-    // if (message.data.containsKey('action_url')) {
-    //   _handleActionRouting(
-    //       message.data['action_url'], message.data['resource_id']);
-    // }
+  void _handleBackgroundMessage(RemoteMessage message) {    
+    if (message.data.containsKey('action_url')) {
+      _handleActionRouting(
+          message.data['action_url'], message.data['resource_id']);
+    }
   }
 
   void _handleActionRouting(String pathName, String resourceId) {
-    print('_handleActionRouting: Routing to path: $pathName with resource ID: $resourceId');
-    if (resourceId != '') {
-      GoRouter.of(MyApp.context)
-          .pushNamed(pathName, pathParameters: {'eventID': resourceId});
-    } else {
-      GoRouter.of(MyApp.context).pushNamed(pathName);
-    }
   }
 }
