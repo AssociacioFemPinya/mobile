@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 
 import 'package:fempinya3_flutter_app/core/navigation/route_names.dart';
 import 'package:fempinya3_flutter_app/core/service_locator.dart';
@@ -15,12 +16,48 @@ Future<void> _firebaseMessagingBackgroupHandler(RemoteMessage message) async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
+  
+  // Store notification data for later processing when the app is fully initialized
+  if (message.data.containsKey('action_url')) {
+    FirebaseNotificationService._pendingNotification = PendingNotification(
+      message.data['action_url'],
+      message.data['resource_id'] ?? ''
+    );
+  }
+}
+
+// Store pending notification data for when the app is fully initialized
+class PendingNotification {
+  final String pathName;
+  final String resourceId;
+  
+  PendingNotification(this.pathName, this.resourceId);
 }
 
 class FirebaseNotificationService {
   FirebaseNotificationService._();
   static final FirebaseNotificationService instance =
       FirebaseNotificationService._();
+      
+  // Store pending notifications to be processed when the app is fully initialized
+  static PendingNotification? _pendingNotification;
+  
+  // Check if there's a pending notification to process
+  static PendingNotification? get pendingNotification => _pendingNotification;
+  
+  // Clear the pending notification after processing
+  static void clearPendingNotification() {
+    _pendingNotification = null;
+  }
+  
+  // Process any pending notifications
+  static void processPendingNotifications() {
+    if (_pendingNotification != null) {
+      print('INFO: Processing pending notification: ${_pendingNotification!.pathName}');
+      instance._handleActionRouting(_pendingNotification!.pathName, _pendingNotification!.resourceId);
+      clearPendingNotification();
+    }
+  }
 
   final _messaging = FirebaseMessaging.instance;
   final _localNotifications = FlutterLocalNotificationsPlugin();
@@ -191,6 +228,13 @@ class FirebaseNotificationService {
 
   void _handleActionRouting(String pathName, String resourceId) {
     try {
+      // If the app is not fully initialized yet, store the notification data for later
+      if (!sl.isRegistered<GoRouter>()) {
+        print('INFO: App not fully initialized, storing notification data for later');
+        _pendingNotification = PendingNotification(pathName, resourceId);
+        return;
+      }
+      
       // Get the router from the service locator
       final router = sl<GoRouter>();
       
@@ -212,6 +256,8 @@ class FirebaseNotificationService {
       }
     } catch (e) {
       print('ERROR: Failed to navigate to $pathName: $e');
+      // Store for later processing when the app is fully initialized
+      _pendingNotification = PendingNotification(pathName, resourceId);
     }
   }
 }

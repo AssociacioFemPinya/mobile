@@ -105,6 +105,11 @@ class _AppState extends State<App> {
     // Create the router and register it with the service locator
     if (!sl.isRegistered<GoRouter>()) {
       sl.registerSingleton<GoRouter>(appRouter(authenticationBloc));
+      
+      // Process any pending notifications after the router is registered
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        FirebaseNotificationService.processPendingNotifications();
+      });
     }
     
     return RepositoryProvider.value(
