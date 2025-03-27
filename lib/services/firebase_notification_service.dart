@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'package:fempinya3_flutter_app/core/navigation/route_names.dart';
+import 'package:fempinya3_flutter_app/core/service_locator.dart';
 import 'package:fempinya3_flutter_app/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:go_router/go_router.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroupHandler(RemoteMessage message) async {
@@ -187,5 +190,28 @@ class FirebaseNotificationService {
   }
 
   void _handleActionRouting(String pathName, String resourceId) {
+    try {
+      // Get the router from the service locator
+      final router = sl<GoRouter>();
+      
+      // Handle different routes based on the pathName
+      switch (pathName) {
+        case 'event':
+          router.pushNamed(eventRoute, pathParameters: {'eventID': resourceId});
+          break;
+        // case 'ronda':
+        //   router.pushNamed(rondaRoute, pathParameters: {'rondaID': resourceId});
+        //   break;
+        // case 'notification':
+        //   router.pushNamed(notificationsRoute);
+        //   break;
+        // // Add more routes as needed
+        default:
+          print('WARNING: Unknown route: $pathName');
+          break;
+      }
+    } catch (e) {
+      print('ERROR: Failed to navigate to $pathName: $e');
+    }
   }
 }

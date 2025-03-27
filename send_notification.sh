@@ -15,8 +15,8 @@ curl -X POST "https://fcm.googleapis.com/v1/projects/fempinya3-73ef3/messages:se
       \"body\": \"This is a test push notification\"
     },
     \"data\": {
-      \"action_url\": \"/event\",
-      \"resource_id\": \"1\"
+      \"action_url\": \"event\",
+      \"resource_id\": \"9651\"
     }
   }
   }"

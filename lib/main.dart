@@ -17,6 +17,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fempinya3_flutter_app/features/notifications/service_locator.dart';
+import 'package:get_it/get_it.dart';
+
+final sl = GetIt.instance;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -99,12 +102,16 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    final GoRouter router = appRouter(authenticationBloc);
+    // Create the router and register it with the service locator
+    if (!sl.isRegistered<GoRouter>()) {
+      sl.registerSingleton<GoRouter>(appRouter(authenticationBloc));
+    }
+    
     return RepositoryProvider.value(
       value: _authenticationRepository,
       child: BlocProvider.value(
         value: authenticationBloc..add(AuthenticationSubscriptionRequested()),
-        child: MyApp(router: router),
+        child: MyApp(),
       ),
     );
   }
@@ -113,10 +120,7 @@ class _AppState extends State<App> {
 class MyApp extends StatelessWidget {
   const MyApp({
     super.key,
-    required this.router,
   });
-
-  final GoRouter router;
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +130,7 @@ class MyApp extends StatelessWidget {
         builder: (context, localeModel, child) {
           return MaterialApp.router(
             title: 'FemPinya App',
-            routerConfig: router, // Use the GoRouter configuration
+            routerConfig: sl<GoRouter>(), // Use the GoRouter configuration
             builder: EasyLoading.init(),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
