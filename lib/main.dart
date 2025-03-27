@@ -118,12 +118,8 @@ class MyApp extends StatelessWidget {
 
   final GoRouter router;
 
-  static late BuildContext context;
-
   @override
   Widget build(BuildContext context) {
-    MyApp.context = context;
-
     return ChangeNotifierProvider(
       create: (context) => LocaleModel(),
       child: Consumer<LocaleModel>(

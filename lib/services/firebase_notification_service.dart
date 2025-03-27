@@ -1,12 +1,9 @@
 import 'dart:convert';
 
 import 'package:fempinya3_flutter_app/firebase_options.dart';
-import 'package:fempinya3_flutter_app/main.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroupHandler(RemoteMessage message) async {
@@ -25,9 +22,6 @@ class FirebaseNotificationService {
   final _messaging = FirebaseMessaging.instance;
   final _localNotifications = FlutterLocalNotificationsPlugin();
   bool _isFlutterLocalNotificationPluginInitialized = false;
-  
-  // Store pending navigation to be executed when app is in foreground
-  Function? _pendingNavigation;
 
   Future<void> initialize() async {
     // Set up background message handler first
@@ -41,9 +35,6 @@ class FirebaseNotificationService {
 
     // Set up message handlers
     await _setupMessageHandlers();
-    
-    // Execute any pending navigation if the app was opened from a notification
-    _executePendingNavigationIfNeeded();
 
     // TODO: this token should be pushed to the API
     final token = await _messaging.getToken();
@@ -52,7 +43,7 @@ class FirebaseNotificationService {
 
   Future<void> _requestPermission() async {
     // Request Firebase Messaging permissions
-    final settings = await _messaging.requestPermission(
+    await _messaging.requestPermission(
       alert: true,
       badge: true,
       sound: true,
@@ -61,17 +52,6 @@ class FirebaseNotificationService {
       carPlay: false,
       criticalAlert: false,
     );
-    
-    // Request specific Android notification permissions
-    if (await _localNotifications
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.areNotificationsEnabled() == false) {
-      await _localNotifications
-          .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
-          ?.areNotificationsEnabled(); // Removed invalid method call
-    }
   }
 
   Future<void> setupFlutterNotifications() async {
