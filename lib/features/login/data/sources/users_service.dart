@@ -21,11 +21,10 @@ class UsersServiceImpl implements UsersService {
   @override
   Future<Either<String, UserEntity>> getUser(GetUserParams params) async {
     try {
-      final response = await _dio.get('/User',
+      final response = await _dio.get('/api-fempinya/mobile_user_context',
           queryParameters: _buildGetUserQueryParams(params));
-      if (response.statusCode == 200 && response.data is String) {
-        final json =
-            jsonDecode(response.data as String) as Map<String, dynamic>;
+      if (response.statusCode == 200 && response.data is Map) {
+        final json = response.data as Map<String, dynamic>;
         return Right(UserEntity.fromModel(UserModel.fromJson(json)));
       }
       return const Left('Unexpected response format');

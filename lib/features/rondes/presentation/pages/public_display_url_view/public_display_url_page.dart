@@ -1,4 +1,3 @@
-import 'package:fempinya3_flutter_app/features/login/login.dart';
 import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +11,7 @@ class PublicDisplayUrlPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => PublicDisplayUrlViewBloc()
         ..add(PublicDisplayUrlLoadEvent(
-            email: context.read<AuthenticationBloc>().userEntity!.mail)),
+            email: 'mail@mail.com')),
       child: PublicDisplayUrlViewContentsPage(),
     );
   }
