@@ -17,23 +17,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fempinya3_flutter_app/features/notifications/service_locator.dart';
+import 'package:get_it/get_it.dart';
 
-// @pragma('vm:entry-point')
-// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-//   // If you're going to use other Firebase services in the background, such as Firestore,
-//   // make sure you call `initializeApp` before using other Firebase services.
-//   await Firebase.initializeApp();
-
-//   print("Handling a background message: ${message.messageId}");
-// }
+final sl = GetIt.instance;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (!kIsWeb) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    }
 
     await FirebaseNotificationService.instance.initialize();
   }
@@ -106,12 +102,21 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    final GoRouter router = appRouter(authenticationBloc);
+    // Create the router and register it with the service locator
+    if (!sl.isRegistered<GoRouter>()) {
+      sl.registerSingleton<GoRouter>(appRouter(authenticationBloc));
+      
+      // Process any pending notifications after the router is registered
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        FirebaseNotificationService.processPendingNotifications();
+      });
+    }
+    
     return RepositoryProvider.value(
       value: _authenticationRepository,
       child: BlocProvider.value(
         value: authenticationBloc..add(AuthenticationSubscriptionRequested()),
-        child: MyApp(router: router),
+        child: MyApp(),
       ),
     );
   }
@@ -120,10 +125,7 @@ class _AppState extends State<App> {
 class MyApp extends StatelessWidget {
   const MyApp({
     super.key,
-    required this.router,
   });
-
-  final GoRouter router;
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +135,7 @@ class MyApp extends StatelessWidget {
         builder: (context, localeModel, child) {
           return MaterialApp.router(
             title: 'FemPinya App',
-            routerConfig: router, // Use the GoRouter configuration
+            routerConfig: sl<GoRouter>(), // Use the GoRouter configuration
             builder: EasyLoading.init(),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
