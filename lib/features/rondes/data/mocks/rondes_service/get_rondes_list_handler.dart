@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
+
 import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 
 abstract class GetRondesListHandler {

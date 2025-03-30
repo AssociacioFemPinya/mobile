@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
+
 import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 
 abstract class GetRondaHandler {
@@ -39,7 +38,7 @@ abstract class GetRondaHandler {
       if (ronda['id'] == rondaID) {
         response = Response(
           requestOptions: options,
-          data: ronda, // Assuming ronda is already in the desired format
+          data: ronda,
           statusCode: 200,
         );
         handler.resolve(response);
