@@ -1,0 +1,52 @@
+name: Flutter_Tests
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout the code
+      uses: actions/checkout@v2
+
+    - name: Install lcov
+      run: sudo apt-get update && sudo apt-get install -y lcov
+
+    - name: Lcov version
+      run: lcov --version
+
+    - name: Install and set Flutter version
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.29.2'
+
+    - name: Clean build directory
+      run: flutter clean
+
+    - name: Restore packages
+      run: flutter pub get
+
+    # - name: Analyze
+    #   run: flutter analyze
+
+    - name: Run tests
+      run: flutter test --coverage
+
+    - name: Extract Coverage Percentage
+      run: ./.github/scripts/extract_coverage.sh
+    
+    - name: Create Awesome Badge
+      uses: schneegans/dynamic-badges-action@v1.7.0
+      with:
+        auth: ${{ secrets.GIST_SECRET }}
+        gistID: 117df38e6f56715a9ef8d16012d190fe
+        filename: fp_mobile_coverage.svg
+        label: Coverage
+        message: is ${{ env.TEXT_COV }}
+        valColorRange: ${{ env.PERCENT_COV }}
+        maxColorRange: 100
+        minColorRange: 0

@@ -1,3 +1,6 @@
+
+![badge](https://gist.githubusercontent.com/FemPinya/117df38e6f56715a9ef8d16012d190fe/raw/fp_mobile_coverage.svg)
+
 # fempinya3_flutter_app
 
 A new Flutter project.
@@ -11,7 +14,36 @@ Mocked users are created with the following credentials :
 
 Use these credentials, otherwise you will get authentication errors.
 
-## TO DOCUMENT SOMEWHERE
+
+## Testing Coverage Guide
+
+The coverage report is automatically generated and available at [repository pages](https://github.com/AssociacioFemPinya/mobile/coverage/index.html). This process is configured using GitHub Actions defined in [.github/workflows/tests.yml](.github/workflows/tests.yml) file.
+
+To generate a coverage report locally from an `lcov` file, you'll need the `genhtml` tool, which is part of the `lcov` package. Here's how you can do it:
+
+### Installation
+
+**For Ubuntu Users:**
+
+Install `lcov` to get the `genhtml` tool:
+
+    sudo apt-get install lcov
+
+### Steps to Generate Coverage Report
+
+Generate the lcov File, running Flutter tests with coverage enabled:
+
+    flutter test --coverage
+
+Generate the Coverage Report, use the genhtml tool to convert the lcov file into an HTML report:
+
+    genhtml coverage/lcov.info -o coverage/html
+
+View the Report, open the generated report in your web browser. For example, using Brave Browser:
+
+    brave-browser coverage/html/index.html
+
+## TO DOCUMENT SOMEWHERE
 
 ### Nullables in bloc states
 Do not set properties in the bloc state as null after initialization. The reason is that, when calling copyWith(), if it's not specifically passed, the value will be null. Hence you don't know if the value is null because the intention is to change some other property, or because we want to set it to null.
