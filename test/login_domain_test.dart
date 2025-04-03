@@ -384,9 +384,63 @@ void main() {
       authRepo.dispose();
     });
 
-    test('givenAuthRepo_whenInit_thenEmitUnauthenticatedStatus', () async {
+    test(
+        'givenSharedPrefsWithGoodToken_whenInit_thenEmitAuthenticatedStatusWithUser',
+        () async {
+      //Arrange
+      when(() => mockSharedPreferences.getString('auth_token')).thenAnswer(
+          (_) => '99|rud6x5D51FyoLHJH1hCncsVfplhdYhuMiUEAG5avbeb88326');
+
       await expectLater(
         authRepo.status.take(1), // Take only the first emission
+        emitsInOrder([
+          AuthenticationResult(
+              status: AuthenticationStatus.authenticated,
+              userEntity: UserEntity(
+                castellerActiveId: 1,
+                castellerActiveAlias: "Josep Maria",
+                linkedCastellers: [
+                  LinkedCastellerEntity(
+                    idCastellerApiUser: 1,
+                    apiUserId: 1,
+                    castellerId: 1,
+                  ),
+                ],
+                boardsEnabled: true,
+              )),
+        ]),
+      );
+    });
+
+    test(
+        'givenSharedPrefsWithWrongToken_whenInit_thenEmitUnauthenticatedStatus',
+        () async {
+      //Arrange
+      _dio!.interceptors
+          .removeWhere((interceptor) => interceptor is UsersDioMockInterceptor);
+      _dio!.interceptors.add(WrongUsersDioMockInterceptor());
+      when(() => mockSharedPreferences.getString('auth_token'))
+          .thenAnswer((_) => 'wrong-token');
+
+      //Act
+      await expectLater(
+        authRepo.status.take(1),
+        emitsInOrder([
+          AuthenticationResult(status: AuthenticationStatus.unauthenticated),
+        ]),
+      );
+
+      //Arrange
+      _dio!.interceptors.removeWhere(
+          (interceptor) => interceptor is WrongUsersDioMockInterceptor);
+      _dio!.interceptors.add(UsersDioMockInterceptor());
+    });
+
+    test('givenSharedPrefsWithoutToken_whenInit_thenEmitUnauthenticatedStatus',
+        () async {
+      //Act
+      await expectLater(
+        authRepo.status.take(1),
         emitsInOrder([
           AuthenticationResult(status: AuthenticationStatus.unauthenticated),
         ]),
@@ -431,7 +485,13 @@ void main() {
       expect(
         () async =>
             await authRepo.logIn(mail: 'fals@exemple.cat', password: ''),
-        throwsA(isA<AuthenticationException>()),
+        throwsA(
+          predicate<AuthenticationException>(
+            (e) =>
+                e.toString() ==
+                'AuthenticationException: Invalid username or password',
+          ),
+        ),
       );
 
       await expectLater(
@@ -454,38 +514,6 @@ void main() {
         ]),
       );
     });
-
-    test('givenWrongToken_whenGetUser_thenFailure', () async {
-      //Arrange
-      _dio!.interceptors
-          .removeWhere((interceptor) => interceptor is UsersDioMockInterceptor);
-      _dio!.interceptors.add(WrongUsersDioMockInterceptor());
-
-      expect(
-        () async => await authRepo.fetchAndHandleUserData(),
-        throwsA(
-          predicate<AuthenticationException>(
-            (e) => e.toString() == 'AuthenticationException: Invalid token',
-          ),
-        ),
-      );
-
-      await expectLater(
-        authRepo.status.take(2),
-        emitsInOrder([
-          AuthenticationResult(
-              status: AuthenticationStatus.unauthenticated, userEntity: null),
-          AuthenticationResult(
-              status: AuthenticationStatus.unauthenticated, userEntity: null),
-        ]),
-      );
-
-      //Arrange
-      _dio!.interceptors.removeWhere(
-          (interceptor) => interceptor is WrongUsersDioMockInterceptor);
-      _dio!.interceptors.add(UsersDioMockInterceptor());   
-    });
-    
   });
 }
 

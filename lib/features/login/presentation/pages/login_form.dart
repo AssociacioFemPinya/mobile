@@ -2,6 +2,7 @@ import 'package:fempinya3_flutter_app/features/login/login.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -101,7 +102,12 @@ Widget _buildLoginButton(BuildContext context, AppLocalizations translate) {
     (LoginFormBloc bloc) => bloc.state.status.isInProgressOrSuccess,
   );
 
-  if (isInProgressOrSuccess) return const CircularProgressIndicator();
+  if (isInProgressOrSuccess) {
+    EasyLoading.show(status: 'Loading...');
+  } else {
+    EasyLoading.dismiss();
+  }
+  // return const CircularProgressIndicator();
 
   final isValid = context.select((LoginFormBloc bloc) => bloc.state.isValid);
 
