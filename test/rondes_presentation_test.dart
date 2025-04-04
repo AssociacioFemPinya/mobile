@@ -233,6 +233,39 @@ void main() {
       expect(find.byType(ListTile), findsNWidgets(2));
     });
 
+    testWidgets('givenEmptyRondesList_whenRenderRondesList_thenMsgDisplayed',
+        (tester) async {
+      mockRondesListBloc.state = RondesListLoadSuccessState([]);
+
+      await tester.pumpWidget(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<RondesListBloc>(
+              create: (context) => mockRondesListBloc,
+            ),
+            BlocProvider<AuthenticationBloc>(
+              create: (context) => mockAuthenticationBloc,
+            ),
+          ],
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: ChangeNotifierProvider<LocaleModel>(
+              create: (_) => LocaleModel(),
+              child: RondesListPageContents(),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(
+          find.text(
+              'No rondas available at the moment. Please check back later.'),
+          findsOneWidget);
+    });
+
     testWidgets('should navigate to the ronda page', (tester) async {
       mockRondesListBloc.state = RondesListLoadSuccessState(
         [

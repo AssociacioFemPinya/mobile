@@ -62,6 +62,7 @@
     "commonSnackBarSuccessSaving": "Sauvegardé avec succès",
     "commentsScreenHintText": "Écrivez vos commentaires",
     "commentsScreenLabelText": "Commentaires",
+    "rondesListEmpty": "Aucune ronde disponible pour le moment. Veuillez vérifier plus tard.",
     "rondesListRondaButton": "Ronda {rondaNumber} {eventName}",
     "@rondesListRondaButton": {
         "placeholders": {
