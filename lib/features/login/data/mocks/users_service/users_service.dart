@@ -1,8 +1,8 @@
-import 'package:fempinya3_flutter_app/features/login/login.dart';
-
 import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+
+import 'package:fempinya3_flutter_app/features/login/login.dart';
 
 class UsersDioMockInterceptor extends Interceptor {
   late UserEntity user;
@@ -14,7 +14,7 @@ class UsersDioMockInterceptor extends Interceptor {
       _MockRouteKey,
       void Function(UsersDioMockInterceptor mock, RequestOptions options,
           RequestInterceptorHandler handler)> mockRouter = {
-    _MockRouteKey('/api-fempinya/mobile_user_context', 'GET'):
+    _MockRouteKey(LoginApiEndpoints.getUserContext, 'GET'):
         GetUserHandler.handle,
   };
 

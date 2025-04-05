@@ -16,7 +16,7 @@ class UsersServiceImpl implements UsersService {
   @override
   Future<Either<String, UserEntity>> getUser(GetUserParams params) async {
     try {
-      final response = await _dio.get('/api-fempinya/mobile_user_context');
+      final response = await _dio.get(LoginApiEndpoints.getUserContext);
       if (response.statusCode == 200 && response.data is Map) {
         final json = response.data as Map<String, dynamic>;
         return Right(UserEntity.fromModel(UserModel.fromJson(json)));
@@ -24,11 +24,11 @@ class UsersServiceImpl implements UsersService {
       return const Left('Unexpected response format');
     } catch (e, stacktrace) {
       _logError(
-          'Error when calling get /api-fempinya/mobile_user_context endpoint',
+          'Error when calling get ${LoginApiEndpoints.getUserContext} endpoint',
           e,
           stacktrace);
       return Left(
-          'Error when calling get /api-fempinya/mobile_user_context endpoint: $e');
+          'Error when calling get ${LoginApiEndpoints.getUserContext} endpoint: $e');
     }
   }
 
@@ -39,7 +39,7 @@ class UsersServiceImpl implements UsersService {
   @override
   Future<Either<String, TokenEntity>> getToken(GetTokenParams params) async {
     try {
-      final response = await _dio.post('/api/auth/login',
+      final response = await _dio.post(LoginApiEndpoints.getToken,
           queryParameters: _buildGetTokenQueryParams(params));
       if (response.statusCode == 200 && response.data is Map) {
         final json = response.data as Map<String, dynamic>;
@@ -47,9 +47,10 @@ class UsersServiceImpl implements UsersService {
       }
       return const Left('Unexpected response format');
     } catch (e, stacktrace) {
-      _logError(
-          'Error when calling get /api/auth/login endpoint', e, stacktrace);
-      return Left('Error when calling get /api/auth/login endpoint: $e');
+      _logError('Error when calling get ${LoginApiEndpoints.getToken} endpoint',
+          e, stacktrace);
+      return Left(
+          'Error when calling get ${LoginApiEndpoints.getToken} endpoint: $e');
     }
   }
 

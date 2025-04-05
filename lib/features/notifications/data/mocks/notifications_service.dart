@@ -1,8 +1,11 @@
 import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+
 import 'package:fempinya3_flutter_app/features/notifications/data/mocks/get_notifications_handler.dart';
 import 'package:fempinya3_flutter_app/features/notifications/data/mocks/update_read_status_handler.dart';
+import 'package:fempinya3_flutter_app/global_endpoints.dart';
+import 'package:fempinya3_flutter_app/features/notifications/data/sources/notifications_api_endpoints.dart';
 
 class NotificationsDioMockInterceptor extends Interceptor {
   int percentageOfRandomFailures = 0;
@@ -11,8 +14,12 @@ class NotificationsDioMockInterceptor extends Interceptor {
   Map<_MockRouteKey, void Function(NotificationsDioMockInterceptor mock,
           RequestOptions options, RequestInterceptorHandler handler)>
       mockRouter = {
-    _MockRouteKey('/notifications', 'GET'): GetNotificationsHandler.handle,
-    _MockRouteKey('/notifications/:id/read', 'PATCH'): UpdateReadStatusHandler.handle,
+    _MockRouteKey(NotificationsApiEndpoints.getNotifications, 'GET'):
+        GetNotificationsHandler.handle,
+    _MockRouteKey(
+        buildEndpoint(NotificationsApiEndpoints.readNotificationEndpoint,
+            {'notificationId': ':id'}),
+        'PATCH'): UpdateReadStatusHandler.handle,
   };
 
   @override
