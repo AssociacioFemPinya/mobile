@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
+
 import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 
 abstract class GetRondaHandler {
@@ -9,26 +8,37 @@ abstract class GetRondaHandler {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) {
-    final queryParams = options.queryParameters;
-    Response<dynamic> response;
+    // Extract the integer ID from the path
+    final idPart = options.path.split('/').last;
+    int? rondaID;
 
-    // If query param doesn't contain eventID, return none
-    if (!queryParams.containsKey("id") || queryParams["id"] == null) {
-      response = Response(
-        requestOptions: options,
-        statusCode: 400,
-      );
+    // Try to parse the ID as an integer
+    try {
+      rondaID = int.parse(idPart);
+    } catch (e) {
+      // If parsing fails, set rondaID to null
+      rondaID = null;
+    }
+
+    // Initialize the response with a bad request status
+    Response response = Response(
+      requestOptions: options,
+      statusCode: 400,
+      data: {'error': 'Invalid ID format'},
+    );
+
+    // Check if rondaID is null or invalid
+    if (rondaID == null) {
       handler.resolve(response);
       return;
     }
 
-    // Try to find the event that match eventID
-    int rondaID = queryParams["id"];
+    // Try to find the event that match rondaID
     for (var ronda in mock.rondesList) {
-      if (ronda.id == rondaID) {
+      if (ronda['id'] == rondaID) {
         response = Response(
           requestOptions: options,
-          data: jsonEncode(ronda.toModel().toJson()),
+          data: ronda,
           statusCode: 200,
         );
         handler.resolve(response);

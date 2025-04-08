@@ -26,14 +26,14 @@ class UsersDioMockInterceptor extends Interceptor {
     return UserEntity(
       castellerActiveId: 1,
       castellerActiveAlias: "Josep Maria",
-        linkedCastellers: [
+      linkedCastellers: [
         LinkedCastellerEntity(
           idCastellerApiUser: 1,
           apiUserId: 1,
           castellerId: 1,
-          ),
-        ],
-        boardsEnabled: true,
+        ),
+      ],
+      boardsEnabled: true,
     );
   }
 

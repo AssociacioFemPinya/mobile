@@ -36,7 +36,7 @@ class RondaViewContentsPage extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: Text(translate.rondesListRondaButton(
-                state.ronda.id, state.ronda.eventName)),
+                state.ronda.id, state.ronda.name)),
           ),
           body: Center(
             child: _rondaViewContentsBody(state, translate),

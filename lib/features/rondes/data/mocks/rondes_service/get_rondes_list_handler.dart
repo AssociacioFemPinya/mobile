@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
+
 import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 
 abstract class GetRondesListHandler {
@@ -9,26 +8,15 @@ abstract class GetRondesListHandler {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) {
-    final List<RondaEntity> rondes = mock.rondesList;
+    final List<Map> rondes = mock.rondesList;
 
-    final queryParams = options.queryParameters;
     Response<dynamic> response;
-
-    // If query param doesn't contain user email, return none
-    if (!queryParams.containsKey("email") || queryParams["email"] == null) {
-      response = Response(
-        requestOptions: options,
-        statusCode: 400,
-      );
-      handler.resolve(response);
-      return;
-    }
 
     // Create a response object
     response = Response(
       requestOptions: options,
       data:
-          jsonEncode(rondes.map((ronda) => ronda.toModel().toJson()).toList()),
+          rondes,
       statusCode: 200,
     );
 

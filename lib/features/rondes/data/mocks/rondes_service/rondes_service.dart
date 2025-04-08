@@ -5,7 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 
 class RondesDioMockInterceptor extends Interceptor {
-  late List<RondaEntity> rondesList;
+  late List<Map> rondesList;
   late PublicDisplayUrlEntity publicDisplayUrl;
 
   int percentageOfRandomFailures = 0;
@@ -15,8 +15,8 @@ class RondesDioMockInterceptor extends Interceptor {
       _MockRouteKey,
       void Function(RondesDioMockInterceptor mock, RequestOptions options,
           RequestInterceptorHandler handler)> mockRouter = {
-    _MockRouteKey('/rondes', 'GET'): GetRondesListHandler.handle,
-    _MockRouteKey('/ronda', 'GET'): GetRondaHandler.handle,
+    _MockRouteKey('/api-fempinya/mobile_rondas', 'GET'):
+        GetRondesListHandler.handle,
     _MockRouteKey('/publicDisplayUrl', 'GET'):
         GetPublicDisplayUrlHandler.handle,
   };
@@ -26,28 +26,33 @@ class RondesDioMockInterceptor extends Interceptor {
     publicDisplayUrl = _generatePublicDisplayUrl();
   }
 
-  List<RondaEntity> _generateRondes() {
-    List<RondaEntity> rondaEntityList = List<RondaEntity>.generate(2, (index) {
-      return RondaEntity(
-          id: index,
-          eventName: 'Lorem ipsum dolor',
-          publicUrl:
-              'https://app.fempinya.cat/public/display/AireNou/WWN5Wk9aTnl4Q3FHUTE5bklsTkdCOFEvQ1BLWVB4M1BveVpRYlNJbkE1bDZ2SVBNTUlIbzI3S1RXUGRlVlBsUQ==',
-          ronda: index);
+List<Map<String, dynamic>> _generateRondes() {
+    List<Map<String, dynamic>> rondaMapList =
+        List<Map<String, dynamic>>.generate(2, (index) {
+      return {
+        'id': index, // Adjusted to start from 1
+        'name': 'Lorem ipsum dolor',
+        'publicUrl':
+            'https://app.fempinya.cat/public/display/AireNou/WWN5Wk9aTnl4Q3FHUTE5bklsTkdCOFEvQ1BLWVB4M1BveVpRYlNJbkE1bDZ2SVBNTUlIbzI3S1RXUGRlVlBsUQ==',
+        'ronda': index, // Adjusted to start from 1
+      };
     });
-    rondaEntityList.add(RondaEntity(
-      id: 2,
-      eventName: 'sit amet.',
-      publicUrl: '',
-      ronda: 2,
-    ));
-    rondaEntityList.add(RondaEntity(
-      id: 3,
-      eventName: 'Sed quisquam',
-      publicUrl: 'mail@mail.com',
-      ronda: 3,
-    ));
-    return rondaEntityList;
+
+    rondaMapList.add({
+      'id': 2,
+      'name': 'sit amet.',
+      'publicUrl': '',
+      'ronda': 2,
+    });
+
+    rondaMapList.add({
+      'id': 3,
+      'name': 'Sed quisquam',
+      'publicUrl': 'mail@mail.com',
+      'ronda': 3,
+    });
+
+    return rondaMapList;
   }
 
   @override
@@ -61,6 +66,15 @@ class RondesDioMockInterceptor extends Interceptor {
 
     // Check the request path and method and provide a mock response
     final routeKey = _MockRouteKey(options.path, options.method);
+
+    // Custom logic to handle dynamic paths
+    if (options.path.startsWith('/api-fempinya/mobile_rondas/') &&
+        options.method == 'GET') {
+      GetRondaHandler.handle(this, options, handler);
+      EasyLoading.dismiss();
+      return;
+    }
+
     if (mockRouter.containsKey(routeKey)) {
       final random = Random();
       if (random.nextInt(101) > 100 - percentageOfRandomFailures) {
@@ -90,7 +104,7 @@ class RondesDioMockInterceptor extends Interceptor {
     // Handle responses if needed
     super.onResponse(response, handler);
   }
-  
+
   PublicDisplayUrlEntity _generatePublicDisplayUrl() {
     return (PublicDisplayUrlEntity(
         publicUrl:

@@ -2,13 +2,13 @@ class RondaModel {
   final int? id;
   final String? publicUrl;
   final int? ronda;
-  final String? eventName;
+  final String? name;
 
   RondaModel(
       {required this.id,
       required this.publicUrl,
       required this.ronda,
-      required this.eventName});
+      required this.name});
 
   // Factory constructor for JSON deserialization
   factory RondaModel.fromJson(Map<String, dynamic> data) {
@@ -16,7 +16,7 @@ class RondaModel {
       id: data['id'],
       publicUrl: data['publicUrl'],
       ronda: data['ronda'],
-      eventName: data['eventName'],
+      name: data['name'],
     );
   }
 
@@ -26,7 +26,7 @@ class RondaModel {
       'id': id,
       'publicUrl': publicUrl,
       'ronda': ronda,
-      'eventName': eventName,
+      'name': name,
     };
   }
 }

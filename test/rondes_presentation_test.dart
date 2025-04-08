@@ -55,7 +55,7 @@ void main() {
     blocTest<RondesListBloc, RondesListState>(
       'givenRondesListBloc_whenLoadRondesList_thenStateIsLoadSuccessAndRondes are retrieved',
       build: () => rondesListBloc,
-      act: (bloc) => bloc.add(LoadRondesList(email: "mail@mail.com")),
+      act: (bloc) => bloc.add(LoadRondesList()),
       wait: const Duration(milliseconds: 200),
       expect: () => <RondesListState>[
         RondesListLoadSuccessState(List.empty()),
@@ -70,7 +70,7 @@ void main() {
                 publicUrl:
                     'https://app.fempinya.cat/public/display/AireNou/WWN5Wk9aTnl4Q3FHUTE5bklsTkdCOFEvQ1BLWVB4M1BveVpRYlNJbkE1bDZ2SVBNTUlIbzI3S1RXUGRlVlBsUQ==',
                 ronda: 0,
-                eventName: 'Lorem ipsum dolor')));
+                name: 'Lorem ipsum dolor')));
         expect(
             (bloc.state as RondesListLoadSuccessState).rondes,
             contains(RondaEntity(
@@ -78,21 +78,21 @@ void main() {
                 publicUrl:
                     'https://app.fempinya.cat/public/display/AireNou/WWN5Wk9aTnl4Q3FHUTE5bklsTkdCOFEvQ1BLWVB4M1BveVpRYlNJbkE1bDZ2SVBNTUlIbzI3S1RXUGRlVlBsUQ==',
                 ronda: 1,
-                eventName: 'Lorem ipsum dolor')));
+                name: 'Lorem ipsum dolor')));
         expect(
             (bloc.state as RondesListLoadSuccessState).rondes,
             contains(RondaEntity(
-                id: 2, publicUrl: '', ronda: 2, eventName: 'sit amet.')));
+                id: 2, publicUrl: '', ronda: 2, name: 'sit amet.')));
         expect(
             (bloc.state as RondesListLoadSuccessState).rondes,
             contains(RondaEntity(
                 id: 3,
                 publicUrl: 'mail@mail.com',
                 ronda: 3,
-                eventName: 'Sed quisquam')));
-        final event = LoadRondesList(email: 'test@example.com');
+                name: 'Sed quisquam')));
+        final event = LoadRondesList();
         expect(event.toString(),
-            'Rondes button pressed { email : test@example.com }');
+            'Rondes button pressed');
       },
     );
   });
@@ -122,7 +122,7 @@ void main() {
                 publicUrl:
                     'https://app.fempinya.cat/public/display/AireNou/WWN5Wk9aTnl4Q3FHUTE5bklsTkdCOFEvQ1BLWVB4M1BveVpRYlNJbkE1bDZ2SVBNTUlIbzI3S1RXUGRlVlBsUQ==',
                 ronda: 0,
-                eventName: 'Lorem ipsum dolor')));
+                name: 'Lorem ipsum dolor')));
       },
     );
 
@@ -203,8 +203,8 @@ void main() {
     testWidgets('should render the list of rondes', (tester) async {
       mockRondesListBloc.state = RondesListLoadSuccessState(
         [
-          RondaEntity(id: 1, ronda: 1, eventName: 'Event 1', publicUrl: ''),
-          RondaEntity(id: 2, ronda: 2, eventName: 'Event 2', publicUrl: ''),
+          RondaEntity(id: 1, ronda: 1, name: 'Event 1', publicUrl: ''),
+          RondaEntity(id: 2, ronda: 2, name: 'Event 2', publicUrl: ''),
         ],
       );
 
@@ -237,7 +237,7 @@ void main() {
     testWidgets('should navigate to the ronda page', (tester) async {
       mockRondesListBloc.state = RondesListLoadSuccessState(
         [
-          RondaEntity(id: 1, ronda: 1, eventName: 'Event 1', publicUrl: ''),
+          RondaEntity(id: 1, ronda: 1, name: 'Event 1', publicUrl: ''),
         ],
       );
 
@@ -321,7 +321,7 @@ void main() {
       final ronda = RondaEntity(
           id: 1,
           ronda: 1,
-          eventName: 'Test Event',
+          name: 'Test Event',
           publicUrl:
               'https://app.fempinya.cat/public/display/AireNou/WWN5Wk9aTnl4Q3FHUTE5bklsTkdCOFEvQ1BLWVB4M1BveVpRYlNJbkE1bDZ2SVBNTUlIbzI3S1RXUGRlVlBsUQ==');
       mockRondaViewBloc.state = RondaViewLoadSuccessState(ronda: ronda);
@@ -352,7 +352,7 @@ void main() {
     testWidgets('Error is correct when url is empty', (tester) async {
       // Arrange
       final ronda =
-          RondaEntity(id: 1, ronda: 1, eventName: 'Test Event', publicUrl: '');
+          RondaEntity(id: 1, ronda: 1, name: 'Test Event', publicUrl: '');
       mockRondaViewBloc.state = RondaViewLoadFailureStateEmptyUri(ronda: ronda);
 
       // Act
@@ -382,7 +382,7 @@ void main() {
     testWidgets('Error is correct when url is wrong', (tester) async {
       // Arrange
       final ronda = RondaEntity(
-          id: 1, ronda: 1, eventName: 'Test Event', publicUrl: 'mail@mail.com');
+          id: 1, ronda: 1, name: 'Test Event', publicUrl: 'mail@mail.com');
       mockRondaViewBloc.state = RondaViewLoadFailureStateWrongUri(ronda: ronda);
 
       // Act

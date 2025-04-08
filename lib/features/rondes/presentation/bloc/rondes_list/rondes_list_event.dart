@@ -8,10 +8,9 @@ sealed class RondesListEvent extends Equatable {
 }
 
 class LoadRondesList extends RondesListEvent {
-  final String email;
 
-  LoadRondesList({required this.email});
+  LoadRondesList();
 
   @override
-  String toString() => 'Rondes button pressed { email : ${this.email} }';
+  String toString() => 'Rondes button pressed';
 }
