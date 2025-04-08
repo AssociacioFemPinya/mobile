@@ -10,8 +10,7 @@ class PublicDisplayUrlPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => PublicDisplayUrlViewBloc()
-        ..add(PublicDisplayUrlLoadEvent(
-            email: 'mail@mail.com')),
+        ..add(PublicDisplayUrlLoadEvent(email: 'mail@mail.com')),
       child: PublicDisplayUrlViewContentsPage(),
     );
   }

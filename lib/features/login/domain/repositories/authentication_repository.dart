@@ -1,9 +1,8 @@
-import 'package:dartz/dartz.dart';
-import 'package:fempinya3_flutter_app/features/login/login.dart';
-
 import 'dart:async';
-
+import 'package:dartz/dartz.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:fempinya3_flutter_app/features/login/login.dart';
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
@@ -12,10 +11,30 @@ class AuthenticationResult {
   final UserEntity? userEntity;
 
   AuthenticationResult({required this.status, this.userEntity});
+
+  @override
+  String toString() {
+    return 'AuthenticationResult($status, userEntity: "$userEntity")';
+  }
+
+  // Override the equality operator to compare two AuthenticationResult objects
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AuthenticationResult &&
+          runtimeType == other.runtimeType &&
+          status == other.status &&
+          userEntity == other.userEntity;
+
+  @override
+  int get hashCode => status.hashCode ^ userEntity.hashCode;
 }
 
 class AuthenticationRepository {
   final _controller = StreamController<AuthenticationResult>();
+  final SharedPreferences sharedPreferences;
+
+  AuthenticationRepository(this.sharedPreferences);
 
   Stream<AuthenticationResult> get status async* {
     await Future<void>.delayed(const Duration(seconds: 1));
@@ -46,18 +65,17 @@ class AuthenticationRepository {
       },
       (data) async {
         await saveAuthToken(data.access_token);
-        await fetchAndHandleUserData(mail, password);
+        await fetchAndHandleUserData();
       },
     );
   }
 
   Future<void> saveAuthToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('auth_token', token);
+    await sharedPreferences.setString('auth_token', token);
   }
 
-  Future<void> fetchAndHandleUserData(String mail, String password) async {
-    final getUserParams = GetUserParams(mail: mail, password: password);
+  Future<void> fetchAndHandleUserData() async {
+    final getUserParams = GetUserParams();
     final result = await sl<GetUser>().call(params: getUserParams);
 
     await result.fold(
@@ -67,7 +85,7 @@ class AuthenticationRepository {
         throw AuthenticationException('Invalid token');
       },
       (userData) {
-      _controller.add(AuthenticationResult(
+        _controller.add(AuthenticationResult(
           status: AuthenticationStatus.authenticated,
           userEntity: userData,
         ));
@@ -76,11 +94,7 @@ class AuthenticationRepository {
   }
 
   Future<void> logOut() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('auth_token');
-
-    _controller.add(
-        AuthenticationResult(status: AuthenticationStatus.unauthenticated));
+    await sharedPreferences.remove('auth_token');
   }
 
   void dispose() => _controller.close();

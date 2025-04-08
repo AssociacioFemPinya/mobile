@@ -4,13 +4,8 @@ import 'package:fempinya3_flutter_app/core/usecase/usecase.dart';
 import 'package:dartz/dartz.dart';
 
 class GetUserParams {
-  final String? mail;
-  final String? password;
-
-  GetUserParams({
-    this.mail,
-    this.password,
-  });
+  
+  GetUserParams();
 }
 
 class GetUser implements UseCase<Either, GetUserParams> {

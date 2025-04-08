@@ -28,5 +28,15 @@ class LoginFormState extends Equatable {
   }
 
   @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LoginFormState &&
+          runtimeType == other.runtimeType &&
+          status == other.status &&
+          mail == other.mail &&
+          password == other.password &&
+          isValid == other.isValid;
+          
+  @override
   List<Object> get props => [status, mail, password];
 }

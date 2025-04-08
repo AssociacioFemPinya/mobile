@@ -44,10 +44,12 @@ class AuthenticationBloc
     );
   }
 
-  void _onLogoutPressed(
+  Future<void> _onLogoutPressed(
     AuthenticationLogoutPressed event,
     Emitter<AuthenticationState> emit,
-  ) {
-    authenticationRepository.logOut();
+  ) async {
+    await authenticationRepository.logOut();
+    userEntity = null;
+    emit(AuthenticationState.unauthenticated());
   }
 }

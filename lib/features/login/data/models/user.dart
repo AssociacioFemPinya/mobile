@@ -49,7 +49,6 @@ class LinkedCasteller {
   final int apiUserId;
   final int castellerId;
 
-
   LinkedCasteller({
     required this.idCastellerApiUser,
     required this.apiUserId,
@@ -66,7 +65,7 @@ class LinkedCasteller {
   }
 
   // Factory constructor for JSON deserialization
-factory LinkedCasteller.fromJson(Map<String, dynamic> data) {
+  factory LinkedCasteller.fromJson(Map<String, dynamic> data) {
     return LinkedCasteller(
       idCastellerApiUser: data['idCastellerApiUser'] as int? ?? 0,
       apiUserId: data['apiUserId'] as int? ?? 0,

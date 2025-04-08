@@ -68,13 +68,20 @@ class UserEntity extends Equatable {
     linkedCastellers: [],
     boardsEnabled: false,
   );
+
+  @override
+  String toString() {
+    return 'UserEntity(castellerActiveId: $castellerActiveId, '
+        'castellerActiveAlias: $castellerActiveAlias, '
+        'linkedCastellers: $linkedCastellers, '
+        'boardsEnabled: $boardsEnabled)';
+  }
 }
 
 class LinkedCastellerEntity extends Equatable {
   final int idCastellerApiUser;
   final int apiUserId;
   final int castellerId;
-
 
   const LinkedCastellerEntity({
     required this.idCastellerApiUser,
@@ -107,5 +114,12 @@ class LinkedCastellerEntity extends Equatable {
       apiUserId: apiUserId,
       castellerId: castellerId,
     );
+  }
+
+  @override
+  String toString() {
+    return 'LinkedCasteller(idCastellerApiUser: $idCastellerApiUser, '
+        'apiUserId: $apiUserId, '
+        'castellerId: $castellerId)';
   }
 }

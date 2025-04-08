@@ -1,0 +1,127 @@
+import 'package:bloc_test/bloc_test.dart';
+import 'package:dio/dio.dart';
+import 'package:fempinya3_flutter_app/core/service_locator.dart' hide sl;
+import 'package:fempinya3_flutter_app/features/login/login.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:test/test.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+import 'mock_entities.dart';
+
+class MockAuthenticationRepository extends Mock
+    implements AuthenticationRepository {}
+
+class MockUserEntity extends Mock implements UserEntity {}
+
+void main() {
+  setUpAll(() {
+    setupCommonServiceLocator();
+    setupLoginServiceLocator();
+    final Dio _dio = sl<Dio>();
+    _dio.interceptors.clear();
+    _dio.interceptors.add(UsersDioMockInterceptor());
+    _dio.interceptors.add(TokensDioMockInterceptor());
+    WebViewPlatform.instance = FakeWebViewPlatform();
+  });
+
+  group('AuthenticationBloc', () {
+    late MockAuthenticationRepository authenticationRepository;
+    late AuthenticationBloc authenticationBloc;
+
+    setUp(() {
+      authenticationRepository = MockAuthenticationRepository();
+      authenticationBloc = AuthenticationBloc(
+        authenticationRepository: authenticationRepository,
+      );
+    });
+
+    tearDown(() {
+      authenticationBloc.close();
+    });
+
+    test('initial state is AuthenticationState.unknown', () {
+      expect(authenticationBloc.state, const AuthenticationState.unknown());
+    });
+
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      'emits AuthenticationState.unauthenticated when status is unauthenticated',
+      build: () => authenticationBloc,
+      act: (bloc) => bloc.add(AuthenticationSubscriptionRequested()),
+      setUp: () {
+        when(() => authenticationRepository.status).thenAnswer(
+          (_) => Stream.value(
+            AuthenticationResult(
+              status: AuthenticationStatus.unauthenticated,
+              userEntity: null,
+            ),
+          ),
+        );
+      },
+      expect: () => [
+        const AuthenticationState.unauthenticated(),
+      ],
+    );
+
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      'emits AuthenticationState.authenticated when status is authenticated',
+      build: () => authenticationBloc,
+      act: (bloc) => bloc.add(AuthenticationSubscriptionRequested()),
+      setUp: () {
+        final userEntity = MockUserEntity();
+        when(() => authenticationRepository.status).thenAnswer(
+          (_) => Stream.value(
+            AuthenticationResult(
+              status: AuthenticationStatus.authenticated,
+              userEntity: userEntity,
+            ),
+          ),
+        );
+      },
+      expect: () => [
+        isA<AuthenticationState>().having(
+          (state) => state.status,
+          'status',
+          AuthenticationStatus.authenticated,
+        ),
+      ],
+    );
+
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      'emits AuthenticationState.unknown when status is unknown',
+      build: () => authenticationBloc,
+      act: (bloc) => bloc.add(AuthenticationSubscriptionRequested()),
+      setUp: () {
+        when(() => authenticationRepository.status).thenAnswer(
+          (_) => Stream.value(
+            AuthenticationResult(
+              status: AuthenticationStatus.unknown,
+              userEntity: null,
+            ),
+          ),
+        );
+      },
+      expect: () => [
+        const AuthenticationState.unknown(),
+      ],
+    );
+
+    blocTest<AuthenticationBloc, AuthenticationState>(
+      'calls logOut when AuthenticationLogoutPressed is added',
+      build: () => authenticationBloc,
+      setUp: () {
+        when(() => authenticationRepository.logOut())
+            .thenAnswer((_) async => Future.value());
+      },
+      act: (bloc) {
+        bloc.add(AuthenticationLogoutPressed());
+      },
+      expect: () => [
+        AuthenticationState(
+            status: AuthenticationStatus.unauthenticated, user: null)
+      ],
+      verify: (bloc) {
+        verify(() => authenticationRepository.logOut()).called(1);
+      },
+    );
+  });
+}

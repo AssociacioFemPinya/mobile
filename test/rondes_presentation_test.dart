@@ -91,8 +91,7 @@ void main() {
                 ronda: 3,
                 name: 'Sed quisquam')));
         final event = LoadRondesList();
-        expect(event.toString(),
-            'Rondes button pressed');
+        expect(event.toString(), 'Rondes button pressed');
       },
     );
   });
@@ -472,7 +471,6 @@ void main() {
 
       await tester.pump(Duration(seconds: 2));
       expect(find.byType(PublicDisplayUrlPage), findsOneWidget);
-      
     });
   });
   group('PublicDisplayUrlViewBloc', () {
