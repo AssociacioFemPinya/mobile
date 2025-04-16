@@ -6,12 +6,13 @@ import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 import 'package:fempinya3_flutter_app/features/notifications/presentation/routes.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:async';
 import 'package:go_router/go_router.dart';
 
 GoRouter appRouter(AuthenticationBloc authenticationBloc) {
   return GoRouter(
-    initialLocation: loginRoute,
+    initialLocation: splashRoute,
     routes: [
       GoRoute(
         path: homeRoute,
@@ -26,20 +27,22 @@ GoRouter appRouter(AuthenticationBloc authenticationBloc) {
     refreshListenable: StreamToListenable([authenticationBloc.stream]),
     //The top-level callback allows the app to redirect to a new location.
     redirect: (context, state) {
-      final isAuthenticated =
-          (authenticationBloc.state != const AuthenticationState.unknown() &&
-              authenticationBloc.state !=
-                  const AuthenticationState.unauthenticated());
-
-      if (isAuthenticated) {
-        // If the user is authenticated, redirect to the home page
-        if (state.matchedLocation == loginRoute) {
-          return homeRoute;
-        }
-      } else if (isAuthenticated == false) {
+      // Show loading screen on app startup
+      if (authenticationBloc.state == const AuthenticationState.unknown()) {
+        EasyLoading.show(status: 'Loading...');
+        return splashRoute;
+      }
+      if (authenticationBloc.state ==
+          const AuthenticationState.unauthenticated()) {
         // If the user is not authenticated, redirect to the login page
-        if (state.matchedLocation != loginRoute) {
-          return loginRoute;
+        EasyLoading.dismiss();
+        return loginRoute;
+      } else {
+        // If the user is authenticated, redirect to the home page
+        if (state.matchedLocation == loginRoute ||
+            state.matchedLocation == splashRoute) {
+          EasyLoading.dismiss();
+          return homeRoute;
         }
       }
       // Otherwise do not modify the route

@@ -38,9 +38,35 @@ class AuthenticationRepository {
 
   Stream<AuthenticationResult> get status async* {
     await Future<void>.delayed(const Duration(seconds: 1));
-    // yield AuthenticationStatus.unauthenticated;
-    yield AuthenticationResult(status: AuthenticationStatus.unauthenticated);
+    
+    // Check if the token exists in SharedPreferences
+    String? token = _fetchAuthToken();
+
+    if (token != null) {
+      try {
+        // // Token exists, attempt to fetch user data
+        Future<UserEntity> userEntity = _fetchUserData();
+        // Fetching user data succeeded, emit authenticated status with user data
+        yield AuthenticationResult(
+          status: AuthenticationStatus.authenticated,
+          userEntity: await userEntity,
+        );
+      } on AuthenticationException {
+        // Fetching user data failed, delete the token and emit unauthenticated status
+        yield AuthenticationResult(
+            status: AuthenticationStatus.unauthenticated);
+      }
+    } else {
+      // Token does not exist, emit unauthenticated status
+      yield AuthenticationResult(status: AuthenticationStatus.unauthenticated);
+    }
+
     yield* _controller.stream;
+  }
+
+  String? _fetchAuthToken() {
+    String? token = sharedPreferences.getString('auth_token');
+    return token;
   }
 
   Future<void> logIn({
@@ -52,10 +78,10 @@ class AuthenticationRepository {
 
     var tokenResult = await sl<GetToken>().call(params: getTokenParams);
 
-    await handleGetTokenResult(tokenResult, mail, password);
+    await _handleGetTokenResult(tokenResult, mail, password);
   }
 
-  Future<void> handleGetTokenResult(
+  Future<void> _handleGetTokenResult(
       Either<dynamic, dynamic> result, String mail, String password) async {
     await result.fold(
       (failure) async {
@@ -64,32 +90,39 @@ class AuthenticationRepository {
         throw AuthenticationException('Invalid username or password');
       },
       (data) async {
-        await saveAuthToken(data.access_token);
-        await fetchAndHandleUserData();
+        await _saveAuthToken(data.access_token);
+        try {
+          UserEntity userEntity = await _fetchUserData();
+          _controller.add(AuthenticationResult(
+            status: AuthenticationStatus.authenticated,
+            userEntity: userEntity,
+          ));
+        } on AuthenticationException {
+          _controller.add(AuthenticationResult(
+              status: AuthenticationStatus.unauthenticated));
+          throw AuthenticationException(
+              'Server provided a wrong token with this username and password.');
+        }
+        
       },
     );
   }
 
-  Future<void> saveAuthToken(String token) async {
+  Future<void> _saveAuthToken(String token) async {
     await sharedPreferences.setString('auth_token', token);
   }
 
-  Future<void> fetchAndHandleUserData() async {
+  Future<UserEntity> _fetchUserData() async {
     final getUserParams = GetUserParams();
     final result = await sl<GetUser>().call(params: getUserParams);
 
-    await result.fold(
+    return result.fold(
       (failure) async {
         _controller.add(
             AuthenticationResult(status: AuthenticationStatus.unauthenticated));
         throw AuthenticationException('Invalid token');
       },
-      (userData) {
-        _controller.add(AuthenticationResult(
-          status: AuthenticationStatus.authenticated,
-          userEntity: userData,
-        ));
-      },
+      (userData) => userData,
     );
   }
 

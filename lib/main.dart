@@ -49,13 +49,13 @@ Future<void> main() async {
   setupLoginServiceLocator();
   setupRondesServiceLocator();
   setupNotificationsServiceLocator();
-  runApp(const App());
   configLoading();
+
+  runApp(const App());
 }
 
-Future<void> requestNotificationPermissions() async {
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-
+Future<void> requestNotificationPermissions(FirebaseMessaging messaging) async {
+  
   NotificationSettings settings = await messaging.requestPermission(
     alert: true,
     announcement: false,
@@ -134,7 +134,9 @@ class _AppState extends State<App> {
       future: initializationFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return Container(
+            color: Colors.white,
+          );
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
