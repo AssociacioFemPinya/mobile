@@ -47,26 +47,33 @@ class RondesListPageContents extends StatelessWidget {
           },
           builder: (context, state) {
             if (state is RondesListLoadSuccessState) {
-              return ListView.separated(
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: ElevatedButton(
-                      onPressed: () {
-                        context.pushNamed(rondaRoute, pathParameters: {
-                          'rondaID': state.rondes[index].id.toString()
-                        });
-                      },
-                      child: Text(AppLocalizations.of(context)!
-                          .rondesListRondaButton(state.rondes[index].ronda,
-                              state.rondes[index].name)),
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return SizedBox(height: 0);
-                },
-                itemCount: state.rondes.length,
-              );
+              if (state.rondes.isEmpty) {
+                // Display a message when state.rondes is empty
+                return Center(
+                  child: Text(AppLocalizations.of(context)!.rondesListEmpty),
+                );
+              } else {
+                return ListView.separated(
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: ElevatedButton(
+                        onPressed: () {
+                          context.pushNamed(rondaRoute, pathParameters: {
+                            'rondaID': state.rondes[index].id.toString()
+                          });
+                        },
+                        child: Text(AppLocalizations.of(context)!
+                            .rondesListRondaButton(state.rondes[index].ronda,
+                                state.rondes[index].name)),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return SizedBox(height: 0);
+                  },
+                  itemCount: state.rondes.length,
+                );
+              }
             } else {
               return Center(
                 child: Text('No data available'),

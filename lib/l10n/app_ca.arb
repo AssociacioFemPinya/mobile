@@ -61,6 +61,7 @@
   "commonSnackBarSuccessSaving": "Desat amb èxit",
   "commentsScreenHintText": "Escriu els teus comentaris",
   "commentsScreenLabelText": "Comentaris",
+  "rondesListEmpty": "No hi ha rondes disponibles en aquest moment. Si us plau, torna a comprovar-ho més tard.",
   "rondesListRondaButton": "Ronda {rondaNumber} {eventName}",
    "@rondesListRondaButton": {
       "placeholders": {
