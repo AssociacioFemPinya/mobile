@@ -1,13 +1,15 @@
-import 'package:fempinya3_flutter_app/features/events/domain/useCases/get_event.dart';
 import 'package:logger/logger.dart';
 import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
+
 import 'package:fempinya3_flutter_app/features/events/data/models/event.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/entities/event.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/useCases/get_events_list.dart';
 import 'package:fempinya3_flutter_app/features/events/service_locator.dart';
-import 'package:intl/intl.dart';
+import 'package:fempinya3_flutter_app/features/events/data/sources/events_api_endpoints.dart';
+import 'package:fempinya3_flutter_app/features/events/domain/useCases/get_event.dart';
 
 abstract class EventsService {
   Future<Either<String, List<EventEntity>>> getEventsList(
@@ -43,7 +45,7 @@ class EventsServiceImpl implements EventsService {
       GetEventsListParams params) async {
     try {
       final response = await _dio.get(
-        '/api-fempinya/mobile_events',
+        EventsApiEndpoints.getEvents,
         queryParameters: _buildGetEventsListQueryParams(params),
       );
       if (response.statusCode == 200 && response.data is List<dynamic>) {
@@ -55,10 +57,11 @@ class EventsServiceImpl implements EventsService {
       }
       return const Left('Unexpected response format');
     } catch (e, stacktrace) {
-      _logError('Error when calling /api-fempinya/mobile_events endpoint', e,
+      _logError('Error when calling ${EventsApiEndpoints.getEvents} endpoint',
+          e,
           stacktrace);
       return Left(
-          'Error when calling /api-fempinya/mobile_events endpoint: $e');
+          'Error when calling ${EventsApiEndpoints.getEvents} endpoint: $e');
     }
   }
 
@@ -71,7 +74,7 @@ class EventsServiceImpl implements EventsService {
     try {
       // TODO: the ID should not come from params?
       final response =
-          await _dio.get('/api-fempinya/mobile_events/${params.id}');
+          await _dio.get('${EventsApiEndpoints.getEvents}/${params.id}');
       _logger.d('Response data: ${response.data.runtimeType}');
       if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
         final json = response.data as Map<String, dynamic>;
@@ -80,11 +83,11 @@ class EventsServiceImpl implements EventsService {
       return const Left('Unexpected response format');
     } catch (e, stacktrace) {
       _logError(
-          'Error when calling get /api-fempinya/mobile_events/${params.id} endpoint',
+          'Error when calling get ${EventsApiEndpoints.getEvents}/${params.id} endpoint',
           e,
           stacktrace);
       return Left(
-          'Error when calling get /api-fempinya/mobile_events/${params.id} endpoint: $e');
+          'Error when calling get ${EventsApiEndpoints.getEvents}/${params.id} endpoint: $e');
     }
   }
 
@@ -95,7 +98,7 @@ class EventsServiceImpl implements EventsService {
       final data = params.toModel().toJson();
       data.remove('id');
       final response = await _dio.put(
-          '/api-fempinya/mobile_events/${params.id}',
+          '${EventsApiEndpoints.getEvents}/${params.id}',
           data: jsonEncode(data));
       if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
         final json = response.data as Map<String, dynamic>;
@@ -103,10 +106,11 @@ class EventsServiceImpl implements EventsService {
       }
       return const Left('Unexpected response format');
     } catch (e, stacktrace) {
-      _logError('Error when calling post /api-fempinya/mobile_events endpoint',
+      _logError(
+          'Error when calling post ${EventsApiEndpoints.getEvents}/${params.id} endpoint',
           e, stacktrace);
       return Left(
-          'Error when calling post /api-fempinya/mobile_events endpoint: $e');
+          'Error when calling post ${EventsApiEndpoints.getEvents}/${params.id} endpoint: $e');
     }
   }
 

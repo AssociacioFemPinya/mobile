@@ -15,9 +15,9 @@ class RondesDioMockInterceptor extends Interceptor {
       _MockRouteKey,
       void Function(RondesDioMockInterceptor mock, RequestOptions options,
           RequestInterceptorHandler handler)> mockRouter = {
-    _MockRouteKey('/api-fempinya/mobile_rondas', 'GET'):
+    _MockRouteKey(RondesApiEndpoints.getRondes, 'GET'):
         GetRondesListHandler.handle,
-    _MockRouteKey('/publicDisplayUrl', 'GET'):
+    _MockRouteKey(RondesApiEndpoints.getPublicDisplayUrl, 'GET'):
         GetPublicDisplayUrlHandler.handle,
   };
 
@@ -26,7 +26,7 @@ class RondesDioMockInterceptor extends Interceptor {
     publicDisplayUrl = _generatePublicDisplayUrl();
   }
 
-List<Map<String, dynamic>> _generateRondes() {
+  List<Map<String, dynamic>> _generateRondes() {
     List<Map<String, dynamic>> rondaMapList =
         List<Map<String, dynamic>>.generate(2, (index) {
       return {

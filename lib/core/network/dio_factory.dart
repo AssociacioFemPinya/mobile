@@ -1,11 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:fempinya3_flutter_app/global_endpoints.dart';
 import 'package:fempinya3_flutter_app/core/network/loading_interceptor.dart';
-import 'package:fempinya3_flutter_app/features/events/data/mocks/events_service/events_service.dart';
-import 'package:fempinya3_flutter_app/features/login/login.dart';
 import 'package:fempinya3_flutter_app/features/notifications/data/mocks/notifications_service.dart';
-import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 
 class DioFactory {
   static Dio? _dio;
@@ -13,7 +11,7 @@ class DioFactory {
   static Dio getInstance() {
     if (_dio == null) {
       BaseOptions options = BaseOptions(
-        baseUrl: 'https://api.dev.fempinya.cat',
+        baseUrl: GlobalEndpoints.apiBaseUrl,
         connectTimeout: Duration(milliseconds: 20000),
         receiveTimeout: Duration(milliseconds: 20000),
         headers: {

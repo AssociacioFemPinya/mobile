@@ -20,7 +20,7 @@ class RondesServiceImpl implements RondesService {
   Future<Either<String, List<RondaEntity>>> getRondesList(
       GetRondesListParams params) async {
     try {
-      final response = await _dio.get('/api-fempinya/mobile_rondas');
+      final response = await _dio.get(RondesApiEndpoints.getRondes);
       if (response.statusCode == 200 && response.data is List) {
         final jsonList = response.data as List<dynamic>;
         final pinyes = jsonList
@@ -33,10 +33,10 @@ class RondesServiceImpl implements RondesService {
       }
       return const Left('Unexpected response format');
     } catch (e, stacktrace) {
-      _logError('Error when calling /api-fempinya/mobile_rondas endpoint', e,
-          stacktrace);
+      _logError('Error when calling ${RondesApiEndpoints.getRondes} endpoint',
+          e, stacktrace);
       return Left(
-          'Error when calling /api-fempinya/mobile_rondas endpoint: $e');
+          'Error when calling ${RondesApiEndpoints.getRondes} endpoint: $e');
     }
   }
 
@@ -47,8 +47,8 @@ class RondesServiceImpl implements RondesService {
   @override
   Future<Either<String, RondaEntity>> getRonda(GetRondaParams params) async {
     try {
-      final response =
-          await _dio.get('/api-fempinya/mobile_rondas/${params.id.toString()}');
+      final response = await _dio
+          .get("${RondesApiEndpoints.getRondes}/${params.id.toString()}");
       if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
         final json = response.data as Map<String, dynamic>;
         return Right(RondaEntity.fromModel(RondaModel.fromJson(json)));
@@ -62,10 +62,12 @@ class RondesServiceImpl implements RondesService {
       }
       return const Left('Unexpected response format');
     } catch (e, stacktrace) {
-      _logError('Error when calling /api-fempinya/mobile_rondas endpoint', e,
+      _logError(
+          'Error when calling ${RondesApiEndpoints.getRondes}/${params.id.toString()} endpoint',
+          e,
           stacktrace);
       return Left(
-          'Error when calling /api-fempinya/mobile_rondas endpoint: $e');
+          'Error when calling ${RondesApiEndpoints.getRondes}/${params.id.toString()} endpoint: $e');
     }
   }
 
@@ -73,7 +75,7 @@ class RondesServiceImpl implements RondesService {
   Future<Either<String, PublicDisplayUrlEntity>> getPublicDisplayUrl(
       GetPublicDisplayUrlParams params) async {
     try {
-      final response = await _dio.get('/publicDisplayUrl',
+      final response = await _dio.get(RondesApiEndpoints.getPublicDisplayUrl,
           queryParameters: _buildGetPublicDisplayUrl(params));
       if (response.statusCode == 200 && response.data is String) {
         final json =
@@ -87,8 +89,12 @@ class RondesServiceImpl implements RondesService {
       }
       return const Left('Unexpected response format');
     } catch (e, stacktrace) {
-      _logError('Error when calling /publicDisplayUrl endpoint', e, stacktrace);
-      return Left('Error when calling /publicDisplayUrl endpoint: $e');
+      _logError(
+          'Error when calling ${RondesApiEndpoints.getPublicDisplayUrl} endpoint',
+          e,
+          stacktrace);
+      return Left(
+          'Error when calling ${RondesApiEndpoints.getPublicDisplayUrl} endpoint: $e');
     }
   }
 
