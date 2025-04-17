@@ -1,7 +1,7 @@
 import 'package:logger/logger.dart';
-import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+
 import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 
 abstract class RondesService {
@@ -28,8 +28,6 @@ class RondesServiceImpl implements RondesService {
                 RondaModel.fromJson(json as Map<String, dynamic>)))
             .toList();
         return Right(pinyes);
-      } else if (response.statusCode == 400) {
-        return Left('Any user email provided');
       }
       return const Left('Unexpected response format');
     } catch (e, stacktrace) {
@@ -75,17 +73,11 @@ class RondesServiceImpl implements RondesService {
   Future<Either<String, PublicDisplayUrlEntity>> getPublicDisplayUrl(
       GetPublicDisplayUrlParams params) async {
     try {
-      final response = await _dio.get(RondesApiEndpoints.getPublicDisplayUrl,
-          queryParameters: _buildGetPublicDisplayUrl(params));
-      if (response.statusCode == 200 && response.data is String) {
-        final json =
-            jsonDecode(response.data as String) as Map<String, dynamic>;
+      final response = await _dio.get(RondesApiEndpoints.getPublicDisplayUrl);
+      if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
+        final json = response.data as Map<String, dynamic>;
         return Right(PublicDisplayUrlEntity.fromModel(
             PublicDisplayUrlModel.fromJson(json)));
-      } else if (response.statusCode == 404) {
-        return Left('Unknown email');
-      } else if (response.statusCode == 400) {
-        return Left('Any user email provided');
       }
       return const Left('Unexpected response format');
     } catch (e, stacktrace) {
@@ -96,9 +88,5 @@ class RondesServiceImpl implements RondesService {
       return Left(
           'Error when calling ${RondesApiEndpoints.getPublicDisplayUrl} endpoint: $e');
     }
-  }
-
-  _buildGetPublicDisplayUrl(GetPublicDisplayUrlParams params) {
-    return {'email': params.email};
   }
 }

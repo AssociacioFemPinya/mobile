@@ -1,20 +1,28 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:fempinya3_flutter_app/core/navigation/route_names.dart';
-import 'package:fempinya3_flutter_app/core/service_locator.dart';
-import 'package:fempinya3_flutter_app/features/login/login.dart' hide sl;
-import 'package:fempinya3_flutter_app/features/menu/domain/entities/locale.dart';
-import 'package:fempinya3_flutter_app/features/rondes/rondes.dart' hide sl;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart' hide ProgressCallback;
 import 'mock_entities.dart';
 import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart'
     hide ProgressCallback;
+
+import 'package:fempinya3_flutter_app/core/navigation/route_names.dart';
+import 'package:fempinya3_flutter_app/core/service_locator.dart';
+import 'package:fempinya3_flutter_app/features/login/login.dart' hide sl;
+import 'package:fempinya3_flutter_app/features/menu/domain/entities/locale.dart';
+import 'package:fempinya3_flutter_app/features/rondes/rondes.dart' hide sl;
+
+@GenerateNiceMocks([MockSpec<GetPublicDisplayUrl>()])
+import 'rondes_presentation_test.mocks.dart';
 
 void main() {
   late MockRondesListBloc mockRondesListBloc;
@@ -22,6 +30,8 @@ void main() {
   late MockAuthenticationRepository mockAuthenticationRepository;
   late MockAuthenticationBloc mockAuthenticationBloc;
   late MockPublicDisplayUrlViewBloc mockPublicDisplayUrlViewBloc;
+
+  GetPublicDisplayUrl? _getPublicDisplayUrl;
 
   setUp(() {
     mockRondesListBloc = MockRondesListBloc();
@@ -36,6 +46,7 @@ void main() {
     setupCommonServiceLocator();
     setupRondesServiceLocator();
     final Dio _dio = sl<Dio>();
+    _getPublicDisplayUrl = sl<GetPublicDisplayUrl>();
     _dio.interceptors.clear();
     _dio.interceptors.add(RondesDioMockInterceptor());
     WebViewPlatform.instance = FakeWebViewPlatform();
@@ -498,6 +509,7 @@ void main() {
             ),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
+            builder: EasyLoading.init(),
           ),
         ),
       );
@@ -508,9 +520,24 @@ void main() {
   });
   group('PublicDisplayUrlViewBloc', () {
     late PublicDisplayUrlViewBloc publicDisplayUrlViewBloc;
-
+    late MockGetPublicDisplayUrl mockGetPublicDisplayUrl;
     setUp(() {
       publicDisplayUrlViewBloc = PublicDisplayUrlViewBloc();
+
+      // Unregister the existing GetPublicDisplayUrl instance
+      sl.unregister<GetPublicDisplayUrl>();
+      // Register the mock GetPublicDisplayUrl instance
+      mockGetPublicDisplayUrl = MockGetPublicDisplayUrl();
+      sl.registerSingleton<GetPublicDisplayUrl>(mockGetPublicDisplayUrl);
+    });
+
+    tearDown(() {
+      // Unregister the mock instances after the test
+      sl.unregister<GetPublicDisplayUrl>();
+      // Register real instances to continue the tests
+      sl.registerSingleton<GetPublicDisplayUrl>(_getPublicDisplayUrl!);
+      // Reset mocks
+      reset(mockGetPublicDisplayUrl);
     });
 
     test('givenPublicDisplayUrlViewBloc_whenInit_thenStateIsInitial', () {
@@ -519,64 +546,65 @@ void main() {
 
     blocTest<PublicDisplayUrlViewBloc, PublicDisplayUrlViewState>(
       'givenPublicDisplayUrlViewBloc_whenPublicDisplayUrlLoadEvent_thenStateIsLoadSuccessAndPublicDisplayUrlIsRetrieved',
-      build: () => publicDisplayUrlViewBloc,
-      act: (bloc) =>
-          bloc.add(PublicDisplayUrlLoadEvent(email: 'mail@mail.com')),
-      wait: const Duration(milliseconds: 200),
-      verify: (bloc) {
-        expect(bloc.state, isA<PublicDisplayUrlLoadSuccessState>());
-        expect(
-            (bloc.state as PublicDisplayUrlLoadSuccessState).publicDisplayUrl,
-            equals(PublicDisplayUrlEntity(
-              publicUrl:
-                  'https://app.fempinya.cat/public/display/AireNou/WWN5Wk9aTnl4Q3FHUTE5bklsTkdCOFEvQ1BLWVB4M1BveVpRYlNJbkE1bDZ2SVBNTUlIbzI3S1RXUGRlVlBsUQ==',
-            )));
+      build: () {
+        when(mockGetPublicDisplayUrl.call(params: anyNamed('params')))
+            .thenAnswer((_) async => Right(
+                PublicDisplayUrlEntity(publicUrl: 'https://validurl.com')));
+        return publicDisplayUrlViewBloc;
       },
-    );
-    blocTest<PublicDisplayUrlViewBloc, PublicDisplayUrlViewState>(
-      'givenPublicDisplayUrlViewBloc_whenPublicDisplayUrlLoadEventWithUnknownMail_thenStateIsFailureStateAndMsgIsCorrect',
-      build: () => publicDisplayUrlViewBloc,
-      act: (bloc) =>
-          bloc.add(PublicDisplayUrlLoadEvent(email: 'toto@toto.com')),
-      wait: const Duration(milliseconds: 200),
-      verify: (bloc) {
-        expect(bloc.state, isA<PublicDisplayUrlLoadFailureState>());
-        expect((bloc.state as PublicDisplayUrlLoadFailureState).failure,
-            equals('Unknown email'));
-      },
+      act: (bloc) => bloc.add(PublicDisplayUrlLoadEvent()),
+      expect: () => [
+        PublicDisplayUrlLoadSuccessState(
+            publicDisplayUrl:
+                PublicDisplayUrlEntity(publicUrl: 'https://validurl.com'))
+      ],
     );
 
     blocTest<PublicDisplayUrlViewBloc, PublicDisplayUrlViewState>(
-      'givenPublicDisplayUrlViewBloc_whenPublicDisplayUrlLoadEventWithCorrectMailWithoutPublicUrl_thenStateIsFailureStateAndMsgIsCorrect',
-      build: () => publicDisplayUrlViewBloc,
-      act: (bloc) =>
-          bloc.add(PublicDisplayUrlLoadEvent(email: 'emptyUrl@mail.com')),
-      wait: const Duration(milliseconds: 200),
-      verify: (bloc) {
-        expect(bloc.state, isA<PublicDisplayUrlLoadFailureStateEmptyUri>());
-        expect(
-            (bloc.state as PublicDisplayUrlLoadFailureStateEmptyUri)
-                .publicDisplayUrl
-                .publicUrl,
-            '');
+      'givenPublicDisplayUrlViewBlocWithEmptyURL_whenPublicDisplayUrlLoadEvent_thenStateIsLoadFailureStateEmptyUriAndPublicDisplayUrlIsEmpty',
+      build: () {
+        when(mockGetPublicDisplayUrl.call(params: anyNamed('params')))
+            .thenAnswer(
+                (_) async => Right(PublicDisplayUrlEntity(publicUrl: '')));
+        return publicDisplayUrlViewBloc;
       },
+      act: (bloc) => bloc.add(PublicDisplayUrlLoadEvent()),
+      expect: () => [
+        PublicDisplayUrlLoadFailureStateEmptyUri(
+            publicDisplayUrl: PublicDisplayUrlEntity(publicUrl: ''))
+      ],
     );
 
     blocTest<PublicDisplayUrlViewBloc, PublicDisplayUrlViewState>(
-      'givenPublicDisplayUrlViewBloc_whenPublicDisplayUrlLoadEventWithCorrectMailWithWrongPublicUrl_thenStateIsPublicDisplayUrlLoadFailureStateWrongUri',
-      build: () => publicDisplayUrlViewBloc,
-      act: (bloc) =>
-          bloc.add(PublicDisplayUrlLoadEvent(email: 'wrongUrl@mail.com')),
-      wait: const Duration(milliseconds: 200),
-      verify: (bloc) {
-        expect(bloc.state, isA<PublicDisplayUrlLoadFailureStateWrongUri>());
+      'givenPublicDisplayUrlViewBlocWithWrongURL_whenPublicDisplayUrlLoadEvent_thenStateIsLoadFailureStateWrongUriAndPublicDisplayUrlIsInvalid',
+      build: () {
+        when(mockGetPublicDisplayUrl.call(params: anyNamed('params')))
+            .thenAnswer((_) async =>
+                Right(PublicDisplayUrlEntity(publicUrl: 'invalidurl')));
+        return publicDisplayUrlViewBloc;
       },
+      act: (bloc) => bloc.add(PublicDisplayUrlLoadEvent()),
+      expect: () => [
+        PublicDisplayUrlLoadFailureStateWrongUri(
+            publicDisplayUrl: PublicDisplayUrlEntity(publicUrl: 'invalidurl'))
+      ],
+    );
+
+    blocTest<PublicDisplayUrlViewBloc, PublicDisplayUrlViewState>(
+      'givenPublicDisplayUrlViewBlocWithCallFail_whenPublicDisplayUrlLoadEvent_thenStateIsLoadFailureStateAndFailureMsgIsSend',
+      build: () {
+        when(mockGetPublicDisplayUrl.call(params: anyNamed('params')))
+            .thenAnswer((_) async => Left('Failure'));
+        return publicDisplayUrlViewBloc;
+      },
+      act: (bloc) => bloc.add(PublicDisplayUrlLoadEvent()),
+      expect: () => [PublicDisplayUrlLoadFailureState(failure: 'Failure')],
     );
   });
 
   group('PublicDisplayUrlPage', () {
     testWidgets(
-        'should display CircularProgressIndicator when state is PublicDisplayUrlViewInitial',
+        'should display EasyLoading when state is PublicDisplayUrlViewInitial',
         (tester) async {
       // Arrange
       mockPublicDisplayUrlViewBloc.state = PublicDisplayUrlViewInitial();
@@ -595,13 +623,21 @@ void main() {
             home: ChangeNotifierProvider<LocaleModel>(
               create: (_) => LocaleModel(),
               child: PublicDisplayUrlViewContentsPage(),
+              builder: EasyLoading.init(),
             ),
           ),
         ),
       );
 
       // Assert
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      // Verify that the Center widget is present
+      expect(find.byType(Center), findsOneWidget);
+
+      // Verify that the Text widget is present
+      expect(find.byType(Text), findsOneWidget);
+
+      // Verify the text content (even if it's empty)
+      expect(find.text(''), findsOneWidget);
     });
 
     testWidgets(

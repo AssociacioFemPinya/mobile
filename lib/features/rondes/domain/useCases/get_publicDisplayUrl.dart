@@ -4,11 +4,8 @@ import 'package:fempinya3_flutter_app/core/usecase/usecase.dart';
 import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 
 class GetPublicDisplayUrlParams {
-  final String? email;
 
-  GetPublicDisplayUrlParams({
-    this.email,
-  });
+  GetPublicDisplayUrlParams();
 }
 
 class GetPublicDisplayUrl
