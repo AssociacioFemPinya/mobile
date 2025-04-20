@@ -4,6 +4,7 @@ import 'package:fempinya3_flutter_app/features/home/presentation/pages/home_page
 import 'package:fempinya3_flutter_app/features/login/login.dart';
 import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 import 'package:fempinya3_flutter_app/features/notifications/presentation/routes.dart';
+import 'package:fempinya3_flutter_app/features/user_profile/presentation/routes.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -21,7 +22,8 @@ GoRouter appRouter(AuthenticationBloc authenticationBloc) {
       ...eventRoutes,
       ...loginRoutes,
       ...rondesRoutes,
-      ...notificationRoutes
+      ...notificationRoutes,
+      ...userProfileRoutes,
     ],
     // changes on the listenable will cause the router to refresh it's route
     refreshListenable: StreamToListenable([authenticationBloc.stream]),
