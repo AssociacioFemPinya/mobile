@@ -6,7 +6,7 @@ import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 
 class RondesDioMockInterceptor extends Interceptor {
   late List<Map> rondesList;
-  late PublicDisplayUrlEntity publicDisplayUrl;
+  late Map<String, dynamic> publicDisplayUrl;
 
   int percentageOfRandomFailures = 0;
   int maxDurationRequest = 200;
@@ -68,7 +68,7 @@ class RondesDioMockInterceptor extends Interceptor {
     final routeKey = _MockRouteKey(options.path, options.method);
 
     // Custom logic to handle dynamic paths
-    if (options.path.startsWith('/api-fempinya/mobile_rondas/') &&
+    if (options.path.startsWith(RondesApiEndpoints.getRondes + '/') &&
         options.method == 'GET') {
       GetRondaHandler.handle(this, options, handler);
       EasyLoading.dismiss();
@@ -93,22 +93,11 @@ class RondesDioMockInterceptor extends Interceptor {
     }
   }
 
-  @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
-    // Handle errors if needed
-    super.onError(err, handler);
-  }
-
-  @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    // Handle responses if needed
-    super.onResponse(response, handler);
-  }
-
-  PublicDisplayUrlEntity _generatePublicDisplayUrl() {
-    return (PublicDisplayUrlEntity(
-        publicUrl:
-            'https://app.fempinya.cat/public/display/AireNou/WWN5Wk9aTnl4Q3FHUTE5bklsTkdCOFEvQ1BLWVB4M1BveVpRYlNJbkE1bDZ2SVBNTUlIbzI3S1RXUGRlVlBsUQ=='));
+  Map<String, dynamic> _generatePublicDisplayUrl() {
+    return {
+      'publicUrl':
+          'https://dev.fempinya.cat/public/display/CdLLeida/cTlTOGl2SHd1Y1o0U0s5WFRyYTFQN3JuRjVwaDloS2xXTUFncWhtbzBuSEc4WTVvV2N3djlEOVZyd1Vic0RoNk1yZncycUd3MEF0NFZJa1RBRDZiMlE9PQ==',
+    };
   }
 }
 

@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 
+import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 part 'public_display_url_view_event.dart';
 part 'public_display_url_view_state.dart';
 
@@ -10,7 +10,7 @@ class PublicDisplayUrlViewBloc
   PublicDisplayUrlViewBloc() : super(PublicDisplayUrlViewInitial()) {
     on<PublicDisplayUrlLoadEvent>((event, emit) async {
       GetPublicDisplayUrlParams getPublicDisplayUrlParams =
-          GetPublicDisplayUrlParams(email: event.email);
+          GetPublicDisplayUrlParams();
       var result = await sl<GetPublicDisplayUrl>()
           .call(params: getPublicDisplayUrlParams);
 

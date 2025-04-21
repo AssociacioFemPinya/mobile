@@ -1,16 +1,29 @@
 import 'package:dio/dio.dart';
+import 'package:logger/logger.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:test/test.dart';
+
 import 'package:fempinya3_flutter_app/core/service_locator.dart';
 import 'package:fempinya3_flutter_app/features/rondes/rondes.dart' hide sl;
 
-import 'package:test/test.dart';
+
+// Mock classes
+class MockDio extends Mock implements Dio {}
+
+class MockLogger extends Mock implements Logger {}
 
 void main() {
+
+  Dio? _dio;
+  Logger? _logger;
+
   setUpAll(() {
     setupCommonServiceLocator();
     setupRondesServiceLocator();
-    final Dio _dio = sl<Dio>();
-    _dio.interceptors.clear();
-    _dio.interceptors.add(RondesDioMockInterceptor());
+    _dio = sl<Dio>();
+    _logger = sl<Logger>();
+    _dio!.interceptors.clear();
+    _dio!.interceptors.add(RondesDioMockInterceptor());
   });
 
   group('Entities', () {
@@ -151,10 +164,10 @@ void main() {
       );
     });
 
-    test('givenEmail_whenGetPublicDisplayUrl_thenGetPublicDisplayUrl',
+    test('whenGetPublicDisplayUrl_thenGetPublicDisplayUrl',
         () async {
       GetPublicDisplayUrlParams getPublicDisplayUrlParams =
-          GetPublicDisplayUrlParams(email: 'mail@mail.com');
+          GetPublicDisplayUrlParams();
 
       var result = await sl<GetPublicDisplayUrl>()
           .call(params: getPublicDisplayUrlParams);
@@ -164,60 +177,224 @@ void main() {
         (publicDisplayUrl) {
           expect(publicDisplayUrl, isA<PublicDisplayUrlEntity>());
           expect(publicDisplayUrl.publicUrl,
-              'https://app.fempinya.cat/public/display/AireNou/WWN5Wk9aTnl4Q3FHUTE5bklsTkdCOFEvQ1BLWVB4M1BveVpRYlNJbkE1bDZ2SVBNTUlIbzI3S1RXUGRlVlBsUQ==');
+              'https://dev.fempinya.cat/public/display/CdLLeida/cTlTOGl2SHd1Y1o0U0s5WFRyYTFQN3JuRjVwaDloS2xXTUFncWhtbzBuSEc4WTVvV2N3djlEOVZyd1Vic0RoNk1yZncycUd3MEF0NFZJa1RBRDZiMlE9PQ==');
         },
       );
     });
+  });
 
-    test('givenNullEmail_whenGetPublicDisplayUrl_thenGetErrorMsg', () async {
-      GetPublicDisplayUrlParams getPublicDisplayUrlParams =
-          GetPublicDisplayUrlParams(email: null);
+  group('Service', () {
+    late RondesServiceImpl rondesService;
+    late MockDio mockDio;
+    late MockLogger mockLogger;
 
-      var result = await sl<GetPublicDisplayUrl>()
-          .call(params: getPublicDisplayUrlParams);
+    setUp(() {
+      // Unregister the existing Dio instance
+      sl.unregister<Dio>();
+      // Unregister the existing Logger instance
+      sl.unregister<Logger>();
 
-      result.fold(
-        (l) {
-          expect(l, isA<String>());
-          expect(l, 'Any user email provided');
-        },
-        (r) => fail('Expected a Left, but got a Right'),
-      );
+      // Register the mock Dio instance
+      mockDio = MockDio();
+      sl.registerSingleton<Dio>(mockDio);
+
+      // Register the mock Logger instance
+      mockLogger = MockLogger();
+      sl.registerSingleton<Logger>(mockLogger);
+
+      // Initialize RondesServiceImpl with the mocked dependencies
+      rondesService = RondesServiceImpl();
     });
 
-    test('givenWrongEmail_whenGetPublicDisplayUrl_thenGetErrorMsg', () async {
-      GetPublicDisplayUrlParams getPublicDisplayUrlParams =
-          GetPublicDisplayUrlParams(email: "toto@toto.com");
-
-      var result = await sl<GetPublicDisplayUrl>()
-          .call(params: getPublicDisplayUrlParams);
-
-      result.fold(
-        (l) {
-          expect(l, isA<String>());
-          expect(l, 'Unknown email');
-        },
-        (r) => fail('Expected a Left, but got a Right'),
-      );
+    tearDown(() {
+      // Unregister the mock instances after the test
+      sl.unregister<Dio>();
+      sl.unregister<Logger>();
+      // Register real instances to continue the tests
+      sl.registerSingleton<Dio>(_dio!);
+      sl.registerSingleton<Logger>(_logger!);
+      // Reset mocks
+      reset(mockDio);
+      reset(mockLogger);
     });
 
-    test(
-        'givenEmail_whenGetPublicDisplayUrlWithEmptyUrl_thenGetPublicDisplayUrlWithEmptyUrl',
-        () async {
-      GetPublicDisplayUrlParams getPublicDisplayUrlParams =
-          GetPublicDisplayUrlParams(email: "emptyUrl@mail.com");
+    group('getRondesList', () {
 
-      var result = await sl<GetPublicDisplayUrl>()
-          .call(params: getPublicDisplayUrlParams);
+      test(
+          'givenDio200ResponseWithUnexpectedData_whenGetRondesList_thenReturnsLeftWithUnexpectedResponseFormatMessage',
+          () async {
+        // Arrange
+        final response = Response(
+          data: 'Unexpected data',
+          statusCode: 200,
+          requestOptions: RequestOptions(path: ''),
+        );
+        when(() => mockDio.get(RondesApiEndpoints.getRondes))
+            .thenAnswer((_) async => response);
 
-      result.fold(
-        (l) => fail('Expected a Right, but got a Left'),
-        (publicDisplayUrl) {
-          expect(publicDisplayUrl, isA<PublicDisplayUrlEntity>());
-          expect(publicDisplayUrl.publicUrl, '');
-        },
-      );
+        // Act
+        final result = await rondesService.getRondesList(GetRondesListParams());
+
+        // Assert
+        expect(result.isLeft(), isTrue);
+        expect(result.fold((l) => l, (r) => ''), 'Unexpected response format');
+      });
+
+      test(
+          'givenDioException_whenGetRondesList_thenReturnsLeftWithExceptionMessage',
+          () async {
+        // Arrange
+        when(() => mockDio.get(RondesApiEndpoints.getRondes))
+            .thenThrow(Exception('Test Exception'));
+
+        // Act
+        final result = await rondesService.getRondesList(GetRondesListParams());
+
+        // Assert
+        verify(() => mockLogger.e(any(), any(), any())).called(1);
+        expect(result.isLeft(), isTrue);
+        expect(result.fold((l) => l, (r) => ''), contains('Test Exception'));
+      });
     });
 
+    group('getRonda', () {
+      final params = GetRondaParams(id: 1);
+      test('givenDioGoodResponse_whenGetRonda_thenReturnsRightWithRondaEntity',
+          () async {
+        // Arrange
+        final response = Response(
+          data: {'id': 1, 'name': 'Ronda 1'},
+          statusCode: 200,
+          requestOptions: RequestOptions(path: ''),
+        );
+        when(() => mockDio.get('${RondesApiEndpoints.getRondes}/${params.id}'))
+            .thenAnswer((_) async => response);
+
+        // Act
+        final result = await rondesService.getRonda(params);
+
+        // Assert
+        expect(result.isRight(), isTrue);
+        expect(
+            result.getOrElse(() => RondaEntity(id: 1, publicUrl: '', ronda: 1)),
+            isA<RondaEntity>());
+      });
+
+      test('givenDio400response_whenGetRonda_thenReturnsLeftWithErrorMessage',
+          () async {
+        // Arrange
+        final response = Response(
+          data: null,
+          statusCode: 400,
+          requestOptions: RequestOptions(path: ''),
+        );
+        when(() => mockDio.get('${RondesApiEndpoints.getRondes}/${params.id}'))
+            .thenAnswer((_) async => response);
+
+        // Act
+        final result = await rondesService.getRonda(params);
+
+        // Assert
+        expect(result.isLeft(), isTrue);
+        expect(result.fold((l) => l, (r) => ''), 'Any ronda id provided');
+      });
+
+      test(
+          'givenDio200ResponseWithUnexpectedData_whenGetRonda_thenReturnsLeftWithUnexpectedResponseFormatMessage',
+          () async {
+        // Arrange
+        final response = Response(
+          data: 'Unexpected data',
+          statusCode: 200,
+          requestOptions: RequestOptions(path: ''),
+        );
+        when(() => mockDio.get('${RondesApiEndpoints.getRondes}/${params.id}'))
+            .thenAnswer((_) async => response);
+
+        // Act
+        final result = await rondesService.getRonda(params);
+
+        // Assert
+        expect(result.isLeft(), isTrue);
+        expect(result.fold((l) => l, (r) => ''), 'Unexpected response format');
+      });
+
+      test('givenDioException_whenGetRonda_thenReturnsLeftWithExceptionMessage',
+          () async {
+        // Arrange
+        when(() => mockDio.get('${RondesApiEndpoints.getRondes}/${params.id}'))
+            .thenThrow(Exception('Test Exception'));
+
+        // Act
+        final result = await rondesService.getRonda(params);
+
+        // Assert
+        verify(() => mockLogger.e(any(), any(), any())).called(1);
+        expect(result.isLeft(), isTrue);
+        expect(result.fold((l) => l, (r) => ''), contains('Test Exception'));
+      });
+    });
+
+    group('getPublicDisplayUrl', () {
+      test(
+          'givenDioGoodResponse_whenGetPublicDisplayUrl_thenReturnsRightWithPublicDisplayUrl',
+          () async {
+        // Arrange
+        final response = Response(
+          data: {'url': 'http://example.com/display'},
+          statusCode: 200,
+          requestOptions: RequestOptions(path: ''),
+        );
+        when(() => mockDio.get(RondesApiEndpoints.getPublicDisplayUrl))
+            .thenAnswer((_) async => response);
+
+        // Act
+        final result = await rondesService
+            .getPublicDisplayUrl(GetPublicDisplayUrlParams());
+
+        // Assert
+        expect(result.isRight(), isTrue);
+        expect(result.getOrElse(() => PublicDisplayUrlEntity(publicUrl: 'url')),
+            isA<PublicDisplayUrlEntity>());
+      });
+
+      test(
+          'givenDio200ResponseWithUnexpectedData_whenGetPublicDisplayUrl_thenReturnsLeftWithUnexpectedResponseFormatMessage',
+          () async {
+        // Arrange
+        final response = Response(
+          data: 'Unexpected data',
+          statusCode: 200,
+          requestOptions: RequestOptions(path: ''),
+        );
+        when(() => mockDio.get(RondesApiEndpoints.getPublicDisplayUrl))
+            .thenAnswer((_) async => response);
+
+        // Act
+        final result = await rondesService
+            .getPublicDisplayUrl(GetPublicDisplayUrlParams());
+
+        // Assert
+        expect(result.isLeft(), isTrue);
+        expect(result.fold((l) => l, (r) => ''), 'Unexpected response format');
+      });
+
+      test(
+          'givenDioException_whenGetPublicDisplayUrl_thenReturnsLeftWithExceptionMessage',
+          () async {
+        // Arrange
+        when(() => mockDio.get(RondesApiEndpoints.getPublicDisplayUrl))
+            .thenThrow(Exception('Test Exception'));
+
+        // Act
+        final result = await rondesService
+            .getPublicDisplayUrl(GetPublicDisplayUrlParams());
+
+        // Assert
+        verify(() => mockLogger.e(any(), any(), any())).called(1);
+        expect(result.isLeft(), isTrue);
+        expect(result.fold((l) => l, (r) => ''), contains('Test Exception'));
+      });
+    });
   });
 }

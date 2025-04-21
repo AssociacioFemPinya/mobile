@@ -8,6 +8,5 @@ sealed class PublicDisplayUrlViewEvent extends Equatable {
 }
 
 class PublicDisplayUrlLoadEvent extends PublicDisplayUrlViewEvent {
-  final String email;
-  PublicDisplayUrlLoadEvent({required this.email});
+  PublicDisplayUrlLoadEvent();
 }
