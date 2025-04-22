@@ -32,7 +32,7 @@ void main() {
 
   setUpAll(() {
     setupCommonServiceLocator();
-    setupUserProfileServiceLocator();
+    setupUserProfileServiceLocator(true);
     _dio = sl<Dio>();
     _dio!.interceptors.clear();
     _dio!.interceptors.add(UserProfileDioMockInterceptor());

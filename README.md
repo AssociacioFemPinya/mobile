@@ -3,17 +3,17 @@
 
 # fempinya3_flutter_app
 
-A new Flutter project.
+## Run the App with Sample Data (Mocked Entities)
 
-## Log in to app with mocked users
+To start the app using sample data, simply use the following command:
 
-Mocked users are created with the following credentials :
+    flutter run --dart-define=USE_MOCK_API=true
 
-    mail: "mail@mail.com"
-    password: "password"
+### Log In with Sample User Account (Mocked User)
 
-Use these credentials, otherwise you will get authentication errors.
+To log in using a sample user account, please enter the email "alanbover@gmail.com". You can use any password you like.
 
+Make sure to use these details to avoid any login issues.
 
 ## Testing Coverage Guide
 

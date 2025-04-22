@@ -16,6 +16,10 @@ class MockDio extends Mock implements Dio {}
 // Mock the Logger class
 class MockLogger extends Mock implements Logger {}
 
+class MockInterceptors extends Mock implements Interceptors {}
+
+class MockInterceptor extends Mock implements Interceptor {}
+
 void main() {
 
   Dio? _dio;
@@ -25,7 +29,7 @@ void main() {
 
   setUpAll(() {
     setupCommonServiceLocator();
-    setupLoginServiceLocator();
+    setupLoginServiceLocator(true);
     _dio = sl<Dio>();
     _logger = sl<Logger>();
     _dio!.interceptors.clear();
@@ -33,6 +37,8 @@ void main() {
     _dio!.interceptors.add(TokensDioMockInterceptor());
     mockDio = MockDio();
     mockLogger = MockLogger();
+    // Register a fallback value for Interceptor
+    registerFallbackValue(MockInterceptor());
   });
 
   group('Entities', () {
@@ -362,7 +368,45 @@ void main() {
       });
     });
 
+    group('setupMockInterceptor', () {
+      test('adds interceptor when USE_MOCK_API is true', () {
+        // Arrange
+        const bool useMockApi = true;
+        final mockInterceptors = MockInterceptors();
 
+        // Override the interceptors getter to return the mock interceptors
+        when(() => mockDio.interceptors).thenReturn(mockInterceptors);
+
+        // Act
+        setupMockInterceptor(useMockApi);
+
+        // Assert
+        // Capture the added interceptors
+        final captured =
+            verify(() => mockInterceptors.add(captureAny())).captured;
+        expect(captured, hasLength(2),
+            reason: 'Expected two interceptors to be captured');
+
+        // Check the types of the added interceptors
+        expect(captured, contains(isA<UsersDioMockInterceptor>()));
+        expect(captured, contains(isA<TokensDioMockInterceptor>()));
+      });
+
+      test('does not add interceptor when USE_MOCK_API is false', () {
+        // Arrange
+        const bool useMockApi = false;
+        final mockInterceptors = MockInterceptors();
+
+        // Override the interceptors getter to return the mock interceptors
+        when(() => mockDio.interceptors).thenReturn(mockInterceptors);
+
+        // Act
+        setupMockInterceptor(useMockApi);
+
+        // Assert
+        verifyNever(() => mockInterceptors.add(any()));
+      });
+    });
   });
 
   group('Repository', () {

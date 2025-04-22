@@ -68,7 +68,7 @@ void main() {
 
   setUpAll(() {
     setupCommonServiceLocator();
-    setupLoginServiceLocator();
+    setupLoginServiceLocator(true);
     final Dio _dio = sl<Dio>();
     _dio.interceptors.clear();
     _dio.interceptors.add(UsersDioMockInterceptor());
