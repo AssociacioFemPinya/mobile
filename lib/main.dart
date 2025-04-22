@@ -2,6 +2,7 @@ import 'package:fempinya3_flutter_app/core/service_locator.dart';
 import 'package:fempinya3_flutter_app/features/events/service_locator.dart';
 import 'package:fempinya3_flutter_app/features/login/login.dart';
 import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
+import 'package:fempinya3_flutter_app/features/user_profile/user_profile.dart';
 import 'package:fempinya3_flutter_app/main_routes.dart';
 import 'package:fempinya3_flutter_app/features/menu/domain/entities/locale.dart';
 import 'package:fempinya3_flutter_app/services/firebase_notification_service.dart';
@@ -49,6 +50,7 @@ Future<void> main() async {
   setupLoginServiceLocator();
   setupRondesServiceLocator();
   setupNotificationsServiceLocator();
+  setupUserProfileServiceLocator();
   configLoading();
 
   runApp(const App());

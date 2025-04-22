@@ -1,4 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:fempinya3_flutter_app/features/events/data/mocks/events_service/events_service.dart';
+import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
+import 'package:fempinya3_flutter_app/features/user_profile/user_profile.dart';
+import 'package:fempinya3_flutter_app/features/login/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:fempinya3_flutter_app/global_endpoints.dart';
@@ -49,8 +53,9 @@ class DioFactory {
       // _dio!.interceptors.add(RondesDioMockInterceptor());
       // _dio!.interceptors.add(EventsDioMockInterceptor());
       // _dio!.interceptors.add(UsersDioMockInterceptor());
-      // _dio.interceptors.add(TokensDioMockInterceptor());
+      // _dio!.interceptors.add(TokensDioMockInterceptor());
       _dio!.interceptors.add(NotificationsDioMockInterceptor());
+      // _dio!.interceptors.add(UserProfileDioMockInterceptor());
     }
 
     return _dio!;
