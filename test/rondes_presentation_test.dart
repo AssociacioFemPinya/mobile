@@ -44,7 +44,7 @@ void main() {
 
   setUpAll(() {
     setupCommonServiceLocator();
-    setupRondesServiceLocator();
+    setupRondesServiceLocator(true);
     final Dio _dio = sl<Dio>();
     _getPublicDisplayUrl = sl<GetPublicDisplayUrl>();
     _dio.interceptors.clear();

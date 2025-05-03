@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:fempinya3_flutter_app/features/events/data/mocks/events_service/events_service.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/useCases/get_event.dart';
 import 'package:fempinya3_flutter_app/features/events/domain/useCases/post_event.dart';
 import 'package:fempinya3_flutter_app/features/events/data/repositories/events_repository_impl.dart';
@@ -8,10 +10,19 @@ import 'package:get_it/get_it.dart';
 
 final sl = GetIt.instance;
 
-Future<void> setupEventsServiceLocator() async {
+Future<void> setupEventsServiceLocator(bool useMockApi) async {
   sl.registerSingleton<EventsService>(EventsServiceImpl());
   sl.registerSingleton<EventsRepository>(EventsRepositoryImpl());
   sl.registerSingleton<GetEventsList>(GetEventsList());
   sl.registerSingleton<GetEvent>(GetEvent());
   sl.registerSingleton<PostEvent>(PostEvent());
+
+  setupMockInterceptor(useMockApi);
+}
+
+void setupMockInterceptor(bool useMockApi) {
+  if (useMockApi) {
+    Dio? _dio = sl<Dio>();
+    _dio.interceptors.add(EventsDioMockInterceptor());
+  }
 }

@@ -19,7 +19,7 @@ void main() {
 
   setUpAll(() {
     setupCommonServiceLocator();
-    setupRondesServiceLocator();
+    setupRondesServiceLocator(true);
     _dio = sl<Dio>();
     _logger = sl<Logger>();
     _dio!.interceptors.clear();

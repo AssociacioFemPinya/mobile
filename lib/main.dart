@@ -1,6 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:fempinya3_flutter_app/core/service_locator.dart';
+import 'package:fempinya3_flutter_app/features/events/data/mocks/events_service/events_service.dart';
 import 'package:fempinya3_flutter_app/features/events/service_locator.dart';
 import 'package:fempinya3_flutter_app/features/login/login.dart';
+import 'package:fempinya3_flutter_app/features/notifications/data/mocks/notifications_service.dart';
 import 'package:fempinya3_flutter_app/features/rondes/rondes.dart';
 import 'package:fempinya3_flutter_app/features/user_profile/user_profile.dart';
 import 'package:fempinya3_flutter_app/main_routes.dart';
@@ -22,6 +25,7 @@ import 'package:fempinya3_flutter_app/features/notifications/service_locator.dar
 import 'package:get_it/get_it.dart';
 
 final sl = GetIt.instance;
+late bool useMockApi;
 
 class AuthInitializationResult {
   final AuthenticationRepository authenticationRepository;
@@ -45,12 +49,15 @@ Future<void> main() async {
     await FirebaseNotificationService.instance.initialize();
   }
 
+  const bool useMockApi =
+      bool.fromEnvironment('USE_MOCK_API', defaultValue: false);
+
   setupCommonServiceLocator();
-  setupEventsServiceLocator();
-  setupLoginServiceLocator();
-  setupRondesServiceLocator();
-  setupNotificationsServiceLocator();
-  setupUserProfileServiceLocator();
+  setupEventsServiceLocator(useMockApi);
+  setupLoginServiceLocator(useMockApi);
+  setupRondesServiceLocator(useMockApi);
+  setupNotificationsServiceLocator(useMockApi);
+  setupUserProfileServiceLocator(useMockApi);
   configLoading();
 
   runApp(const App());
